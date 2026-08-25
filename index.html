@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SH Group - Home</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    keyframes: {
+                        float: {
+                            "0%, 100%": {
+                                transform: "translateY(0)"
+                            },
+                            "50%": {
+                                transform: "translateY(-8px)"
+                            }
+                        }
+                    },
+                    animation: {
+                        float: "float 3s ease-in-out infinite"
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .card {
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+
+
+<body class="min-h-screen bg-[#f5f5f5]">
+
+
+    <!-- ================================
+         HEADER
+    ================================= -->
+
+    <header class="relative z-10">
+
+        <div
+            class="
+                flex
+                min-h-12
+                items-center
+                justify-between
+                px-4
+                text-white
+                bg-gradient-to-r
+                from-[#319a82]
+                via-[#42a85c]
+                to-[#82c83b]
+            "
+        >
+
+            <div class="flex items-center gap-2">
+
+                <div
+                    class="
+                        flex
+                        h-[30px]
+                        w-[30px]
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-white
+                        text-[11px]
+                        font-bold
+                        text-[#319a82]
+                    "
+                >
+                    SG
+                </div>
+
+                <div class="text-sm font-bold">
+                    SH Group
+                </div>
+
+            </div>
+
+
+            <div
+                id="headerDateTime"
+                class="
+                    hidden
+                    text-xs
+                    font-bold
+                    sm:block
+                "
+            ></div>
+
+
+            <div class="text-xs font-bold">
+                Home
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav
+            class="
+                flex
+                h-[42px]
+                items-stretch
+                border-b
+                border-[#1d2124]
+                bg-[#252a2d]
+            "
+        >
+
+            <a
+                href="index.html"
+                class="
+                    flex
+                    items-center
+                    border-r
+                    border-[#343a3d]
+                    border-b-2
+                    border-b-[#42a85c]
+                    bg-[#111619]
+                    px-5
+                    text-xs
+                    font-bold
+                    text-white
+                    no-underline
+                "
+            >
+                Home
+            </a>
+
+
+            <a
+                href="excel.html"
+                class="
+                    flex
+                    items-center
+                    border-r
+                    border-[#343a3d]
+                    px-5
+                    text-xs
+                    font-bold
+                    text-white
+                    no-underline
+                    transition
+                    hover:bg-[#343a3d]
+                "
+            >
+                Excel Editing
+            </a>
+
+
+            <a
+                href="gatepass.html"
+                class="
+                    flex
+                    items-center
+                    border-r
+                    border-[#343a3d]
+                    px-5
+                    text-xs
+                    font-bold
+                    text-white
+                    no-underline
+                    transition
+                    hover:bg-[#343a3d]
+                "
+            >
+                OGP Print
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================================
+         MAIN
+    ================================= -->
+
+    <main
+        class="
+            flex
+            min-h-[calc(100vh-90px)]
+            items-center
+            justify-center
+            px-5
+            py-12
+        "
+    >
+
+        <div class="w-full max-w-[800px]">
+
+
+            <!-- TITLE -->
+
+            <div class="mb-10 text-center">
+
+                <div
+                    class="
+                        mx-auto
+                        mb-5
+                        flex
+                        h-[80px]
+                        w-[80px]
+                        animate-float
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-gradient-to-br
+                        from-[#319a82]
+                        to-[#82c83b]
+                        text-3xl
+                        font-bold
+                        text-white
+                        shadow-lg
+                    "
+                >
+                    SG
+                </div>
+
+
+                <h1
+                    class="
+                        mb-2
+                        text-3xl
+                        font-bold
+                        text-[#222]
+                        sm:text-4xl
+                    "
+                >
+                    SH Group
+                </h1>
+
+
+                <p class="text-sm text-[#777] sm:text-base">
+                    Excel Editing & OGP Print
+                </p>
+
+            </div>
+
+
+            <!-- ================================
+                 OPTIONS
+            ================================= -->
+
+            <div
+                class="
+                    grid
+                    grid-cols-1
+                    gap-5
+                    sm:grid-cols-2
+                "
+            >
+
+
+                <!-- EXCEL EDITING -->
+
+                <a
+                    href="excel.html"
+                    class="
+                        card
+                        block
+                        rounded-xl
+                        bg-white
+                        p-7
+                        text-center
+                        no-underline
+                        shadow-[0_5px_20px_rgba(0,0,0,0.08)]
+                    "
+                >
+
+                    <div
+                        class="
+                            mx-auto
+                            mb-5
+                            flex
+                            h-[70px]
+                            w-[70px]
+                            items-center
+                            justify-center
+                            rounded-full
+                            bg-[#e8f5e9]
+                            text-3xl
+                        "
+                    >
+                        📊
+                    </div>
+
+
+                    <h2
+                        class="
+                            mb-2
+                            text-xl
+                            font-bold
+                            text-[#222]
+                        "
+                    >
+                        Excel Editing
+                    </h2>
+
+
+                    <p
+                        class="
+                            mb-5
+                            text-sm
+                            leading-6
+                            text-[#777]
+                        "
+                    >
+                        Open Excel Editing tools
+                        and manage your Excel files.
+                    </p>
+
+
+                    <div
+                        class="
+                            inline-block
+                            rounded-md
+                            bg-[#319a82]
+                            px-6
+                            py-2.5
+                            text-sm
+                            font-bold
+                            text-white
+                        "
+                    >
+                        Open Excel Editing →
+                    </div>
+
+                </a>
+
+
+                <!-- OGP PRINT -->
+
+                <a
+                    href="gatepass.html"
+                    class="
+                        card
+                        block
+                        rounded-xl
+                        bg-white
+                        p-7
+                        text-center
+                        no-underline
+                        shadow-[0_5px_20px_rgba(0,0,0,0.08)]
+                    "
+                >
+
+                    <div
+                        class="
+                            mx-auto
+                            mb-5
+                            flex
+                            h-[70px]
+                            w-[70px]
+                            items-center
+                            justify-center
+                            rounded-full
+                            bg-[#e3f2fd]
+                            text-3xl
+                        "
+                    >
+                        🖨️
+                    </div>
+
+
+                    <h2
+                        class="
+                            mb-2
+                            text-xl
+                            font-bold
+                            text-[#222]
+                        "
+                    >
+                        OGP Print
+                    </h2>
+
+
+                    <p
+                        class="
+                            mb-5
+                            text-sm
+                            leading-6
+                            text-[#777]
+                        "
+                    >
+                        Generate Delivery Challan,
+                        Delivery Gate Pass and
+                        Generic Gate Pass.
+                    </p>
+
+
+                    <div
+                        class="
+                            inline-block
+                            rounded-md
+                            bg-[#007bff]
+                            px-6
+                            py-2.5
+                            text-sm
+                            font-bold
+                            text-white
+                        "
+                    >
+                        Open OGP Print →
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- FOOTER TEXT -->
+
+            <div
+                class="
+                    mt-10
+                    text-center
+                    text-xs
+                    text-[#999]
+                "
+            >
+                SH Group • Internal Tools
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================================
+         DATE / TIME
+    ================================= -->
+
+    <script>
+
+        function updateDateTime() {
+
+            const element =
+                document.getElementById(
+                    "headerDateTime"
+                );
+
+            const now =
+                new Date();
+
+
+            const day =
+                String(
+                    now.getDate()
+                ).padStart(2, "0");
+
+
+            const month =
+                String(
+                    now.getMonth() + 1
+                ).padStart(2, "0");
+
+
+            const year =
+                now.getFullYear();
+
+
+            let hours =
+                now.getHours();
+
+
+            const minutes =
+                String(
+                    now.getMinutes()
+                ).padStart(2, "0");
+
+
+            const seconds =
+                String(
+                    now.getSeconds()
+                ).padStart(2, "0");
+
+
+            const ampm =
+                hours >= 12
+                    ? "pm"
+                    : "am";
+
+
+            hours =
+                hours % 12 || 12;
+
+
+            hours =
+                String(hours)
+                    .padStart(2, "0");
+
+
+            element.textContent =
+                `${day}-${month}-${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+
+        }
+
+
+        updateDateTime();
+
+
+        setInterval(
+            updateDateTime,
+            1000
+        );
+
+    </script>
+
+</body>
+
+</html>
