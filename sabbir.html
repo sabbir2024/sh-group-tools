@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sabbir Hossen | Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#0f172a;
+color:#fff;
+}
+
+.container{
+width:90%;
+max-width:1200px;
+margin:auto;
+}
+
+/* Navbar */
+
+nav{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+background:#0f172a;
+padding:18px 0;
+z-index:999;
+box-shadow:0 2px 15px rgba(0,0,0,.3);
+}
+
+nav .container{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#38bdf8;
+}
+
+nav ul{
+display:flex;
+gap:25px;
+list-style:none;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+transition:.3s;
+}
+
+nav a:hover{
+color:#38bdf8;
+}
+
+/* Hero */
+
+.hero{
+height:100vh;
+display:flex;
+align-items:center;
+}
+
+.hero .container{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:50px;
+flex-wrap:wrap;
+}
+
+.hero-text{
+flex:1;
+}
+
+.hero-text h3{
+font-size:24px;
+color:#38bdf8;
+}
+
+.hero-text h1{
+font-size:60px;
+margin:15px 0;
+}
+
+.hero-text h2{
+font-size:30px;
+font-weight:400;
+color:#cbd5e1;
+}
+
+.hero-text p{
+margin:25px 0;
+line-height:1.8;
+color:#cbd5e1;
+max-width:600px;
+}
+
+.btn{
+display:inline-block;
+padding:14px 35px;
+background:#38bdf8;
+color:#000;
+text-decoration:none;
+font-weight:600;
+border-radius:40px;
+transition:.3s;
+}
+
+.btn:hover{
+transform:translateY(-3px);
+background:#0ea5e9;
+}
+
+.hero-image{
+flex:1;
+text-align:center;
+}
+
+.hero-image img{
+width:320px;
+height:320px;
+border-radius:50%;
+object-fit:cover;
+border:8px solid #38bdf8;
+box-shadow:0 0 40px #38bdf8;
+}
+
+/* Section */
+
+section{
+padding:100px 0;
+}
+
+.title{
+text-align:center;
+font-size:38px;
+margin-bottom:50px;
+color:#38bdf8;
+}
+
+/* About */
+
+.about p{
+max-width:800px;
+margin:auto;
+text-align:center;
+line-height:1.8;
+color:#d1d5db;
+}
+
+/* Skills */
+
+.skills-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:25px;
+}
+
+.skill{
+background:#1e293b;
+padding:30px;
+border-radius:12px;
+text-align:center;
+transition:.3s;
+}
+
+.skill:hover{
+transform:translateY(-8px);
+background:#334155;
+}
+
+.skill h3{
+margin-bottom:10px;
+}
+
+/* Projects */
+
+.projects{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:30px;
+}
+
+.card{
+background:#1e293b;
+border-radius:15px;
+overflow:hidden;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
+}
+
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.card-content{
+padding:20px;
+}
+
+.card-content h3{
+margin-bottom:10px;
+}
+
+.card-content p{
+color:#cbd5e1;
+margin-bottom:20px;
+}
+
+.card-content a{
+text-decoration:none;
+color:#38bdf8;
+}
+
+/* Contact */
+
+.contact{
+text-align:center;
+}
+
+.contact p{
+margin:15px 0;
+}
+
+.socials{
+margin-top:30px;
+}
+
+.socials a{
+display:inline-block;
+margin:10px;
+padding:12px 22px;
+border:2px solid #38bdf8;
+color:#38bdf8;
+text-decoration:none;
+border-radius:30px;
+transition:.3s;
+}
+
+.socials a:hover{
+background:#38bdf8;
+color:#000;
+}
+
+/* Footer */
+
+footer{
+padding:30px;
+text-align:center;
+background:#020617;
+color:#94a3b8;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.hero{
+padding-top:120px;
+height:auto;
+}
+
+.hero .container{
+flex-direction:column-reverse;
+text-align:center;
+}
+
+.hero-text h1{
+font-size:42px;
+}
+
+.hero-text h2{
+font-size:22px;
+}
+
+nav ul{
+display:none;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+<div class="container">
+
+<div class="logo">Sabbir Hossen</div>
+
+<ul>
+<li><a href="#home">Home</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#skills">Skills</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+
+</div>
+</nav>
+
+<!-- Hero -->
+
+<section class="hero" id="home">
+
+<div class="container">
+
+<div class="hero-text">
+
+<h3>Hello, I'm</h3>
+
+<h1>Sabbir Hossen</h1>
+
+<h2>Web Developer</h2>
+
+<p>
+I create modern, responsive and user-friendly websites using HTML, CSS and JavaScript. I enjoy building clean interfaces and high-quality web experiences.
+</p>
+
+<a href="#contact" class="btn">Hire Me</a>
+
+</div>
+
+<div class="hero-image">
+
+<img src="https://ci3.googleusercontent.com/mail-sig/AIorK4zFKOfLiZB1pkdAjTjxdSQiywQlaIZO6Hqq6WsrRi2UZTTpFb2phsQGPi23fhLn7nTB7B7utDbZv3eo" alt="Profile">
+
+</div>
+
+</div>
+
+</section>
+
+<!-- About -->
+
+<section class="about" id="about">
+
+<div class="container">
+
+<h2 class="title">About Me</h2>
+
+<p>
+I'm a passionate front-end developer who enjoys creating beautiful websites with clean code. I focus on responsive design, performance and modern user experiences.
+</p>
+
+</div>
+
+</section>
+
+<!-- Skills -->
+
+<section id="skills">
+
+<div class="container">
+
+<h2 class="title">My Skills</h2>
+
+<div class="skills-grid">
+
+<div class="skill">
+<h3>HTML5</h3>
+<p>Semantic Structure</p>
+</div>
+
+<div class="skill">
+<h3>CSS3</h3>
+<p>Responsive Design</p>
+</div>
+
+<div class="skill">
+<h3>JavaScript</h3>
+<p>Interactive UI</p>
+</div>
+
+<div class="skill">
+<h3>Typescript </h3>
+<p>Interactive UI</p>
+</div>
+
+
+<div class="skill">
+<h3>Next.js</h3>
+<p>Full stack</p>
+</div>
+
+<div class="skill">
+<h3>Node.js</h3>
+<p>Back end</p>
+</div>
+
+<div class="skill">
+<h3>Taildwindcss </h3>
+<p>Fast Development</p>
+</div>
+
+
+<div class="skill">
+<h3>Bootstrap</h3>
+<p>Fast Development</p>
+</div>
+
+<div class="skill">
+<h3>DaisyUI</h3>
+<p>Fast Development</p>
+</div>
+
+<div class="skill">
+<h3>Git Hub</h3>
+<p>Fast Development</p>
+</div>
+
+<div class="skill">
+<h3>Firebase</h3>
+<p>Authorization </p>
+</div>
+
+<div class="skill">
+<h3>Next-auth</h3>
+<p>Oauth</p>
+</div>
+
+<div class="skill">
+<h3>Mongodb</h3>
+<p>Database</p>
+</div>
+
+<div class="skill">
+<h3>Figma</h3>
+<p>Design</p>
+</div>
+
+
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Projects -->
+
+<section id="projects">
+
+<div class="container">
+
+<h2 class="title">Projects</h2>
+
+<div class="projects">
+
+<div class="card">
+
+<img src="https://www.banglaflavor.online/logo.png">
+
+<div class="card-content">
+
+<h3>Bangla Flavor</h3>
+
+<p>
+Authorities food.
+</p>
+
+<a href="https://www.banglaflavor.online">View Project →</a>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://flora-mart.vercel.app/flora-mart-logo.jpg">
+
+<div class="card-content">
+
+<h3>Flora Mart</h3>
+
+<p>
+Morden Fashion collection.
+</p>
+
+<a href="https://flora-mart.vercel.app">View Project →</a>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://chotobazaar.vercel.app/chotologo.png">
+
+<div class="card-content">
+
+<h3>Choto Bazar</h3>
+
+<p>
+All catalogs 
+</p>
+
+<a href="https://chotobazaar.vercel.app">View Project →</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Contact -->
+
+<section class="contact" id="contact">
+
+<div class="container">
+
+<h2 class="title">Contact Me</h2>
+
+<p>Email: sabit3733@gmail.com</p>
+
+<p>Phone: +880 1XXXXXXXXX</p>
+
+<div class="socials">
+
+<a href="#">Facebook</a>
+
+<a href="#">LinkedIn</a>
+
+<a href="#">GitHub</a>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+© 2026 Sabbir Hossen. All Rights Reserved.
+
+</footer>
+
+</body>
+</html>
