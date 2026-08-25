@@ -1,0 +1,2738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+        rel="icon"
+        href="https://reportsrv.dbl-group.com:8090/ords/r/bpm/files/static/v32/img/logodbl.png"
+    >
+
+    <title>OGP Print</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    keyframes: {
+                        antennaLeft: {
+                            from: { transform: "rotate(-135deg)" },
+                            to: { transform: "rotate(-115deg)" }
+                        },
+                        antennaRight: {
+                            from: { transform: "rotate(-80deg)" },
+                            to: { transform: "rotate(-60deg)" }
+                        },
+                        checkPop: {
+                            "0%": {
+                                transform: "scale(0)",
+                                opacity: "0"
+                            },
+                            "70%": {
+                                transform: "scale(1.25)",
+                                opacity: "1"
+                            },
+                            "100%": {
+                                transform: "scale(1)",
+                                opacity: "1"
+                            }
+                        },
+                        blinkCursor: {
+                            "0%, 50%": { opacity: "1" },
+                            "51%, 100%": { opacity: "0" }
+                        }
+                    },
+                    animation: {
+                        antennaLeft:
+                            "antennaLeft 0.35s ease-in-out infinite alternate",
+                        antennaRight:
+                            "antennaRight 0.35s ease-in-out infinite alternate",
+                        checkPop:
+                            "checkPop 0.3s ease",
+                        blinkCursor:
+                            "blinkCursor 0.7s infinite"
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .creator::after {
+            content: "|";
+            color: #007bff;
+            font-style: normal;
+            margin-left: 2px;
+            animation: blinkCursor 0.7s infinite;
+        }
+
+        .session-info-wrapper {
+            --progress: 0;
+        }
+
+        .session-info-wrapper::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 3px;
+            border-radius: 8px;
+
+            background:
+                conic-gradient(
+                    #007bff
+                    calc(var(--progress) * 1%),
+                    #d6ebff 0
+                );
+
+            -webkit-mask:
+                linear-gradient(#fff 0 0)
+                content-box,
+                linear-gradient(#fff 0 0);
+
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+
+            pointer-events: none;
+        }
+
+        .session-info-wrapper.expired-border::before {
+            background:
+                conic-gradient(
+                    red 100%,
+                    red 0
+                );
+        }
+
+        /*
+         * Pencil cursor retained.
+         * Ant cursor completely removed.
+         */
+        input,
+        button,
+        .session-btn {
+            cursor:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(-25 16 16)'%3E%3Cpath d='M16 2 L11.5 9 L20.5 9 Z' fill='%23f2d2a0' stroke='%23111111' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M11.5 9 L20.5 9 L20.5 25 L11.5 25 Z' fill='%23f4b400' stroke='%23111111' stroke-width='1.2'/%3E%3Cpath d='M11.5 13 L20.5 13 L20.5 16 L11.5 16 Z' fill='%23ffffff' opacity='0.9'/%3E%3Cpath d='M11.5 25 L16 30 L20.5 25 Z' fill='%23111111' stroke='%23111111' stroke-width='1' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E")
+                8 8,
+                auto;
+        }
+
+        @media (max-width: 600px) {
+
+            input,
+            button,
+            a {
+                cursor: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="min-h-screen bg-[#f5f5f5] p-10 max-[600px]:p-5">
+
+
+<!-- =================================================
+     HEADER
+================================================= -->
+
+<header
+    class="
+        relative z-[10000]
+        -mx-10 -mt-10 mb-[30px]
+        font-sans
+        max-[600px]:-mx-5
+        max-[600px]:-mt-5
+        max-[600px]:mb-5
+    "
+>
+
+
+    <!-- =================================================
+         GREEN TOP HEADER
+    ================================================= -->
+
+    <div
+        class="
+            relative
+            flex min-h-12
+            items-center
+            justify-between
+            px-3
+            text-white
+            bg-gradient-to-r
+            from-[#319a82]
+            via-[#42a85c]
+            to-[#82c83b]
+            max-[600px]:px-2.5
+        "
+    >
+
+        <div
+            class="
+                flex
+                min-w-[260px]
+                items-center
+                gap-2
+                max-[600px]:min-w-0
+            "
+        >
+
+            <div
+                class="
+                    flex
+                    h-[25px]
+                    w-[25px]
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-white
+                    text-[10px]
+                    font-bold
+                    text-[#319a82]
+                "
+            >
+                SG
+            </div>
+
+
+            <div
+                class="
+                    whitespace-nowrap
+                    text-[13px]
+                    font-bold
+                    max-[600px]:text-[11px]
+                "
+            >
+                Excel Editing - SH Group
+            </div>
+
+        </div>
+
+
+        <div
+            class="
+                absolute
+                left-1/2
+                -translate-x-1/2
+                whitespace-nowrap
+                text-xs
+                font-bold
+                max-[600px]:hidden
+            "
+            id="headerDateTime"
+        >
+            25-08-2026 03:02:15 pm
+        </div>
+
+
+        <div
+            class="
+                ml-auto
+                whitespace-nowrap
+                text-[11px]
+                font-bold
+                max-[600px]:hidden
+            "
+        >
+            ← Back in EBS
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         DARK NAVIGATION
+    ================================================= -->
+
+    <nav
+        class="
+            flex
+            h-[39px]
+            items-stretch
+            border-b
+            border-[#1d2124]
+            bg-[#252a2d]
+        "
+    >
+
+        <a
+            href="file:///D:/s-Desktop/sabbir/excel%20editing.html"
+            class="
+                flex
+                items-center
+                border-r
+                border-[#343a3d]
+                px-4
+                text-xs
+                font-bold
+                text-white
+                no-underline
+                transition
+                hover:bg-[#343a3d]
+                hover:text-white
+                max-[600px]:px-[13px]
+                max-[600px]:text-[11px]
+            "
+        >
+            Excel Editing
+        </a>
+
+
+        <a
+            href="file:///D:/s-Desktop/sabbir/gatepass.html"
+            class="
+                flex
+                items-center
+                border-r
+                border-[#343a3d]
+                border-b-2
+                border-b-[#42a85c]
+                bg-[#111619]
+                px-4
+                text-xs
+                font-bold
+                text-white
+                no-underline
+                transition
+                hover:bg-[#343a3d]
+                max-[600px]:px-[13px]
+                max-[600px]:text-[11px]
+            "
+        >
+            OGP Print
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- =================================================
+     LOGIN SCREEN
+================================================= -->
+
+<div
+    id="loginScreen"
+    class="
+        fixed
+        inset-0
+        z-[9999999]
+        flex
+        items-center
+        justify-center
+        bg-gradient-to-br
+        from-[#f5f7fa]
+        to-[#e8edf3]
+    "
+>
+
+    <div
+        class="
+            w-full
+            max-w-[360px]
+            rounded-[14px]
+            bg-white
+            p-[30px]
+            text-center
+            shadow-[0_10px_35px_rgba(0,0,0,0.15)]
+            max-[600px]:m-5
+            max-[600px]:p-[25px]
+        "
+    >
+
+        <div class="mb-2.5 text-[45px]">
+            🔐
+        </div>
+
+
+        <h2 class="mb-2 text-2xl font-bold">
+            OGP Print
+        </h2>
+
+
+        <div class="mb-[22px] text-[13px] text-[#777]">
+            Enter password to continue
+        </div>
+
+
+        <input
+            type="password"
+            id="passwordInput"
+            placeholder="Enter password"
+            autocomplete="off"
+            class="
+                mb-3
+                w-full
+                rounded-md
+                border
+                border-[#ccc]
+                p-3
+                text-base
+                outline-none
+                transition
+                focus:border-[#007bff]
+            "
+        >
+
+
+        <button
+            type="button"
+            id="loginBtn"
+            class="
+                w-full
+                rounded-md
+                border-0
+                bg-[#007bff]
+                p-3
+                text-[15px]
+                font-bold
+                text-white
+                transition
+                hover:-translate-y-px
+                hover:bg-[#0056b3]
+            "
+        >
+            Login
+        </button>
+
+
+        <div
+            id="loginError"
+            class="
+                mt-3
+                hidden
+                text-[13px]
+                text-red-600
+            "
+        >
+            Wrong password. Please try again.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     MAIN PAGE
+================================================= -->
+
+<div id="mainPage" class="hidden">
+
+
+    <!-- =================================================
+         LOCK BUTTON
+    ================================================= -->
+
+    <div
+        class="
+            mx-auto
+            mb-2.5
+            flex
+            max-w-[500px]
+            justify-end
+        "
+    >
+
+        <button
+            type="button"
+            id="lockBtn"
+            class="
+                hidden
+                rounded-md
+                border-0
+                bg-[#dc3545]
+                px-[13px]
+                py-[7px]
+                text-[13px]
+                font-bold
+                text-white
+                transition
+                hover:-translate-y-px
+                hover:bg-[#c82333]
+            "
+        >
+            🔒 Lock
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         MAIN CONTAINER
+    ================================================= -->
+
+    <div
+        class="
+            mx-auto
+            max-w-[500px]
+            rounded-[10px]
+            bg-white
+            p-[25px]
+            shadow-[0_2px_10px_rgba(0,0,0,0.1)]
+        "
+    >
+
+
+        <!-- =================================================
+             EYES
+        ================================================= -->
+
+        <div
+            id="eyesContainer"
+            class="
+                mb-3
+                flex
+                h-[70px]
+                items-center
+                justify-center
+                gap-[18px]
+            "
+        >
+
+            <div
+                class="
+                    eye
+                    relative
+                    h-[58px]
+                    w-[58px]
+                    overflow-hidden
+                    rounded-full
+                    border-[3px]
+                    border-[#333]
+                    bg-white
+                    shadow-[0_2px_5px_rgba(0,0,0,0.15)]
+                    transition
+                "
+            >
+
+                <div
+                    id="pupilLeft"
+                    class="
+                        pupil
+                        absolute
+                        left-1/2
+                        top-1/2
+                        h-[25px]
+                        w-[25px]
+                        -translate-x-1/2
+                        -translate-y-1/2
+                        rounded-full
+                        bg-[#111]
+                        transition-transform
+                        duration-[40ms]
+                        ease-linear
+                    "
+                ></div>
+
+                <div
+                    class="
+                        pointer-events-none
+                        absolute
+                        left-3
+                        top-[11px]
+                        z-[3]
+                        h-3
+                        w-3
+                        rounded-full
+                        bg-white
+                    "
+                ></div>
+
+            </div>
+
+
+            <div
+                class="
+                    eye
+                    relative
+                    h-[58px]
+                    w-[58px]
+                    overflow-hidden
+                    rounded-full
+                    border-[3px]
+                    border-[#333]
+                    bg-white
+                    shadow-[0_2px_5px_rgba(0,0,0,0.15)]
+                    transition
+                "
+            >
+
+                <div
+                    id="pupilRight"
+                    class="
+                        pupil
+                        absolute
+                        left-1/2
+                        top-1/2
+                        h-[25px]
+                        w-[25px]
+                        -translate-x-1/2
+                        -translate-y-1/2
+                        rounded-full
+                        bg-[#111]
+                        transition-transform
+                        duration-[40ms]
+                        ease-linear
+                    "
+                ></div>
+
+                <div
+                    class="
+                        pointer-events-none
+                        absolute
+                        left-3
+                        top-[11px]
+                        z-[3]
+                        h-3
+                        w-3
+                        rounded-full
+                        bg-white
+                    "
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TITLE
+        ================================================= -->
+
+        <h2 class="mb-5 mt-0 text-center text-2xl font-bold">
+            OGP Print
+        </h2>
+
+
+        <!-- =================================================
+             SESSION AREA
+        ================================================= -->
+
+        <div id="sessionArea">
+
+            <div
+                class="
+                    mb-[7px]
+                    flex
+                    items-center
+                    justify-between
+                "
+            >
+
+                <div class="text-sm font-bold">
+                    Paste Report Link
+                </div>
+
+
+                <a
+                    href="https://reportsrv.dbl-group.com:8090/ords/r/bpm/accessories/home"
+                    target="_blank"
+                    class="
+                        inline-block
+                        rounded-[5px]
+                        bg-[#28a745]
+                        px-[14px]
+                        py-1.5
+                        text-center
+                        text-[13px]
+                        font-bold
+                        text-white
+                        no-underline
+                        transition
+                        hover:-translate-y-px
+                        hover:bg-[#218838]
+                    "
+                >
+                    Session↗️
+                </a>
+
+            </div>
+
+
+            <div class="relative mb-[15px] w-full">
+
+                <input
+                    type="text"
+                    id="sessionInput"
+                    placeholder="Paste report link here"
+                    oninput="handleSessionLink()"
+                    class="
+                        w-full
+                        rounded-[5px]
+                        border
+                        border-[#ccc]
+                        p-3
+                        pr-[42px]
+                        text-base
+                        outline-none
+                        transition
+                        focus:border-[#007bff]
+                    "
+                >
+
+
+                <button
+                    type="button"
+                    class="
+                        clear-btn
+                        absolute
+                        right-2.5
+                        top-2
+                        z-[5]
+                        hidden
+                        h-[27px]
+                        w-[27px]
+                        rounded-full
+                        border-0
+                        bg-[#999]
+                        p-0
+                        text-xl
+                        leading-[25px]
+                        text-white
+                        transition
+                        hover:scale-[1.08]
+                        hover:bg-[#555]
+                    "
+                    id="sessionClearBtn"
+                    onclick="clearSessionLink()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SESSION SUCCESS
+        ================================================= -->
+
+        <div
+            id="sessionSuccess"
+            class="
+                mb-2.5
+                hidden
+                text-2xl
+                font-bold
+                text-[#28a745]
+                animate-checkPop
+            "
+        >
+            Session ✓
+        </div>
+
+
+        <!-- =================================================
+             CREATOR
+        ================================================= -->
+
+        <div
+            id="creator"
+            class="
+                creator
+                mb-2.5
+                -mt-0.5
+                hidden
+                min-h-4
+                overflow-hidden
+                whitespace-nowrap
+                text-[13px]
+                italic
+                text-[#666]
+            "
+        ></div>
+
+
+        <!-- =================================================
+             SESSION INFO
+        ================================================= -->
+
+        <div
+            id="sessionInfoWrapper"
+            class="
+                relative
+                mb-[15px]
+                -mt-[5px]
+                hidden
+                overflow-hidden
+                rounded-lg
+                p-[3px]
+            "
+            style="--progress: 0;"
+        >
+
+            <div
+                id="sessionInfo"
+                class="
+                    relative
+                    z-[1]
+                    m-0
+                    rounded-[5px]
+                    bg-[#f1f8ff]
+                    p-2.5
+                    text-sm
+                    leading-6
+                "
+            >
+
+                <div>
+
+                    <strong>
+                        Session ID:
+                    </strong>
+
+                    <span
+                        id="sessionId"
+                        class="
+                            break-all
+                            text-[#333]
+                        "
+                    >
+                        ---
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Session Time:
+                    </strong>
+
+                    <span
+                        id="countdown"
+                        class="
+                            text-base
+                            font-bold
+                            text-[#007bff]
+                        "
+                    >
+                        300
+                    </span>
+
+                    seconds
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             OGP NUMBER
+        ================================================= -->
+
+        <div class="mb-[7px] text-sm font-bold">
+            OGP Number
+        </div>
+
+
+        <div class="relative mb-[15px] w-full">
+
+            <div class="flex w-full items-center gap-1.5">
+
+                <button
+                    type="button"
+                    id="ogpMinusBtn"
+                    onclick="changeOGP(-2)"
+                    title="Decrease by 2"
+                    class="
+                        h-[42px]
+                        w-[42px]
+                        flex-none
+                        rounded-md
+                        border-0
+                        bg-[#007bff]
+                        p-0
+                        text-2xl
+                        font-bold
+                        leading-[42px]
+                        text-white
+                        transition
+                        hover:-translate-y-px
+                        hover:bg-[#0056b3]
+                        active:scale-95
+                    "
+                >
+                    −
+                </button>
+
+
+                <input
+                    type="text"
+                    id="ogpInput"
+                    placeholder="Enter OGP Number"
+                    oninput="generateLinks()"
+                    class="
+                        min-w-0
+                        flex-1
+                        rounded-[5px]
+                        border
+                        border-[#ccc]
+                        p-3
+                        pr-[42px]
+                        text-base
+                        outline-none
+                        transition
+                        focus:border-[#007bff]
+                    "
+                >
+
+
+                <button
+                    type="button"
+                    id="ogpPlusBtn"
+                    onclick="changeOGP(2)"
+                    title="Increase by 2"
+                    class="
+                        h-[42px]
+                        w-[42px]
+                        flex-none
+                        rounded-md
+                        border-0
+                        bg-[#007bff]
+                        p-0
+                        text-2xl
+                        font-bold
+                        leading-[42px]
+                        text-white
+                        transition
+                        hover:-translate-y-px
+                        hover:bg-[#0056b3]
+                        active:scale-95
+                    "
+                >
+                    +
+                </button>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="ogpClearBtn"
+                onclick="clearOGP()"
+                class="
+                    clear-btn
+                    absolute
+                    right-[58px]
+                    top-2
+                    z-[5]
+                    hidden
+                    h-[27px]
+                    w-[27px]
+                    rounded-full
+                    border-0
+                    bg-[#999]
+                    p-0
+                    text-xl
+                    leading-[25px]
+                    text-white
+                    transition
+                    hover:scale-[1.08]
+                    hover:bg-[#555]
+                "
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             GENERATED LINKS
+        ================================================= -->
+
+        <div id="links"></div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =================================================
+   HEADER DATE / TIME
+================================================= */
+
+function updateHeaderDateTime() {
+
+    const element =
+        document.getElementById(
+            "headerDateTime"
+        );
+
+    const now =
+        new Date();
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+    const year =
+        now.getFullYear();
+
+    let hours =
+        now.getHours();
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(2, "0");
+
+    const seconds =
+        String(
+            now.getSeconds()
+        ).padStart(2, "0");
+
+    const ampm =
+        hours >= 12
+            ? "pm"
+            : "am";
+
+    hours =
+        hours % 12 || 12;
+
+    hours =
+        String(hours)
+            .padStart(2, "0");
+
+    element.textContent =
+        `${day}-${month}-${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+
+}
+
+
+updateHeaderDateTime();
+
+
+setInterval(
+    updateHeaderDateTime,
+    1000
+);
+
+
+/* =================================================
+   LOGIN SYSTEM
+================================================= */
+
+const LOGIN_PASSWORD = "123";
+
+
+const loginScreen =
+    document.getElementById(
+        "loginScreen"
+    );
+
+
+const mainPage =
+    document.getElementById(
+        "mainPage"
+    );
+
+
+const passwordInput =
+    document.getElementById(
+        "passwordInput"
+    );
+
+
+const loginBtn =
+    document.getElementById(
+        "loginBtn"
+    );
+
+
+const loginError =
+    document.getElementById(
+        "loginError"
+    );
+
+
+const lockBtn =
+    document.getElementById(
+        "lockBtn"
+    );
+
+
+/* =================================================
+   LOGIN
+================================================= */
+
+function login() {
+
+    const password =
+        passwordInput.value;
+
+
+    if (
+        password ===
+        LOGIN_PASSWORD
+    ) {
+
+        loginScreen.style.display =
+            "none";
+
+
+        mainPage.style.display =
+            "block";
+
+
+        lockBtn.style.display =
+            "block";
+
+
+        loginError.style.display =
+            "none";
+
+
+        passwordInput.value =
+            "";
+
+
+        setTimeout(
+            function() {
+
+                const sessionInput =
+                    document.getElementById(
+                        "sessionInput"
+                    );
+
+
+                const ogpInput =
+                    document.getElementById(
+                        "ogpInput"
+                    );
+
+
+                if (
+                    ogpInput.value.trim() !== ""
+                ) {
+
+                    ogpInput.focus();
+
+                }
+
+                else if (
+                    sessionInput.value.trim() === ""
+                ) {
+
+                    sessionInput.focus();
+
+                }
+
+            },
+            100
+        );
+
+    }
+
+    else {
+
+        loginError.style.display =
+            "block";
+
+
+        passwordInput.value =
+            "";
+
+
+        passwordInput.focus();
+
+    }
+
+}
+
+
+/* =================================================
+   LOGIN BUTTON
+================================================= */
+
+loginBtn.addEventListener(
+    "click",
+    login
+);
+
+
+/* =================================================
+   ENTER TO LOGIN
+================================================= */
+
+passwordInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            login();
+
+        }
+
+    }
+);
+
+
+/* =================================================
+   LOCK PAGE
+================================================= */
+
+function lockPage() {
+
+    mainPage.style.display =
+        "none";
+
+
+    lockBtn.style.display =
+        "none";
+
+
+    loginScreen.style.display =
+        "flex";
+
+
+    loginError.style.display =
+        "none";
+
+
+    passwordInput.value =
+        "";
+
+
+    setTimeout(
+        function() {
+
+            passwordInput.focus();
+
+        },
+        100
+    );
+
+}
+
+
+/* =================================================
+   LOCK BUTTON CLICK
+================================================= */
+
+lockBtn.addEventListener(
+    "click",
+    lockPage
+);
+
+
+/* =================================================
+   LOCK SHORTCUT
+   Ctrl + Shift + L
+================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.ctrlKey &&
+            event.shiftKey &&
+            event.key.toLowerCase() === "l"
+        ) {
+
+            event.preventDefault();
+
+
+            if (
+                loginScreen.style.display !== "flex" &&
+                mainPage.style.display !== "none"
+            ) {
+
+                lockPage();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =================================================
+   DEFAULT SESSION
+================================================= */
+
+let currentSession =
+    "6848999126945";
+
+
+/* =================================================
+   SESSION HOME URL
+================================================= */
+
+const SESSION_HOME_URL =
+    "https://reportsrv.dbl-group.com:8090/ords/r/bpm/accessories/home";
+
+
+/* =================================================
+   CTRL + SHIFT + S
+================================================= */
+
+function showSessionInput() {
+
+    const sessionArea =
+        document.getElementById(
+            "sessionArea"
+        );
+
+    const sessionInput =
+        document.getElementById(
+            "sessionInput"
+        );
+
+
+    sessionArea.style.display =
+        "block";
+
+
+    document.getElementById(
+        "sessionSuccess"
+    ).style.display =
+        "none";
+
+
+    setTimeout(
+        function() {
+
+            sessionInput.focus();
+
+            sessionInput.select();
+
+        },
+        50
+    );
+
+}
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.ctrlKey &&
+            event.shiftKey &&
+            event.key.toLowerCase() === "s"
+        ) {
+
+            event.preventDefault();
+
+
+            if (
+                loginScreen.style.display === "flex" ||
+                mainPage.style.display === "none"
+            ) {
+
+                return;
+
+            }
+
+
+            window.open(
+                SESSION_HOME_URL,
+                "_blank"
+            );
+
+
+            showSessionInput();
+
+        }
+
+    }
+);
+
+
+/* =================================================
+   EXPIRED OPEN CONTROL
+================================================= */
+
+let expiredLinkOpened =
+    false;
+
+
+/* =================================================
+   COUNTDOWN
+================================================= */
+
+let countdownTimer =
+    null;
+
+
+let remainingSeconds =
+    300;
+
+
+let expiredSeconds =
+    0;
+
+
+let isExpired =
+    false;
+
+
+/* =================================================
+   TYPING
+================================================= */
+
+let typingTimer =
+    null;
+
+
+let typingIndex =
+    0;
+
+
+let typingDirection =
+    "typing";
+
+
+let typingPauseCounter =
+    0;
+
+
+const creatorText =
+    "- Create by Sabbir";
+
+
+const typingSpeed =
+    90;
+
+
+const fullTextPause =
+    20;
+
+
+const emptyTextPause =
+    5;
+
+
+/* =================================================
+   EYES
+================================================= */
+
+const eyesContainer =
+    document.getElementById(
+        "eyesContainer"
+    );
+
+
+const eyes =
+    document.querySelectorAll(
+        ".eye"
+    );
+
+
+const pupils =
+    document.querySelectorAll(
+        ".pupil"
+    );
+
+
+function moveEyes(
+    clientX,
+    clientY
+) {
+
+    eyes.forEach(
+        function(
+            eye,
+            index
+        ) {
+
+            const rect =
+                eye.getBoundingClientRect();
+
+
+            const eyeCenterX =
+                rect.left +
+                rect.width / 2;
+
+
+            const eyeCenterY =
+                rect.top +
+                rect.height / 2;
+
+
+            const deltaX =
+                clientX -
+                eyeCenterX;
+
+
+            const deltaY =
+                clientY -
+                eyeCenterY;
+
+
+            const angle =
+                Math.atan2(
+                    deltaY,
+                    deltaX
+                );
+
+
+            const maxMove =
+                12;
+
+
+            const distance =
+                Math.min(
+                    maxMove,
+                    Math.sqrt(
+                        deltaX * deltaX +
+                        deltaY * deltaY
+                    ) / 8
+                );
+
+
+            const moveX =
+                Math.cos(angle) *
+                distance;
+
+
+            const moveY =
+                Math.sin(angle) *
+                distance;
+
+
+            pupils[index].style.transform =
+                "translate(calc(-50% + " +
+                moveX +
+                "px), calc(-50% + " +
+                moveY +
+                "px))";
+
+        }
+    );
+
+}
+
+
+document.addEventListener(
+    "mousemove",
+    function(event) {
+
+        moveEyes(
+            event.clientX,
+            event.clientY
+        );
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+document.addEventListener(
+    "touchmove",
+    function(event) {
+
+        if (
+            event.touches &&
+            event.touches.length > 0
+        ) {
+
+            moveEyes(
+                event.touches[0].clientX,
+                event.touches[0].clientY
+            );
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+document.addEventListener(
+    "touchstart",
+    function(event) {
+
+        if (
+            event.touches &&
+            event.touches.length > 0
+        ) {
+
+            moveEyes(
+                event.touches[0].clientX,
+                event.touches[0].clientY
+            );
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =================================================
+   RESET EYES
+================================================= */
+
+function resetEyes() {
+
+    eyesContainer.classList.remove(
+        "expired"
+    );
+
+}
+
+
+/* =================================================
+   RED EYES
+================================================= */
+
+function makeEyesRed() {
+
+    eyesContainer.classList.add(
+        "expired"
+    );
+
+}
+
+
+/* =================================================
+   OPEN SESSION HOME
+================================================= */
+
+function openSessionHome() {
+
+    if (
+        expiredLinkOpened
+    ) {
+
+        return;
+
+    }
+
+
+    expiredLinkOpened =
+        true;
+
+
+    window.open(
+        SESSION_HOME_URL,
+        "_blank"
+    );
+
+}
+
+
+/* =================================================
+   OGP INCREMENT / DECREMENT
+================================================= */
+
+function changeOGP(step) {
+
+    const input =
+        document.getElementById(
+            "ogpInput"
+        );
+
+
+    let value =
+        input.value.trim();
+
+
+    if (
+        value === ""
+    ) {
+
+        if (
+            step > 0
+        ) {
+
+            input.value =
+                "2";
+
+            generateLinks();
+
+        }
+
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    if (
+        !/^\d+$/.test(value)
+    ) {
+
+        return;
+
+    }
+
+
+    let number =
+        parseInt(
+            value,
+            10
+        );
+
+
+    number +=
+        step;
+
+
+    if (
+        number < 0
+    ) {
+
+        number = 0;
+
+    }
+
+
+    input.value =
+        number;
+
+
+    generateLinks();
+
+
+    input.focus();
+
+}
+
+
+/* =================================================
+   GENERATE OGP LINKS
+================================================= */
+
+function generateLinks() {
+
+    const input =
+        document.getElementById(
+            "ogpInput"
+        );
+
+
+    const value =
+        input.value.trim();
+
+
+    const links =
+        document.getElementById(
+            "links"
+        );
+
+
+    const clearBtn =
+        document.getElementById(
+            "ogpClearBtn"
+        );
+
+
+    if (
+        value !== ""
+    ) {
+
+        clearBtn.style.display =
+            "block";
+
+    }
+
+    else {
+
+        clearBtn.style.display =
+            "none";
+
+    }
+
+
+    if (
+        value === ""
+    ) {
+
+        links.innerHTML =
+            "";
+
+        return;
+
+    }
+
+
+    /* =================================================
+       DELIVERY GATE PASS
+    ================================================= */
+
+    const gatePassUrl =
+        "https://reportsrv.dbl-group.com:8090/ords/f?p=507:0:" +
+        currentSession +
+        ":PRINT_REPORT=DeliveryGatePass:::P2_OGPNUMBER:OGP-" +
+        encodeURIComponent(value);
+
+
+    const gatePassUrl2 =
+        "https://reportsrv.dbl-group.com:8090/ords/f?p=507:0:" +
+        currentSession +
+        ":PRINT_REPORT=OtherGatePass:::P22_OGPNUMBER:OGP-" +
+        encodeURIComponent(value);
+
+
+    /* =================================================
+       DELIVERY CHALLAN
+    ================================================= */
+
+    const challanUrl =
+        "https://reportsrv.dbl-group.com:8090/ords/f?p=507:0:" +
+        currentSession +
+        ":PRINT_REPORT=DeliveryChallan:::P2_OGPNUMBER:OGP-" +
+        encodeURIComponent(value);
+
+
+    /* =================================================
+       SHOW LINKS
+    ================================================= */
+
+    links.innerHTML = `
+
+        <a
+            href="${challanUrl}"
+            target="_blank"
+            class="
+                mb-2.5
+                block
+                rounded-[5px]
+                bg-[#007bff]
+                p-3
+                text-center
+                text-white
+                no-underline
+                transition
+                hover:-translate-y-px
+                hover:bg-[#0056b3]
+            "
+        >
+            Delivery Challan
+        </a>
+
+
+        <a
+            href="${gatePassUrl}"
+            target="_blank"
+            class="
+                mb-2.5
+                block
+                rounded-[5px]
+                bg-[#007bff]
+                p-3
+                text-center
+                text-white
+                no-underline
+                transition
+                hover:-translate-y-px
+                hover:bg-[#0056b3]
+            "
+        >
+            Delivery Gate Pass
+        </a>
+
+
+        <a
+            href="${gatePassUrl2}"
+            target="_blank"
+            class="
+                mb-2.5
+                block
+                rounded-[5px]
+                bg-[#007bff]
+                p-3
+                text-center
+                text-white
+                no-underline
+                transition
+                hover:-translate-y-px
+                hover:bg-[#0056b3]
+            "
+        >
+            Generic Gate Pass
+        </a>
+
+    `;
+
+}
+
+
+/* =================================================
+   HANDLE SESSION LINK
+================================================= */
+
+function handleSessionLink() {
+
+    const input =
+        document.getElementById(
+            "sessionInput"
+        );
+
+
+    const value =
+        input.value.trim();
+
+
+    const clearBtn =
+        document.getElementById(
+            "sessionClearBtn"
+        );
+
+
+    const sessionInfoWrapper =
+        document.getElementById(
+            "sessionInfoWrapper"
+        );
+
+
+    if (
+        value !== ""
+    ) {
+
+        clearBtn.style.display =
+            "block";
+
+
+        startTypingAnimation();
+
+    }
+
+    else {
+
+        clearBtn.style.display =
+            "none";
+
+
+        stopTypingAnimation();
+
+    }
+
+
+    if (
+        value === ""
+    ) {
+
+        sessionInfoWrapper.style.display =
+            "none";
+
+
+        stopCountdown();
+
+
+        resetEyes();
+
+
+        return;
+
+    }
+
+
+    try {
+
+        const url =
+            new URL(value);
+
+
+        const session =
+            url.searchParams.get(
+                "session"
+            );
+
+
+        if (!session) {
+
+            showInvalidSession();
+
+            return;
+
+        }
+
+
+        if (
+            !/^\d+$/.test(session)
+        ) {
+
+            showInvalidSession();
+
+            return;
+
+        }
+
+
+        currentSession =
+            session;
+
+
+        resetEyes();
+
+
+        const sessionId =
+            document.getElementById(
+                "sessionId"
+            );
+
+
+        sessionId.textContent =
+            currentSession;
+
+
+        sessionId.classList.remove(
+            "text-red-600"
+        );
+
+
+        sessionInfoWrapper.style.display =
+            "block";
+
+
+        document.getElementById(
+            "sessionArea"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "sessionSuccess"
+        ).style.display =
+            "block";
+
+
+        startTypingAnimation();
+
+
+        generateLinks();
+
+
+        startCountdown();
+
+    }
+
+
+    catch (error) {
+
+        showInvalidSession();
+
+    }
+
+}
+
+
+/* =================================================
+   INVALID SESSION
+================================================= */
+
+function showInvalidSession() {
+
+    const sessionInfoWrapper =
+        document.getElementById(
+            "sessionInfoWrapper"
+        );
+
+
+    const sessionId =
+        document.getElementById(
+            "sessionId"
+        );
+
+
+    const countdown =
+        document.getElementById(
+            "countdown"
+        );
+
+
+    sessionInfoWrapper.style.display =
+        "block";
+
+
+    sessionId.textContent =
+        "Invalid Link";
+
+
+    sessionId.classList.add(
+        "text-red-600"
+    );
+
+
+    countdown.textContent =
+        "--";
+
+
+    countdown.classList.add(
+        "text-red-600"
+    );
+
+
+    countdown.classList.remove(
+        "text-red-600"
+    );
+
+
+    countdown.classList.add(
+        "text-red-600"
+    );
+
+
+    stopCountdown();
+
+}
+
+
+/* =================================================
+   UPDATE BORDER
+================================================= */
+
+function updateBorderProgress() {
+
+    const wrapper =
+        document.getElementById(
+            "sessionInfoWrapper"
+        );
+
+
+    const elapsed =
+        300 -
+        remainingSeconds;
+
+
+    let progress =
+        (elapsed / 300) *
+        100;
+
+
+    progress =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                progress
+            )
+        );
+
+
+    wrapper.style.setProperty(
+        "--progress",
+        progress
+    );
+
+}
+
+
+/* =================================================
+   START COUNTDOWN
+================================================= */
+
+function startCountdown() {
+
+    stopCountdown();
+
+
+    remainingSeconds =
+        300;
+
+
+    expiredSeconds =
+        0;
+
+
+    isExpired =
+        false;
+
+
+    expiredLinkOpened =
+        false;
+
+
+    resetEyes();
+
+
+    const countdown =
+        document.getElementById(
+            "countdown"
+        );
+
+
+    const wrapper =
+        document.getElementById(
+            "sessionInfoWrapper"
+        );
+
+
+    wrapper.style.setProperty(
+        "--progress",
+        0
+    );
+
+
+    wrapper.classList.remove(
+        "expired-border"
+    );
+
+
+    countdown.classList.remove(
+        "text-red-600"
+    );
+
+
+    countdown.textContent =
+        remainingSeconds;
+
+
+    countdownTimer =
+        setInterval(
+            function() {
+
+                if (
+                    !isExpired
+                ) {
+
+                    remainingSeconds--;
+
+
+                    countdown.textContent =
+                        remainingSeconds;
+
+
+                    updateBorderProgress();
+
+
+                    if (
+                        remainingSeconds <= 0
+                    ) {
+
+                        isExpired =
+                            true;
+
+
+                        expiredSeconds =
+                            0;
+
+
+                        makeEyesRed();
+
+
+                        wrapper.style.setProperty(
+                            "--progress",
+                            100
+                        );
+
+
+                        wrapper.classList.add(
+                            "expired-border"
+                        );
+
+
+                        countdown.textContent =
+                            "Expired +0s";
+
+
+                        countdown.classList.remove(
+                            "text-[#007bff]"
+                        );
+
+
+                        countdown.classList.add(
+                            "text-red-600"
+                        );
+
+
+                        document.getElementById(
+                            "sessionArea"
+                        ).style.display =
+                            "block";
+
+
+                        document.getElementById(
+                            "sessionSuccess"
+                        ).style.display =
+                            "block";
+
+
+                        document.getElementById(
+                            "sessionClearBtn"
+                        ).style.display =
+                            "block";
+
+
+                        startTypingAnimation();
+
+
+                        openSessionHome();
+
+                    }
+
+                }
+
+                else {
+
+                    expiredSeconds++;
+
+
+                    countdown.textContent =
+                        "Expired +" +
+                        expiredSeconds +
+                        "s";
+
+
+                    makeEyesRed();
+
+
+                    wrapper.style.setProperty(
+                        "--progress",
+                        100
+                    );
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+/* =================================================
+   STOP COUNTDOWN
+================================================= */
+
+function stopCountdown() {
+
+    if (
+        countdownTimer !== null
+    ) {
+
+        clearInterval(
+            countdownTimer
+        );
+
+
+        countdownTimer =
+            null;
+
+    }
+
+}
+
+
+/* =================================================
+   START TYPING
+================================================= */
+
+function startTypingAnimation() {
+
+    const creator =
+        document.getElementById(
+            "creator"
+        );
+
+
+    if (
+        typingTimer !== null
+    ) {
+
+        return;
+
+    }
+
+
+    creator.style.display =
+        "block";
+
+
+    typingIndex =
+        0;
+
+
+    typingDirection =
+        "typing";
+
+
+    typingPauseCounter =
+        0;
+
+
+    creator.textContent =
+        "";
+
+
+    typingTimer =
+        setInterval(
+            function() {
+
+                if (
+                    typingDirection ===
+                    "typing"
+                ) {
+
+                    typingIndex++;
+
+
+                    creator.textContent =
+                        creatorText.substring(
+                            0,
+                            typingIndex
+                        );
+
+
+                    if (
+                        typingIndex >=
+                        creatorText.length
+                    ) {
+
+                        typingDirection =
+                            "full-pause";
+
+
+                        typingPauseCounter =
+                            0;
+
+                    }
+
+                }
+
+
+                else if (
+                    typingDirection ===
+                    "full-pause"
+                ) {
+
+                    typingPauseCounter++;
+
+
+                    if (
+                        typingPauseCounter >=
+                        fullTextPause
+                    ) {
+
+                        typingDirection =
+                            "deleting";
+
+
+                        typingPauseCounter =
+                            0;
+
+                    }
+
+                }
+
+
+                else if (
+                    typingDirection ===
+                    "deleting"
+                ) {
+
+                    typingIndex--;
+
+
+                    creator.textContent =
+                        creatorText.substring(
+                            0,
+                            typingIndex
+                        );
+
+
+                    if (
+                        typingIndex <= 0
+                    ) {
+
+                        typingDirection =
+                            "empty-pause";
+
+
+                        typingPauseCounter =
+                            0;
+
+                    }
+
+                }
+
+
+                else if (
+                    typingDirection ===
+                    "empty-pause"
+                ) {
+
+                    typingPauseCounter++;
+
+
+                    if (
+                        typingPauseCounter >=
+                        emptyTextPause
+                    ) {
+
+                        typingDirection =
+                            "typing";
+
+
+                        typingPauseCounter =
+                            0;
+
+                    }
+
+                }
+
+            },
+            typingSpeed
+        );
+
+}
+
+
+/* =================================================
+   STOP TYPING
+================================================= */
+
+function stopTypingAnimation() {
+
+    const creator =
+        document.getElementById(
+            "creator"
+        );
+
+
+    if (
+        typingTimer !== null
+    ) {
+
+        clearInterval(
+            typingTimer
+        );
+
+
+        typingTimer =
+            null;
+
+    }
+
+
+    creator.textContent =
+        "";
+
+
+    creator.style.display =
+        "none";
+
+
+    typingIndex =
+        0;
+
+
+    typingDirection =
+        "typing";
+
+
+    typingPauseCounter =
+        0;
+
+}
+
+
+/* =================================================
+   CLEAR OGP
+================================================= */
+
+function clearOGP() {
+
+    document.getElementById(
+        "ogpInput"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "links"
+    ).innerHTML =
+        "";
+
+
+    document.getElementById(
+        "ogpClearBtn"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "ogpInput"
+    ).focus();
+
+}
+
+
+/* =================================================
+   CLEAR SESSION
+================================================= */
+
+function clearSessionLink() {
+
+    document.getElementById(
+        "sessionInput"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "sessionArea"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "sessionSuccess"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "sessionClearBtn"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "sessionInfoWrapper"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "sessionInfoWrapper"
+    ).style.setProperty(
+        "--progress",
+        0
+    );
+
+
+    document.getElementById(
+        "sessionInfoWrapper"
+    ).classList.remove(
+        "expired-border"
+    );
+
+
+    resetEyes();
+
+
+    stopTypingAnimation();
+
+
+    stopCountdown();
+
+
+    currentSession =
+        "6848999126945";
+
+
+    expiredLinkOpened =
+        false;
+
+
+    generateLinks();
+
+
+    document.getElementById(
+        "sessionInput"
+    ).focus();
+
+}
+
+
+/* =================================================
+   OGP KEYBOARD SHORTCUT
+   Arrow Up = +2
+   Arrow Down = -2
+================================================= */
+
+document.getElementById(
+    "ogpInput"
+).addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "ArrowUp"
+        ) {
+
+            event.preventDefault();
+
+            changeOGP(2);
+
+        }
+
+
+        if (
+            event.key === "ArrowDown"
+        ) {
+
+            event.preventDefault();
+
+            changeOGP(-2);
+
+        }
+
+    }
+);
+
+
+/* =================================================
+   INITIAL LOAD
+================================================= */
+
+passwordInput.focus();
+
+generateLinks();
+
+
+</script>
+
+
+</body>
+
+</html>
