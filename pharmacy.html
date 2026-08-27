@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pharmacy POS System</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #0f766e;
+      color: white;
+      padding: 20px 14px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+    }
+
+    .logo {
+      text-align: center;
+      padding: 10px 5px 25px;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+      margin-bottom: 20px;
+    }
+
+    .logo .icon {
+      font-size: 40px;
+    }
+
+    .logo h2 {
+      margin-top: 5px;
+      font-size: 21px;
+    }
+
+    .logo small {
+      opacity: .8;
+    }
+
+    .nav-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: white;
+      padding: 13px 15px;
+      text-align: left;
+      border-radius: 8px;
+      margin-bottom: 7px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: rgba(255,255,255,.16);
+    }
+
+    /* Main */
+    .main {
+      margin-left: 240px;
+      width: calc(100% - 240px);
+      padding: 20px;
+    }
+
+    .topbar {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    .topbar h1 {
+      font-size: 22px;
+    }
+
+    .date {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Dashboard */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    .stat .label {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .stat .value {
+      font-size: 27px;
+      font-weight: bold;
+      margin-top: 8px;
+      color: #0f766e;
+    }
+
+    /* POS */
+    .pos-layout {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 20px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .panel-title h2 {
+      font-size: 18px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .search-box input {
+      flex: 1;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 7px;
+      padding: 10px 12px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #0f766e;
+      box-shadow: 0 0 0 2px rgba(15,118,110,.1);
+    }
+
+    .medicine-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-height: 650px;
+      overflow-y: auto;
+      padding-right: 3px;
+    }
+
+    .medicine-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 13px;
+      cursor: pointer;
+      transition: .2s;
+      background: #fff;
+    }
+
+    .medicine-card:hover {
+      border-color: #0f766e;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+
+    .medicine-card h3 {
+      font-size: 15px;
+      margin-bottom: 7px;
+    }
+
+    .medicine-card .generic {
+      color: #64748b;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .medicine-card .price {
+      color: #0f766e;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .stock {
+      font-size: 12px;
+      margin-top: 7px;
+    }
+
+    .stock.good {
+      color: #16a34a;
+    }
+
+    .stock.low {
+      color: #dc2626;
+    }
+
+    /* Cart */
+    .cart {
+      position: sticky;
+      top: 20px;
+    }
+
+    .customer-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .customer-fields .full {
+      grid-column: 1 / -1;
+    }
+
+    .cart-items {
+      max-height: 330px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 0;
+    }
+
+    .cart-item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .cart-name {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .cart-price {
+      color: #0f766e;
+      font-weight: bold;
+    }
+
+    .cart-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .qty-btn {
+      border: 0;
+      width: 27px;
+      height: 27px;
+      border-radius: 5px;
+      background: #e2e8f0;
+      cursor: pointer;
+    }
+
+    .qty-number {
+      width: 32px;
+      text-align: center;
+    }
+
+    .remove-btn {
+      border: 0;
+      color: #dc2626;
+      background: transparent;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    .summary {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 12px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    .summary-row.total {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0f766e;
+      padding-top: 8px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    .payment-box {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .payment-box label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .change {
+      background: #ecfdf5;
+      color: #047857;
+      padding: 10px;
+      border-radius: 7px;
+      margin-top: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 7px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: #0f766e;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0d665f;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .full-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* Table */
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      overflow-x: auto;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .badge-green {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-red {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .action-btn {
+      padding: 6px 9px;
+      border: 0;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 3px;
+    }
+
+    .edit {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .delete {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 12px;
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .close {
+      border: 0;
+      background: transparent;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #111827;
+      color: white;
+      padding: 13px 18px;
+      border-radius: 8px;
+      display: none;
+      z-index: 2000;
+      box-shadow: 0 5px 20px rgba(0,0,0,.2);
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    /* Empty */
+    .empty {
+      text-align: center;
+      color: #94a3b8;
+      padding: 30px;
+      grid-column: 1 / -1;
+    }
+
+    /* Mobile */
+    @media (max-width: 1100px) {
+      .medicine-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 850px) {
+      .sidebar {
+        width: 70px;
+        padding: 10px;
+      }
+
+      .logo h2,
+      .logo small,
+      .nav-text {
+        display: none;
+      }
+
+      .logo .icon {
+        font-size: 30px;
+      }
+
+      .nav-btn {
+        text-align: center;
+        padding: 13px 5px;
+      }
+
+      .main {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+      }
+
+      .pos-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .cart {
+        position: static;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .main {
+        padding: 10px;
+      }
+
+      .topbar {
+        padding: 12px;
+      }
+
+      .topbar h1 {
+        font-size: 18px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .stat {
+        padding: 14px;
+      }
+
+      .stat .value {
+        font-size: 21px;
+      }
+
+      .medicine-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .form-grid,
+      .customer-fields {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full,
+      .customer-fields .full {
+        grid-column: auto;
+      }
+    }
+
+    /* Print */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #invoicePrint,
+      #invoicePrint * {
+        visibility: visible;
+      }
+
+      #invoicePrint {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 20px;
+      }
+    }
+
+    #invoicePrint {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="icon">💊</div>
+      <h2>Pharma POS</h2>
+      <small>Pharmacy Management</small>
+    </div>
+
+    <button class="nav-btn active" onclick="showPage('posPage', this)">
+      🛒 <span class="nav-text">POS / Sale</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('productsPage', this)">
+      💊 <span class="nav-text">Medicines</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('salesPage', this)">
+      🧾 <span class="nav-text">Sales History</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('dashboardPage', this)">
+      📊 <span class="nav-text">Dashboard</span>
+    </button>
+  </aside>
+
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">Pharmacy POS</h1>
+      </div>
+      <div class="date" id="currentDate"></div>
+    </div>
+
+
+    <!-- ================= POS PAGE ================= -->
+    <section id="posPage" class="page active">
+
+      <div class="pos-layout">
+
+        <!-- Products -->
+        <div class="panel">
+
+          <div class="panel-title">
+            <h2>Medicine / Products</h2>
+            <button class="btn btn-primary" onclick="openProductModal()">
+              + Add Medicine
+            </button>
+          </div>
+
+          <div class="search-box">
+            <input
+              type="text"
+              id="posSearch"
+              placeholder="Search medicine by name, generic or barcode..."
+              oninput="renderPOSProducts()"
+            />
+
+            <select id="categoryFilter" onchange="renderPOSProducts()">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+
+          <div class="medicine-grid" id="medicineGrid"></div>
+
+        </div>
+
+
+        <!-- CART -->
+        <div class="panel cart">
+
+          <div class="panel-title">
+            <h2>🛒 Current Sale</h2>
+            <button class="btn btn-danger" onclick="clearCart()">Clear</button>
+          </div>
+
+          <div class="customer-fields">
+            <input
+              class="full"
+              id="customerName"
+              placeholder="Customer name"
+            />
+
+            <input
+              id="customerPhone"
+              placeholder="Phone number"
+            />
+
+            <select id="paymentMethod">
+              <option value="Cash">Cash</option>
+              <option value="Card">Card</option>
+              <option value="Mobile Banking">Mobile Banking</option>
+            </select>
+          </div>
+
+          <div class="cart-items" id="cartItems"></div>
+
+          <div class="summary">
+
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <strong id="subtotal">৳0.00</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Discount</span>
+              <div style="width:100px">
+                <input
+                  type="number"
+                  id="discount"
+                  value="0"
+                  min="0"
+                  oninput="calculateCart()"
+                />
+              </div>
+            </div>
+
+            <div class="summary-row">
+              <span>VAT (%)</span>
+              <div style="width:100px">
+                <input
+                  type="number"
+                  id="vat"
+                  value="0"
+                  min="0"
+                  max="100"
+                  oninput="calculateCart()"
+                />
+              </div>
+            </div>
+
+            <div class="summary-row">
+              <span>VAT Amount</span>
+              <strong id="vatAmount">৳0.00</strong>
+            </div>
+
+            <div class="summary-row total">
+              <span>Grand Total</span>
+              <span id="grandTotal">৳0.00</span>
+            </div>
+
+          </div>
+
+          <div class="payment-box">
+
+            <label>Cash Received</label>
+
+            <input
+              type="number"
+              id="cashReceived"
+              placeholder="Enter received amount"
+              min="0"
+              oninput="calculateChange()"
+            />
+
+            <div class="change">
+              Change: <span id="changeAmount">৳0.00</span>
+            </div>
+
+            <button
+              class="btn btn-primary full-btn"
+              onclick="completeSale()"
+            >
+              💰 Complete Sale
+            </button>
+
+            <button
+              class="btn btn-secondary full-btn"
+              onclick="printLastInvoice()"
+            >
+              🖨️ Print Last Invoice
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ================= PRODUCTS PAGE ================= -->
+    <section id="productsPage" class="page">
+
+      <div class="table-container">
+
+        <div class="table-header">
+          <h2>Medicine Inventory</h2>
+
+          <div style="display:flex; gap:8px;">
+            <input
+              id="productSearch"
+              placeholder="Search..."
+              oninput="renderProductsTable()"
+              style="width:220px;"
+            />
+
+            <button
+              class="btn btn-primary"
+              onclick="openProductModal()"
+            >
+              + Add Medicine
+            </button>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Medicine</th>
+              <th>Generic</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Expiry</th>
+              <th>Barcode</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="productsTable"></tbody>
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= SALES PAGE ================= -->
+    <section id="salesPage" class="page">
+
+      <div class="table-container">
+
+        <div class="table-header">
+          <h2>Sales History</h2>
+
+          <button
+            class="btn btn-danger"
+            onclick="clearSalesHistory()"
+          >
+            Clear History
+          </button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Payment</th>
+              <th>Total</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="salesTable"></tbody>
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= DASHBOARD ================= -->
+    <section id="dashboardPage" class="page">
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="label">Total Medicines</div>
+          <div class="value" id="dashProducts">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="label">Total Stock</div>
+          <div class="value" id="dashStock">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="label">Today's Sales</div>
+          <div class="value" id="dashSales">৳0</div>
+        </div>
+
+        <div class="stat">
+          <div class="label">Low Stock Items</div>
+          <div class="value" id="dashLowStock">0</div>
+        </div>
+
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-bottom:15px;">Quick Information</h2>
+
+        <p style="color:#64748b; line-height:1.7;">
+          This is a browser-based pharmacy POS demo.
+          Product and sales data are stored in your browser's
+          localStorage.
+        </p>
+
+        <br>
+
+        <button
+          class="btn btn-warning"
+          onclick="loadDemoData()"
+        >
+          🔄 Reload Demo Medicines
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+
+<!-- PRODUCT MODAL -->
+<div class="modal" id="productModal">
+
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h2 id="modalTitle">Add Medicine</h2>
+      <button class="close" onclick="closeProductModal()">×</button>
+    </div>
+
+    <form id="productForm">
+
+      <input type="hidden" id="editProductId">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Medicine Name *</label>
+          <input id="medicineName" required />
+        </div>
+
+        <div class="form-group">
+          <label>Generic Name</label>
+          <input id="genericName" />
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <input id="medicineCategory" placeholder="Tablet / Syrup / Capsule" />
+        </div>
+
+        <div class="form-group">
+          <label>Price *</label>
+          <input
+            id="medicinePrice"
+            type="number"
+            step="0.01"
+            min="0"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Stock *</label>
+          <input
+            id="medicineStock"
+            type="number"
+            min="0"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Expiry Date</label>
+          <input id="medicineExpiry" type="date" />
+        </div>
+
+        <div class="form-group full">
+          <label>Barcode</label>
+          <input id="medicineBarcode" />
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="closeProductModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >
+          Save Medicine
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<!-- INVOICE PRINT AREA -->
+<div id="invoicePrint"></div>
+
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+  /* =========================================================
+     DATA
+  ========================================================= */
+
+  const demoProducts = [
+    {
+      id: 1,
+      name: "Napa 500mg",
+      generic: "Paracetamol",
+      category: "Tablet",
+      price: 1.20,
+      stock: 150,
+      expiry: "2027-06-30",
+      barcode: "8941100123456"
+    },
+    {
+      id: 2,
+      name: "Seclo 20mg",
+      generic: "Omeprazole",
+      category: "Capsule",
+      price: 3.00,
+      stock: 80,
+      expiry: "2027-04-15",
+      barcode: "8941100123457"
+    },
+    {
+      id: 3,
+      name: "Fexo 120mg",
+      generic: "Fexofenadine",
+      category: "Tablet",
+      price: 2.50,
+      stock: 60,
+      expiry: "2027-01-20",
+      barcode: "8941100123458"
+    },
+    {
+      id: 4,
+      name: "DP 25mg",
+      generic: "Diclofenac Sodium",
+      category: "Tablet",
+      price: 1.50,
+      stock: 12,
+      expiry: "2026-12-10",
+      barcode: "8941100123459"
+    },
+    {
+      id: 5,
+      name: "Napa Syrup",
+      generic: "Paracetamol",
+      category: "Syrup",
+      price: 35.00,
+      stock: 30,
+      expiry: "2027-03-05",
+      barcode: "8941100123460"
+    },
+    {
+      id: 6,
+      name: "Antacid Plus",
+      generic: "Aluminium Hydroxide",
+      category: "Syrup",
+      price: 75.00,
+      stock: 8,
+      expiry: "2026-11-18",
+      barcode: "8941100123461"
+    },
+    {
+      id: 7,
+      name: "Vitamin C",
+      generic: "Ascorbic Acid",
+      category: "Tablet",
+      price: 2.00,
+      stock: 100,
+      expiry: "2027-08-10",
+      barcode: "8941100123462"
+    },
+    {
+      id: 8,
+      name: "ORS",
+      generic: "Oral Saline",
+      category: "Sachet",
+      price: 8.00,
+      stock: 200,
+      expiry: "2027-05-25",
+      barcode: "8941100123463"
+    }
+  ];
+
+
+  let products =
+    JSON.parse(localStorage.getItem("pharmacy_products")) ||
+    demoProducts;
+
+  let sales =
+    JSON.parse(localStorage.getItem("pharmacy_sales")) ||
+    [];
+
+  let cart = [];
+
+  let lastInvoice = null;
+
+
+  /* =========================================================
+     INITIALIZATION
+  ========================================================= */
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    saveProducts();
+
+    updateDate();
+
+    renderPOSProducts();
+
+    renderProductsTable();
+
+    renderSalesTable();
+
+    updateDashboard();
+
+    populateCategories();
+
+    calculateCart();
+
+  });
+
+
+  /* =========================================================
+     STORAGE
+  ========================================================= */
+
+  function saveProducts() {
+    localStorage.setItem(
+      "pharmacy_products",
+      JSON.stringify(products)
+    );
+  }
+
+
+  function saveSales() {
+    localStorage.setItem(
+      "pharmacy_sales",
+      JSON.stringify(sales)
+    );
+  }
+
+
+  /* =========================================================
+     DATE
+  ========================================================= */
+
+  function updateDate() {
+
+    const now = new Date();
+
+    document.getElementById("currentDate").textContent =
+      now.toLocaleDateString("en-BD", {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+
+  }
+
+
+  /* =========================================================
+     NAVIGATION
+  ========================================================= */
+
+  function showPage(pageId, button) {
+
+    document.querySelectorAll(".page").forEach(page => {
+      page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    const titles = {
+      posPage: "Pharmacy POS",
+      productsPage: "Medicine Inventory",
+      salesPage: "Sales History",
+      dashboardPage: "Dashboard"
+    };
+
+    document.getElementById("pageTitle").textContent =
+      titles[pageId];
+
+    if (pageId === "dashboardPage") {
+      updateDashboard();
+    }
+
+    if (pageId === "productsPage") {
+      renderProductsTable();
+    }
+
+    if (pageId === "salesPage") {
+      renderSalesTable();
+    }
+
+  }
+
+
+  /* =========================================================
+     CATEGORIES
+  ========================================================= */
+
+  function populateCategories() {
+
+    const select =
+      document.getElementById("categoryFilter");
+
+    const categories = [
+      ...new Set(
+        products
+          .map(p => p.category)
+          .filter(Boolean)
+      )
+    ];
+
+    select.innerHTML =
+      `<option value="">All Categories</option>`;
+
+    categories.forEach(category => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = category;
+      option.textContent = category;
+
+      select.appendChild(option);
+
+    });
+
+  }
+
+
+  /* =========================================================
+     POS PRODUCTS
+  ========================================================= */
+
+  function renderPOSProducts() {
+
+    const grid =
+      document.getElementById("medicineGrid");
+
+    const search =
+      document
+        .getElementById("posSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const category =
+      document.getElementById("categoryFilter").value;
+
+    const filtered = products.filter(product => {
+
+      const matchesSearch =
+        product.name.toLowerCase().includes(search) ||
+        product.generic.toLowerCase().includes(search) ||
+        product.barcode.toLowerCase().includes(search);
+
+      const matchesCategory =
+        !category ||
+        product.category === category;
+
+      return matchesSearch && matchesCategory;
+
+    });
+
+    if (!filtered.length) {
+
+      grid.innerHTML =
+        `<div class="empty">
+          No medicine found.
+        </div>`;
+
+      return;
+    }
+
+    grid.innerHTML = filtered.map(product => {
+
+      const stockClass =
+        product.stock <= 10
+          ? "low"
+          : "good";
+
+      return `
+        <div
+          class="medicine-card"
+          onclick="addToCart(${product.id})"
+        >
+
+          <h3>${escapeHTML(product.name)}</h3>
+
+          <div class="generic">
+            ${escapeHTML(product.generic || "N/A")}
+          </div>
+
+          <div class="price">
+            ৳${Number(product.price).toFixed(2)}
+          </div>
+
+          <div class="stock ${stockClass}">
+            Stock: ${product.stock}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  }
+
+
+  /* =========================================================
+     CART
+  ========================================================= */
+
+  function addToCart(productId) {
+
+    const product =
+      products.find(p => p.id === productId);
+
+    if (!product) return;
+
+    if (product.stock <= 0) {
+      showToast("This medicine is out of stock.");
+      return;
+    }
+
+    const existing =
+      cart.find(item => item.id === productId);
+
+    if (existing) {
+
+      if (existing.qty >= product.stock) {
+        showToast("Not enough stock available.");
+        return;
+      }
+
+      existing.qty++;
+
+    } else {
+
+      cart.push({
+        id: product.id,
+        qty: 1
+      });
+
+    }
+
+    renderCart();
+
+    showToast(
+      `${product.name} added to cart`
+    );
+
+  }
+
+
+  function renderCart() {
+
+    const container =
+      document.getElementById("cartItems");
+
+    if (!cart.length) {
+
+      container.innerHTML =
+        `<div class="empty">
+          Cart is empty
+        </div>`;
+
+      calculateCart();
+
+      return;
+    }
+
+    container.innerHTML = cart.map(item => {
+
+      const product =
+        products.find(p => p.id === item.id);
+
+      if (!product) return "";
+
+      const total =
+        product.price * item.qty;
+
+      return `
+        <div class="cart-item">
+
+          <div class="cart-item-top">
+
+            <div>
+              <div class="cart-name">
+                ${escapeHTML(product.name)}
+              </div>
+
+              <small>
+                ৳${Number(product.price).toFixed(2)} each
+              </small>
+            </div>
+
+            <div class="cart-price">
+              ৳${total.toFixed(2)}
+            </div>
+
+          </div>
+
+          <div class="cart-controls">
+
+            <button
+              class="qty-btn"
+              onclick="changeQty(${product.id}, -1)"
+            >
+              −
+            </button>
+
+            <span class="qty-number">
+              ${item.qty}
+            </span>
+
+            <button
+              class="qty-btn"
+              onclick="changeQty(${product.id}, 1)"
+            >
+              +
+            </button>
+
+            <button
+              class="remove-btn"
+              onclick="removeFromCart(${product.id})"
+            >
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+    calculateCart();
+
+  }
+
+
+  function changeQty(productId, change) {
+
+    const item =
+      cart.find(i => i.id === productId);
+
+    const product =
+      products.find(p => p.id === productId);
+
+    if (!item || !product) return;
+
+    const newQty =
+      item.qty + change;
+
+    if (newQty <= 0) {
+
+      removeFromCart(productId);
+
+      return;
+    }
+
+    if (newQty > product.stock) {
+
+      showToast("Maximum available stock reached.");
+
+      return;
+    }
+
+    item.qty = newQty;
+
+    renderCart();
+
+  }
+
+
+  function removeFromCart(productId) {
+
+    cart =
+      cart.filter(item => item.id !== productId);
+
+    renderCart();
+
+  }
+
+
+  function clearCart() {
+
+    if (!cart.length) return;
+
+    if (!confirm("Clear current cart?")) return;
+
+    cart = [];
+
+    document.getElementById("customerName").value = "";
+    document.getElementById("customerPhone").value = "";
+    document.getElementById("cashReceived").value = "";
+
+    renderCart();
+
+  }
+
+
+  /* =========================================================
+     CALCULATIONS
+  ========================================================= */
+
+  function calculateCart() {
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+
+      const product =
+        products.find(p => p.id === item.id);
+
+      if (product) {
+        subtotal += product.price * item.qty;
+      }
+
+    });
+
+    let discount =
+      Number(document.getElementById("discount").value) || 0;
+
+    if (discount > subtotal) {
+      discount = subtotal;
+      document.getElementById("discount").value =
+        discount.toFixed(2);
+    }
+
+    const vatRate =
+      Number(document.getElementById("vat").value) || 0;
+
+    const afterDiscount =
+      subtotal - discount;
+
+    const vatAmount =
+      afterDiscount * vatRate / 100;
+
+    const grandTotal =
+      afterDiscount + vatAmount;
+
+    document.getElementById("subtotal").textContent =
+      money(subtotal);
+
+    document.getElementById("vatAmount").textContent =
+      money(vatAmount);
+
+    document.getElementById("grandTotal").textContent =
+      money(grandTotal);
+
+    calculateChange();
+
+    return {
+      subtotal,
+      discount,
+      vatRate,
+      vatAmount,
+      grandTotal
+    };
+
+  }
+
+
+  function calculateChange() {
+
+    const total =
+      getGrandTotal();
+
+    const cash =
+      Number(
+        document.getElementById("cashReceived").value
+      ) || 0;
+
+    const change =
+      Math.max(0, cash - total);
+
+    document.getElementById("changeAmount").textContent =
+      money(change);
+
+  }
+
+
+  function getGrandTotal() {
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+
+      const product =
+        products.find(p => p.id === item.id);
+
+      if (product) {
+        subtotal += product.price * item.qty;
+      }
+
+    });
+
+    const discount =
+      Number(document.getElementById("discount").value) || 0;
+
+    const vatRate =
+      Number(document.getElementById("vat").value) || 0;
+
+    const afterDiscount =
+      Math.max(0, subtotal - discount);
+
+    return afterDiscount +
+      afterDiscount * vatRate / 100;
+
+  }
+
+
+  /* =========================================================
+     COMPLETE SALE
+  ========================================================= */
+
+  function completeSale() {
+
+    if (!cart.length) {
+
+      showToast("Please add medicine to cart.");
+
+      return;
+    }
+
+    const totals =
+      calculateCart();
+
+    const cash =
+      Number(
+        document.getElementById("cashReceived").value
+      ) || 0;
+
+    if (cash < totals.grandTotal) {
+
+      showToast(
+        `Insufficient cash. Need ${money(
+          totals.grandTotal - cash
+        )} more.`
+      );
+
+      return;
+    }
+
+    const invoice =
+      "INV-" +
+      Date.now().toString().slice(-8);
+
+    const customer =
+      document.getElementById("customerName").value.trim() ||
+      "Walk-in Customer";
+
+    const phone =
+      document.getElementById("customerPhone").value.trim();
+
+    const paymentMethod =
+      document.getElementById("paymentMethod").value;
+
+    const saleItems =
+      cart.map(item => {
+
+        const product =
+          products.find(p => p.id === item.id);
+
+        return {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          qty: item.qty,
+          total: product.price * item.qty
+        };
+
+      });
+
+    /* Reduce stock */
+    cart.forEach(item => {
+
+      const product =
+        products.find(p => p.id === item.id);
+
+      if (product) {
+        product.stock -= item.qty;
+      }
+
+    });
+
+    const sale = {
+      invoice,
+      date: new Date().toISOString(),
+      customer,
+      phone,
+      paymentMethod,
+      items: saleItems,
+      subtotal: totals.subtotal,
+      discount: totals.discount,
+      vatRate: totals.vatRate,
+      vatAmount: totals.vatAmount,
+      total: totals.grandTotal,
+      cash,
+      change: cash - totals.grandTotal
+    };
+
+    sales.unshift(sale);
+
+    saveProducts();
+    saveSales();
+
+    lastInvoice = sale;
+
+    createInvoiceHTML(sale);
+
+    /* Reset cart */
+    cart = [];
+
+    document.getElementById("customerName").value = "";
+    document.getElementById("customerPhone").value = "";
+    document.getElementById("cashReceived").value = "";
+    document.getElementById("discount").value = "0";
+    document.getElementById("vat").value = "0";
+
+    renderCart();
+    renderPOSProducts();
+    renderProductsTable();
+    renderSalesTable();
+    updateDashboard();
+
+    showToast(
+      `${invoice} completed successfully`
+    );
+
+    /* Auto print */
+    setTimeout(() => {
+      window.print();
+    }, 300);
+
+  }
+
+
+  /* =========================================================
+     PRODUCT MODAL
+  ========================================================= */
+
+  function openProductModal(productId = null) {
+
+    document
+      .getElementById("productModal")
+      .classList.add("show");
+
+    if (productId) {
+
+      const product =
+        products.find(p => p.id === productId);
+
+      if (!product) return;
+
+      document.getElementById("modalTitle").textContent =
+        "Edit Medicine";
+
+      document.getElementById("editProductId").value =
+        product.id;
+
+      document.getElementById("medicineName").value =
+        product.name;
+
+      document.getElementById("genericName").value =
+        product.generic;
+
+      document.getElementById("medicineCategory").value =
+        product.category;
+
+      document.getElementById("medicinePrice").value =
+        product.price;
+
+      document.getElementById("medicineStock").value =
+        product.stock;
+
+      document.getElementById("medicineExpiry").value =
+        product.expiry;
+
+      document.getElementById("medicineBarcode").value =
+        product.barcode;
+
+    } else {
+
+      document.getElementById("modalTitle").textContent =
+        "Add Medicine";
+
+      document.getElementById("productForm").reset();
+
+      document.getElementById("editProductId").value = "";
+
+    }
+
+  }
+
+
+  function closeProductModal() {
+
+    document
+      .getElementById("productModal")
+      .classList.remove("show");
+
+  }
+
+
+  document
+    .getElementById("productForm")
+    .addEventListener("submit", function(e) {
+
+      e.preventDefault();
+
+      const editId =
+        document.getElementById("editProductId").value;
+
+      const data = {
+
+        name:
+          document.getElementById("medicineName").value.trim(),
+
+        generic:
+          document.getElementById("genericName").value.trim(),
+
+        category:
+          document.getElementById("medicineCategory").value.trim(),
+
+        price:
+          Number(
+            document.getElementById("medicinePrice").value
+          ),
+
+        stock:
+          Number(
+            document.getElementById("medicineStock").value
+          ),
+
+        expiry:
+          document.getElementById("medicineExpiry").value,
+
+        barcode:
+          document.getElementById("medicineBarcode").value.trim()
+
+      };
+
+      if (editId) {
+
+        const product =
+          products.find(p => p.id === Number(editId));
+
+        if (product) {
+          Object.assign(product, data);
+        }
+
+        showToast("Medicine updated.");
+
+      } else {
+
+        products.push({
+          id: Date.now(),
+          ...data
+        });
+
+        showToast("Medicine added.");
+
+      }
+
+      saveProducts();
+
+      populateCategories();
+      renderPOSProducts();
+      renderProductsTable();
+      updateDashboard();
+
+      closeProductModal();
+
+    });
+
+
+  /* =========================================================
+     PRODUCT TABLE
+  ========================================================= */
+
+  function renderProductsTable() {
+
+    const tbody =
+      document.getElementById("productsTable");
+
+    const search =
+      (
+        document.getElementById("productSearch")?.value ||
+        ""
+      ).toLowerCase();
+
+    const filtered =
+      products.filter(product => {
+
+        return (
+          product.name.toLowerCase().includes(search) ||
+          product.generic.toLowerCase().includes(search) ||
+          product.barcode.toLowerCase().includes(search)
+        );
+
+      });
+
+    if (!filtered.length) {
+
+      tbody.innerHTML =
+        `<tr>
+          <td colspan="8" style="text-align:center;">
+            No medicine found.
+          </td>
+        </tr>`;
+
+      return;
+    }
+
+    tbody.innerHTML =
+      filtered.map(product => {
+
+        const status =
+          product.stock <= 10
+            ? `<span class="badge badge-red">Low Stock</span>`
+            : `<span class="badge badge-green">In Stock</span>`;
+
+        return `
+          <tr>
+
+            <td>
+              <strong>${escapeHTML(product.name)}</strong>
+            </td>
+
+            <td>
+              ${escapeHTML(product.generic || "-")}
+            </td>
+
+            <td>
+              ${escapeHTML(product.category || "-")}
+            </td>
+
+            <td>
+              ${money(product.price)}
+            </td>
+
+            <td>
+              ${product.stock}
+              <br>
+              ${status}
+            </td>
+
+            <td>
+              ${product.expiry || "-"}
+            </td>
+
+            <td>
+              ${escapeHTML(product.barcode || "-")}
+            </td>
+
+            <td>
+
+              <button
+                class="action-btn edit"
+                onclick="openProductModal(${product.id})"
+              >
+                Edit
+              </button>
+
+              <button
+                class="action-btn delete"
+                onclick="deleteProduct(${product.id})"
+              >
+                Delete
+              </button>
+
+            </td>
+
+          </tr>
+        `;
+
+      }).join("");
+
+  }
+
+
+  function deleteProduct(productId) {
+
+    const product =
+      products.find(p => p.id === productId);
+
+    if (!product) return;
+
+    if (
+      !confirm(
+        `Delete "${product.name}"?`
+      )
+    ) {
+      return;
+    }
+
+    products =
+      products.filter(p => p.id !== productId);
+
+    cart =
+      cart.filter(item => item.id !== productId);
+
+    saveProducts();
+
+    renderProductsTable();
+    renderPOSProducts();
+    renderCart();
+    populateCategories();
+    updateDashboard();
+
+    showToast("Medicine deleted.");
+
+  }
+
+
+  /* =========================================================
+     SALES TABLE
+  ========================================================= */
+
+  function renderSalesTable() {
+
+    const tbody =
+      document.getElementById("salesTable");
+
+    if (!sales.length) {
+
+      tbody.innerHTML =
+        `<tr>
+          <td colspan="7" style="text-align:center;">
+            No sales found.
+          </td>
+        </tr>`;
+
+      return;
+    }
+
+    tbody.innerHTML =
+      sales.map(sale => {
+
+        const itemCount =
+          sale.items.reduce(
+            (sum, item) => sum + item.qty,
+            0
+          );
+
+        const date =
+          new Date(sale.date)
+            .toLocaleString("en-BD");
+
+        return `
+          <tr>
+
+            <td>
+              <strong>${sale.invoice}</strong>
+            </td>
+
+            <td>
+              ${date}
+            </td>
+
+            <td>
+              ${escapeHTML(sale.customer)}
+            </td>
+
+            <td>
+              ${itemCount}
+            </td>
+
+            <td>
+              ${escapeHTML(sale.paymentMethod)}
+            </td>
+
+            <td>
+              <strong>${money(sale.total)}</strong>
+            </td>
+
+            <td>
+
+              <button
+                class="action-btn edit"
+                onclick="printSale('${sale.invoice}')"
+              >
+                Print
+              </button>
+
+            </td>
+
+          </tr>
+        `;
+
+      }).join("");
+
+  }
+
+
+  function printSale(invoice) {
+
+    const sale =
+      sales.find(s => s.invoice === invoice);
+
+    if (!sale) return;
+
+    lastInvoice = sale;
+
+    createInvoiceHTML(sale);
+
+    window.print();
+
+  }
+
+
+  function clearSalesHistory() {
+
+    if (!sales.length) return;
+
+    if (
+      !confirm(
+        "Delete all sales history?"
+      )
+    ) {
+      return;
+    }
+
+    sales = [];
+
+    saveSales();
+
+    renderSalesTable();
+
+    updateDashboard();
+
+    showToast("Sales history cleared.");
+
+  }
+
+
+  /* =========================================================
+     INVOICE
+  ========================================================= */
+
+  function createInvoiceHTML(sale) {
+
+    const invoice =
+      document.getElementById("invoicePrint");
+
+    invoice.innerHTML = `
+      <div style="
+        max-width:700px;
+        margin:auto;
+        font-family:Arial, sans-serif;
+        color:#111;
+      ">
+
+        <div style="
+          text-align:center;
+          border-bottom:2px solid #111;
+          padding-bottom:15px;
+          margin-bottom:15px;
+        ">
+
+          <h1 style="font-size:25px;">
+            PHARMA POS
+          </h1>
+
+          <p>Pharmacy & Medical Store</p>
+
+          <p>
+            Invoice: <strong>${sale.invoice}</strong>
+          </p>
+
+          <p>
+            ${new Date(sale.date).toLocaleString("en-BD")}
+          </p>
+
+        </div>
+
+
+        <div style="margin-bottom:15px;">
+
+          <strong>Customer:</strong>
+          ${escapeHTML(sale.customer)}
+
+          ${
+            sale.phone
+              ? `<br><strong>Phone:</strong> ${escapeHTML(sale.phone)}`
+              : ""
+          }
+
+        </div>
+
+
+        <table style="
+          width:100%;
+          border-collapse:collapse;
+          margin-bottom:15px;
+        ">
+
+          <thead>
+            <tr>
+              <th style="
+                border-bottom:1px solid #111;
+                padding:8px;
+                text-align:left;
+              ">
+                Medicine
+              </th>
+
+              <th style="
+                border-bottom:1px solid #111;
+                padding:8px;
+              ">
+                Qty
+              </th>
+
+              <th style="
+                border-bottom:1px solid #111;
+                padding:8px;
+                text-align:right;
+              ">
+                Price
+              </th>
+
+              <th style="
+                border-bottom:1px solid #111;
+                padding:8px;
+                text-align:right;
+              ">
+                Total
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            ${sale.items.map(item => `
+              <tr>
+
+                <td style="padding:8px;">
+                  ${escapeHTML(item.name)}
+                </td>
+
+                <td style="
+                  padding:8px;
+                  text-align:center;
+                ">
+                  ${item.qty}
+                </td>
+
+                <td style="
+                  padding:8px;
+                  text-align:right;
+                ">
+                  ${money(item.price)}
+                </td>
+
+                <td style="
+                  padding:8px;
+                  text-align:right;
+                ">
+                  ${money(item.total)}
+                </td>
+
+              </tr>
+            `).join("")}
+
+          </tbody>
+
+        </table>
+
+
+        <div style="
+          margin-left:auto;
+          width:280px;
+        ">
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:5px 0;
+          ">
+            <span>Subtotal:</span>
+            <strong>${money(sale.subtotal)}</strong>
+          </div>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:5px 0;
+          ">
+            <span>Discount:</span>
+            <strong>${money(sale.discount)}</strong>
+          </div>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:5px 0;
+          ">
+            <span>VAT (${sale.vatRate}%):</span>
+            <strong>${money(sale.vatAmount)}</strong>
+          </div>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:8px 0;
+            border-top:1px solid #111;
+            font-size:18px;
+          ">
+            <strong>Grand Total:</strong>
+            <strong>${money(sale.total)}</strong>
+          </div>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:5px 0;
+          ">
+            <span>Payment:</span>
+            <strong>${escapeHTML(sale.paymentMethod)}</strong>
+          </div>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:5px 0;
+          ">
+            <span>Cash:</span>
+            <strong>${money(sale.cash)}</strong>
+          </div>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:5px 0;
+          ">
+            <span>Change:</span>
+            <strong>${money(sale.change)}</strong>
+          </div>
+
+        </div>
+
+
+        <div style="
+          text-align:center;
+          margin-top:30px;
+          border-top:1px dashed #888;
+          padding-top:15px;
+        ">
+          <p>Thank you for your purchase!</p>
+          <p style="font-size:12px;">
+            Please consult a qualified doctor/pharmacist when required.
+          </p>
+        </div>
+
+      </div>
+    `;
+
+    invoice.style.display = "block";
+
+  }
+
+
+  function printLastInvoice() {
+
+    if (!lastInvoice) {
+
+      showToast("No invoice available.");
+
+      return;
+    }
+
+    createInvoiceHTML(lastInvoice);
+
+    window.print();
+
+  }
+
+
+  /* =========================================================
+     DASHBOARD
+  ========================================================= */
+
+  function updateDashboard() {
+
+    const totalProducts =
+      products.length;
+
+    const totalStock =
+      products.reduce(
+        (sum, product) =>
+          sum + Number(product.stock || 0),
+        0
+      );
+
+    const lowStock =
+      products.filter(
+        product => product.stock <= 10
+      ).length;
+
+    const today =
+      new Date().toISOString().slice(0, 10);
+
+    const todaySales =
+      sales
+        .filter(sale =>
+          sale.date.slice(0, 10) === today
+        )
+        .reduce(
+          (sum, sale) =>
+            sum + Number(sale.total),
+          0
+        );
+
+    document.getElementById("dashProducts").textContent =
+      totalProducts;
+
+    document.getElementById("dashStock").textContent =
+      totalStock;
+
+    document.getElementById("dashLowStock").textContent =
+      lowStock;
+
+    document.getElementById("dashSales").textContent =
+      money(todaySales);
+
+  }
+
+
+  /* =========================================================
+     DEMO DATA
+  ========================================================= */
+
+  function loadDemoData() {
+
+    if (
+      !confirm(
+        "This will replace your current medicine list with demo data. Continue?"
+      )
+    ) {
+      return;
+    }
+
+    products =
+      JSON.parse(
+        JSON.stringify(demoProducts)
+      );
+
+    saveProducts();
+
+    cart = [];
+
+    populateCategories();
+    renderPOSProducts();
+    renderProductsTable();
+    renderCart();
+    updateDashboard();
+
+    showToast("Demo medicines loaded.");
+
+  }
+
+
+  /* =========================================================
+     HELPERS
+  ========================================================= */
+
+  function money(value) {
+
+    return "৳" +
+      Number(value || 0).toLocaleString(
+        "en-BD",
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  }
+
+
+  function escapeHTML(value) {
+
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  function showToast(message) {
+
+    const toast =
+      document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2500);
+
+  }
+
+
+  /* =========================================================
+     CLOSE MODAL ON OUTSIDE CLICK
+  ========================================================= */
+
+  document
+    .getElementById("productModal")
+    .addEventListener("click", function(e) {
+
+      if (e.target === this) {
+        closeProductModal();
+      }
+
+    });
+
+
+  /* =========================================================
+     KEYBOARD SHORTCUTS
+  ========================================================= */
+
+  document.addEventListener("keydown", function(e) {
+
+    /* F2 = focus search */
+    if (e.key === "F2") {
+
+      e.preventDefault();
+
+      document
+        .getElementById("posSearch")
+        .focus();
+
+    }
+
+    /* Escape = close modal */
+    if (e.key === "Escape") {
+      closeProductModal();
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
