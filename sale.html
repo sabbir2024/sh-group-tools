@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profit Calculator with Per Sale Profit</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f4f6f9;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #0078d7;
+      color: white;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #0078d7;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #222;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <h1>Multi-Lot Profit Calculator</h1>
+  <div class="container">
+    <button onclick="addRow()">➕ Add Entry</button>
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Purchase Qty</th>
+          <th>Unit Cost</th>
+          <th>Delivery Cost</th>
+          <th>Sale Qty</th>
+          <th>Sale Price</th>
+          <th>Lot Cost</th>
+          <th>Lot Sale</th>
+          <th>Lot Profit</th>
+          <th>Per Sale Profit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="date"></td>
+          <td><input type="number" value="0"></td>
+          <td><input type="number" value="0"></td>
+          <td><input type="number" value="0"></td>
+          <td><input type="number" value="0"></td>
+          <td><input type="number" value="0"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <button onclick="calculateProfit()">💰 Calculate Total Profit</button>
+    <button onclick="exportCSV()">📤 Export CSV</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function addRow() {
+      const table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      for (let i = 0; i < 10; i++) {
+        const cell = newRow.insertCell(i);
+        if (i === 0) {
+          cell.innerHTML = '<input type="date">';
+        } else if (i < 6) {
+          cell.innerHTML = '<input type="number" value="0">';
+        } else {
+          cell.innerHTML = '';
+        }
+      }
+    }
+
+    function calculateProfit() {
+      const rows = document.querySelectorAll('#dataTable tbody tr');
+      let totalCost = 0;
+      let totalSale = 0;
+      let details = "";
+
+      rows.forEach((row, index) => {
+        const inputs = row.querySelectorAll('input');
+        const date = inputs[0].value || "N/A";
+        const qty = parseFloat(inputs[1].value) || 0;
+        const cost = parseFloat(inputs[2].value) || 0;
+        const delivery = parseFloat(inputs[3].value) || 0;
+        const saleQty = parseFloat(inputs[4].value) || 0;
+        const salePrice = parseFloat(inputs[5].value) || 0;
+
+        const lotCost = (qty * cost) + delivery;
+        const lotSale = saleQty * salePrice;
+        const lotProfit = lotSale - lotCost;
+        const perSaleProfit = saleQty > 0 ? (lotProfit / saleQty).toFixed(2) : 0;
+
+        totalCost += lotCost;
+        totalSale += lotSale;
+
+        // Update table cells
+        row.cells[6].innerText = lotCost;
+        row.cells[7].innerText = lotSale;
+        row.cells[8].innerText = lotProfit;
+        row.cells[9].innerText = perSaleProfit;
+
+        details += `Row ${index+1} [${date}] → Cost: ${lotCost}, Sale: ${lotSale}, Profit: ${lotProfit}, Per Sale Profit: ${perSaleProfit}\n`;
+      });
+
+      const profit = totalSale - totalCost;
+      document.getElementById('result').innerText =
+        `${details}\nTotal Cost: ${totalCost} | Total Sale: ${totalSale} | Overall Profit: ${profit}`;
+    }
+
+    function exportCSV() {
+      const rows = document.querySelectorAll('#dataTable tbody tr');
+      let csvContent = "Date,Purchase Qty,Unit Cost,Delivery Cost,Sale Qty,Sale Price,Lot Cost,Lot Sale,Lot Profit,Per Sale Profit\n";
+
+      rows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        const date = inputs[0].value || "N/A";
+        const qty = parseFloat(inputs[1].value) || 0;
+        const cost = parseFloat(inputs[2].value) || 0;
+        const delivery = parseFloat(inputs[3].value) || 0;
+        const saleQty = parseFloat(inputs[4].value) || 0;
+        const salePrice = parseFloat(inputs[5].value) || 0;
+
+        const lotCost = (qty * cost) + delivery;
+        const lotSale = saleQty * salePrice;
+        const lotProfit = lotSale - lotCost;
+        const perSaleProfit = saleQty > 0 ? (lotProfit / saleQty).toFixed(2) : 0;
+
+        csvContent += `${date},${qty},${cost},${delivery},${saleQty},${salePrice},${lotCost},${lotSale},${lotProfit},${perSaleProfit}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "profit_data.csv";
+      link.click();
+    }
+  </script>
+</body>
+</html>
