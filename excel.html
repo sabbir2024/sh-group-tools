@@ -674,6 +674,21 @@ body {
     background: #e2f2fc;
 }
 
+/* ================= SELECTED ROW ================= */
+
+#dataTable tbody tr {
+    cursor: pointer;
+}
+
+#dataTable tbody tr.selected-row td {
+    background: #c8e7ff !important;
+    color: #111;
+}
+
+#dataTable tbody tr.selected-row:hover td {
+    background: #b6dcf7 !important;
+}
+
 #dataTable .filter-header th {
     position: sticky;
     top: 35px;
@@ -1072,7 +1087,6 @@ body {
 
 </div>
 
-
 <!-- ================= HEADER ================= -->
 
 <div class="top-header">
@@ -1097,27 +1111,25 @@ body {
 
 </div>
 
-
 <!-- ================= NAV ================= -->
 
 <nav class="header-nav">
 
     <a
-        href="excel.html"
-        class="header-link  active"
+        href="file:///D:/s-Desktop/sabbir/excel%20editing.html"
+        class="header-link active"
     >
         Excel Editing
     </a>
 
     <a
-        href="gatepass.html"
+        href="file:///D:/s-Desktop/sabbir/gatepass.html"
         class="header-link"
     >
         OGP Print
     </a>
 
 </nav>
-
 
 <!-- ================= MAIN ================= -->
 
@@ -1159,7 +1171,6 @@ Clear ↻
 
 </div>
 
-
 <!-- ================= UPLOAD ================= -->
 
 <div class="upload-area">
@@ -1184,7 +1195,6 @@ No file selected
 </div>
 
 </div>
-
 
 <div class="upload-row">
 
@@ -1215,7 +1225,6 @@ Remove 2nd Excel
 
 </div>
 
-
 <div
 class="excel-status"
 id="excelStatus">
@@ -1229,7 +1238,6 @@ id="secondExcelStatus">
 </div>
 
 </div>
-
 
 <!-- ================= TOOLBAR ================= -->
 
@@ -1252,13 +1260,11 @@ placeholder="Search all columns..."
 
 </div>
 
-
 <button
 class="btn clear"
 onclick="clearColumnFilters()">
 Clear Filters
 </button>
-
 
 <div class="column-menu-wrap">
 
@@ -1282,13 +1288,11 @@ Show / Hide Columns + Change Position
 
 </div>
 
-
 <button
 class="btn orange"
 onclick="openMappingModal()">
 Mapping ⚙
 </button>
-
 
 <button
 class="btn purple"
@@ -1296,13 +1300,11 @@ onclick="addManualColumn()">
 + Column
 </button>
 
-
 <button
 class="btn save"
 onclick="saveExcel()">
 💾 Save Excel
 </button>
-
 
 <button
 class="btn print-btn"
@@ -1310,13 +1312,11 @@ onclick="printTable()">
 🖨 Print
 </button>
 
-
 <span class="drag-info">
-↔ Drag header to change position • Double-click header to rename • Double-click cell to edit
+↔ Drag header to change position • Double-click header to rename • Double-click cell to edit • Click row + ↑/↓ to navigate
 </span>
 
 </div>
-
 
 <div class="record-info">
 
@@ -1327,7 +1327,6 @@ records
 </div>
 
 </div>
-
 
 <!-- ================= TABLE ================= -->
 
@@ -1353,7 +1352,6 @@ Upload your first Excel file above.
 
 </div>
 
-
 <table
 id="dataTable"
 style="display:none;">
@@ -1377,7 +1375,6 @@ id="tableFilterRow">
 
 </div>
 
-
 <!-- ================= MAPPING MODAL ================= -->
 
 <div
@@ -1399,7 +1396,6 @@ onclick="closeMappingModal()">
 </button>
 
 </div>
-
 
 <div class="modal-body">
 
@@ -1437,7 +1433,6 @@ New Column:
 
 </div>
 
-
 <div class="mapping-row header">
 
 <div>1st Excel Match</div>
@@ -1454,9 +1449,7 @@ New Column:
 
 </div>
 
-
 <div id="mappingRows"></div>
-
 
 <button
 class="btn green"
@@ -1466,7 +1459,6 @@ onclick="addMappingRow()">
 </button>
 
 </div>
-
 
 <div class="modal-footer">
 
@@ -1488,7 +1480,6 @@ Apply Mapping
 
 </div>
 
-
 <script>
 
 /* ============================================================
@@ -1497,43 +1488,26 @@ UI LOCK
 
 const UI_LOCK_PASSWORD = "1234";
 
-
 function unlockUI() {
 
     const passwordInput =
-        document.getElementById(
-            "uiLockPassword"
-        );
+        document.getElementById("uiLockPassword");
 
     const error =
-        document.getElementById(
-            "uiLockError"
-        );
+        document.getElementById("uiLockError");
 
     const password =
         passwordInput.value;
 
-
-    if (
-        password ===
-        UI_LOCK_PASSWORD
-    ) {
+    if (password === UI_LOCK_PASSWORD) {
 
         document
-        .getElementById(
-            "uiLockOverlay"
-        )
-        .classList.add(
-            "hidden"
-        );
+        .getElementById("uiLockOverlay")
+        .classList.add("hidden");
 
+        passwordInput.value = "";
 
-        passwordInput.value =
-            "";
-
-
-        error.textContent =
-            "";
+        error.textContent = "";
 
     }
     else {
@@ -1541,10 +1515,7 @@ function unlockUI() {
         error.textContent =
             "Incorrect password.";
 
-
-        passwordInput.value =
-            "";
-
+        passwordInput.value = "";
 
         passwordInput.focus();
 
@@ -1552,30 +1523,22 @@ function unlockUI() {
 
 }
 
-
 document.addEventListener(
     "DOMContentLoaded",
     function() {
 
         const passwordInput =
-            document.getElementById(
-                "uiLockPassword"
-            );
-
+            document.getElementById("uiLockPassword");
 
         if (passwordInput) {
 
             passwordInput.focus();
 
-
             passwordInput.addEventListener(
                 "keydown",
                 function(event) {
 
-                    if (
-                        event.key ===
-                        "Enter"
-                    ) {
+                    if (event.key === "Enter") {
 
                         event.preventDefault();
 
@@ -1590,7 +1553,6 @@ document.addEventListener(
 
     }
 );
-
 
 /* ============================================================
 GLOBAL VARIABLES
@@ -1622,26 +1584,29 @@ let draggedColumnIndex = null;
 
 let reportName = "DBL Delivery Report";
 
+/* ================= NEW: SELECTED ROW ================= */
+
+let selectedRowIndex = -1;
 
 /* ============================================================
 READY
 ============================================================ */
 
 document.addEventListener(
-"DOMContentLoaded",
-function() {
+    "DOMContentLoaded",
+    function() {
 
-    initializeEvents();
+        initializeEvents();
 
-    updateClock();
+        updateClock();
 
-    setInterval(
-        updateClock,
-        1000
-    );
+        setInterval(
+            updateClock,
+            1000
+        );
 
-});
-
+    }
+);
 
 /* ============================================================
 EVENTS
@@ -1656,7 +1621,6 @@ function initializeEvents() {
         handleFirstExcelUpload
     );
 
-
     document
     .getElementById("secondExcelFile")
     .addEventListener(
@@ -1664,14 +1628,12 @@ function initializeEvents() {
         handleSecondExcelUpload
     );
 
-
     document
     .getElementById("globalSearch")
     .addEventListener(
         "input",
         renderTable
     );
-
 
     document
     .getElementById("reportName")
@@ -1686,6 +1648,9 @@ function initializeEvents() {
         }
     );
 
+    /* NEW: ROW SELECTION */
+
+    initializeRowSelection();
 
     document.addEventListener(
         "click",
@@ -1710,17 +1675,13 @@ function initializeEvents() {
         }
     );
 
-
     document
     .getElementById("mappingModal")
     .addEventListener(
         "click",
         function(event) {
 
-            if (
-                event.target ===
-                this
-            ) {
+            if (event.target === this) {
 
                 closeMappingModal();
 
@@ -1731,6 +1692,264 @@ function initializeEvents() {
 
 }
 
+/* ============================================================
+ROW SELECTION + KEYBOARD NAVIGATION
+============================================================ */
+
+function initializeRowSelection() {
+
+    const tbody =
+        document.getElementById("tableBody");
+
+    if (!tbody) return;
+
+    /*
+        Event delegation is used here because renderRows()
+        rebuilds the tbody whenever search/filter/sort changes.
+    */
+
+    tbody.addEventListener(
+        "click",
+        function(event) {
+
+            const row =
+                event.target.closest("tr");
+
+            if (!row) return;
+
+            const rows =
+                Array.from(
+                    tbody.querySelectorAll("tr")
+                );
+
+            const index =
+                rows.indexOf(row);
+
+            if (index < 0) return;
+
+            /*
+                Do not select the "No matching records found"
+                message row.
+            */
+
+            if (
+                row.textContent.includes(
+                    "No matching records found."
+                )
+            ) {
+                return;
+            }
+
+            selectTableRow(index);
+
+        }
+    );
+
+}
+
+function selectTableRow(index) {
+
+    const rows =
+        Array.from(
+            document.querySelectorAll(
+                "#tableBody tr"
+            )
+        );
+
+    if (!rows.length) {
+
+        selectedRowIndex = -1;
+
+        return;
+
+    }
+
+    /*
+        Do not allow selection outside the table.
+    */
+
+    if (index < 0) {
+
+        index = 0;
+
+    }
+
+    if (index >= rows.length) {
+
+        index = rows.length - 1;
+
+    }
+
+    /*
+        Ignore empty/no-result row.
+    */
+
+    if (
+        rows[index].textContent.includes(
+            "No matching records found."
+        )
+    ) {
+
+        return;
+
+    }
+
+    /*
+        Remove previous highlight.
+    */
+
+    rows.forEach(
+        row => {
+
+            row.classList.remove(
+                "selected-row"
+            );
+
+        }
+    );
+
+    /*
+        Highlight new row.
+    */
+
+    rows[index].classList.add(
+        "selected-row"
+    );
+
+    selectedRowIndex = index;
+
+    /*
+        Keep selected row visible.
+    */
+
+    rows[index].scrollIntoView({
+        block: "nearest",
+        inline: "nearest"
+    });
+
+}
+
+/* ============================================================
+KEYBOARD UP / DOWN
+============================================================ */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        /*
+            Do not control table navigation while the user
+            is typing into an input, select, or textarea.
+        */
+
+        const active =
+            document.activeElement;
+
+        if (
+            active &&
+            (
+                active.tagName === "INPUT" ||
+                active.tagName === "TEXTAREA" ||
+                active.tagName === "SELECT"
+            )
+        ) {
+
+            return;
+
+        }
+
+        /*
+            Don't navigate while UI lock is visible.
+        */
+
+        const lockOverlay =
+            document.getElementById(
+                "uiLockOverlay"
+            );
+
+        if (
+            lockOverlay &&
+            !lockOverlay.classList.contains("hidden")
+        ) {
+
+            return;
+
+        }
+
+        const rows =
+            Array.from(
+                document.querySelectorAll(
+                    "#tableBody tr"
+                )
+            );
+
+        if (!rows.length) return;
+
+        /*
+            Ignore "No matching records found."
+        */
+
+        if (
+            rows.length === 1 &&
+            rows[0].textContent.includes(
+                "No matching records found."
+            )
+        ) {
+
+            return;
+
+        }
+
+        /*
+            DOWN ARROW
+        */
+
+        if (event.key === "ArrowDown") {
+
+            event.preventDefault();
+
+            if (selectedRowIndex < 0) {
+
+                selectTableRow(0);
+
+            }
+            else {
+
+                selectTableRow(
+                    selectedRowIndex + 1
+                );
+
+            }
+
+        }
+
+        /*
+            UP ARROW
+        */
+
+        if (event.key === "ArrowUp") {
+
+            event.preventDefault();
+
+            if (selectedRowIndex < 0) {
+
+                selectTableRow(
+                    rows.length - 1
+                );
+
+            }
+            else {
+
+                selectTableRow(
+                    selectedRowIndex - 1
+                );
+
+            }
+
+        }
+
+    }
+);
 
 /* ============================================================
 REPORT NAME
@@ -1743,18 +1962,15 @@ function getReportName() {
             "reportName"
         );
 
-
     const name =
         input
             ? input.value.trim()
             : "";
 
-
     return name ||
         "DBL Delivery Report";
 
 }
-
 
 /* ============================================================
 FIRST EXCEL
@@ -1767,22 +1983,18 @@ function handleFirstExcelUpload(event) {
 
     if (!file) return;
 
-
     document.getElementById(
         "fileName"
     ).textContent =
         file.name;
-
 
     document.getElementById(
         "excelStatus"
     ).textContent =
         "Reading 1st Excel...";
 
-
     const reader =
         new FileReader();
-
 
     reader.onload =
     function(e) {
@@ -1795,28 +2007,25 @@ function handleFirstExcelUpload(event) {
                         e.target.result
                     ),
                     {
-                        type:"array",
-                        cellDates:true
+                        type: "array",
+                        cellDates: true
                     }
                 );
-
 
             const sheet =
                 workbook.Sheets[
                     workbook.SheetNames[0]
                 ];
 
-
             const rows =
                 XLSX.utils.sheet_to_json(
                     sheet,
                     {
-                        header:1,
-                        defval:"",
-                        raw:false
+                        header: 1,
+                        defval: "",
+                        raw: false
                     }
                 );
-
 
             if (!rows.length) {
 
@@ -1826,16 +2035,13 @@ function handleFirstExcelUpload(event) {
 
             }
 
-
             baseColumns =
                 buildHeaders(
                     rows[0]
                 );
 
-
             columns =
                 [...baseColumns];
-
 
             originalData =
                 rows
@@ -1855,7 +2061,7 @@ function handleFirstExcelUpload(event) {
                         const obj = {};
 
                         baseColumns.forEach(
-                            (column,index) => {
+                            (column, index) => {
 
                                 obj[column] =
                                     formatExcelValue(
@@ -1870,7 +2076,6 @@ function handleFirstExcelUpload(event) {
                     }
                 );
 
-
             hiddenColumns.clear();
 
             sortColumn = -1;
@@ -1879,6 +2084,7 @@ function handleFirstExcelUpload(event) {
 
             mappings = [];
 
+            selectedRowIndex = -1;
 
             resetFiltersOnly();
 
@@ -1887,7 +2093,6 @@ function handleFirstExcelUpload(event) {
             createColumnMenu();
 
             renderTable();
-
 
             document.getElementById(
                 "excelStatus"
@@ -1908,11 +2113,9 @@ function handleFirstExcelUpload(event) {
 
     };
 
-
     reader.readAsArrayBuffer(file);
 
 }
-
 
 /* ============================================================
 SECOND EXCEL
@@ -1925,22 +2128,18 @@ function handleSecondExcelUpload(event) {
 
     if (!file) return;
 
-
     document.getElementById(
         "secondFileName"
     ).textContent =
         file.name;
-
 
     document.getElementById(
         "secondExcelStatus"
     ).textContent =
         "Reading 2nd Excel...";
 
-
     const reader =
         new FileReader();
-
 
     reader.onload =
     function(e) {
@@ -1953,28 +2152,25 @@ function handleSecondExcelUpload(event) {
                         e.target.result
                     ),
                     {
-                        type:"array",
-                        cellDates:true
+                        type: "array",
+                        cellDates: true
                     }
                 );
-
 
             const sheet =
                 workbook.Sheets[
                     workbook.SheetNames[0]
                 ];
 
-
             const rows =
                 XLSX.utils.sheet_to_json(
                     sheet,
                     {
-                        header:1,
-                        defval:"",
-                        raw:false
+                        header: 1,
+                        defval: "",
+                        raw: false
                     }
                 );
-
 
             if (!rows.length) {
 
@@ -1984,12 +2180,10 @@ function handleSecondExcelUpload(event) {
 
             }
 
-
             secondColumns =
                 buildHeaders(
                     rows[0]
                 );
-
 
             secondExcelData =
                 rows
@@ -2009,7 +2203,7 @@ function handleSecondExcelUpload(event) {
                         const obj = {};
 
                         secondColumns.forEach(
-                            (column,index) => {
+                            (column, index) => {
 
                                 obj[column] =
                                     formatExcelValue(
@@ -2024,21 +2218,17 @@ function handleSecondExcelUpload(event) {
                     }
                 );
 
-
             secondExcelLoaded = true;
-
 
             document.getElementById(
                 "secondExcelStatus"
             ).textContent =
                 `${secondExcelData.length} rows loaded`;
 
-
             document.getElementById(
                 "clearSecondBtn"
             ).style.display =
                 "inline-block";
-
 
             openMappingModal();
 
@@ -2056,11 +2246,9 @@ function handleSecondExcelUpload(event) {
 
     };
 
-
     reader.readAsArrayBuffer(file);
 
 }
-
 
 /* ============================================================
 BUILD HEADERS
@@ -2072,15 +2260,13 @@ function buildHeaders(headerRow) {
 
     const used = {};
 
-
     headerRow.forEach(
-        (header,index) => {
+        (header, index) => {
 
             let name =
                 String(
                     header ?? ""
                 ).trim();
-
 
             if (!name) {
 
@@ -2089,10 +2275,8 @@ function buildHeaders(headerRow) {
 
             }
 
-
             const key =
                 name.toLowerCase();
-
 
             if (used[key]) {
 
@@ -2108,17 +2292,14 @@ function buildHeaders(headerRow) {
 
             }
 
-
             result.push(name);
 
         }
     );
 
-
     return result;
 
 }
-
 
 /* ============================================================
 FORMAT VALUE
@@ -2135,7 +2316,6 @@ function formatExcelValue(value) {
 
     }
 
-
     if (
         value instanceof Date &&
         !isNaN(value.getTime())
@@ -2145,10 +2325,8 @@ function formatExcelValue(value) {
 
     }
 
-
     let text =
         String(value).trim();
-
 
     if (
         /^[+-]?\d+(\.\d+)?e[+-]?\d+$/i.test(text)
@@ -2159,7 +2337,6 @@ function formatExcelValue(value) {
 
     }
 
-
     if (
         /^\d+\.0+$/.test(text)
     ) {
@@ -2169,11 +2346,9 @@ function formatExcelValue(value) {
 
     }
 
-
     return text;
 
 }
-
 
 function expandScientificNotation(value) {
 
@@ -2182,9 +2357,7 @@ function expandScientificNotation(value) {
         .trim()
         .toUpperCase();
 
-
     let sign = "";
-
 
     if (
         str.startsWith("-") ||
@@ -2199,10 +2372,8 @@ function expandScientificNotation(value) {
 
     }
 
-
     const parts =
         str.split("E");
-
 
     if (parts.length !== 2) {
 
@@ -2210,10 +2381,8 @@ function expandScientificNotation(value) {
 
     }
 
-
     const coefficient =
         parts[0];
-
 
     const exponent =
         parseInt(
@@ -2221,26 +2390,21 @@ function expandScientificNotation(value) {
             10
         );
 
-
     if (isNaN(exponent)) {
 
         return value;
 
     }
 
-
     const decimalParts =
         coefficient.split(".");
-
 
     const digits =
         decimalParts.join("");
 
-
     let decimalPosition =
         decimalParts[0].length +
         exponent;
-
 
     if (decimalPosition <= 0) {
 
@@ -2254,7 +2418,6 @@ function expandScientificNotation(value) {
         );
 
     }
-
 
     if (
         decimalPosition >=
@@ -2272,7 +2435,6 @@ function expandScientificNotation(value) {
 
     }
 
-
     return (
         sign +
         digits.slice(
@@ -2287,23 +2449,21 @@ function expandScientificNotation(value) {
 
 }
 
-
 function formatDate(date) {
 
     return (
         String(
             date.getDate()
-        ).padStart(2,"0") +
+        ).padStart(2, "0") +
         "-" +
         String(
-            date.getMonth()+1
-        ).padStart(2,"0") +
+            date.getMonth() + 1
+        ).padStart(2, "0") +
         "-" +
         date.getFullYear()
     );
 
 }
-
 
 /* ============================================================
 NORMALIZE
@@ -2314,13 +2474,12 @@ function normalizeHeader(value) {
     return String(value || "")
         .toLowerCase()
         .replace(
-            /[\s_\-\/.]+/g,
+            /[\s_\-/.]+/g,
             ""
         )
         .trim();
 
 }
-
 
 function normalizeMatchValue(value) {
 
@@ -2330,9 +2489,7 @@ function normalizeMatchValue(value) {
         )
         .trim();
 
-
     if (!text) return "";
-
 
     if (
         /^[+-]?\d+(\.\d+)?e[+-]?\d+$/i.test(text)
@@ -2343,13 +2500,11 @@ function normalizeMatchValue(value) {
 
     }
 
-
     text =
         text.replace(
             /,/g,
             ""
         );
-
 
     if (
         /^\d+\.0+$/.test(text)
@@ -2360,13 +2515,11 @@ function normalizeMatchValue(value) {
 
     }
 
-
     return text
         .toLowerCase()
         .trim();
 
 }
-
 
 /* ============================================================
 FIND COLUMN
@@ -2395,11 +2548,9 @@ function findColumn(possibleNames) {
 
     }
 
-
     return null;
 
 }
-
 
 /* ============================================================
 MAPPING MODAL
@@ -2417,7 +2568,6 @@ function openMappingModal() {
 
     }
 
-
     if (!secondExcelLoaded) {
 
         alert(
@@ -2428,16 +2578,12 @@ function openMappingModal() {
 
     }
 
-
     const container =
         document.getElementById(
             "mappingRows"
         );
 
-
-    container.innerHTML =
-        "";
-
+    container.innerHTML = "";
 
     if (mappings.length) {
 
@@ -2458,13 +2604,11 @@ function openMappingModal() {
 
     }
 
-
     document
     .getElementById("mappingModal")
     .classList.add("show");
 
 }
-
 
 function closeMappingModal() {
 
@@ -2473,7 +2617,6 @@ function closeMappingModal() {
     .classList.remove("show");
 
 }
-
 
 /* ============================================================
 ADD MAPPING ROW
@@ -2486,17 +2629,14 @@ function addMappingRow(existing = null) {
             "mappingRows"
         );
 
-
     const row =
         document.createElement("div");
 
     row.className =
         "mapping-row";
 
-
     const mainSelect =
         document.createElement("select");
-
 
     addSelectOptions(
         mainSelect,
@@ -2505,7 +2645,6 @@ function addMappingRow(existing = null) {
             ? existing.mainMatch
             : ""
     );
-
 
     const arrow =
         document.createElement("div");
@@ -2516,10 +2655,8 @@ function addMappingRow(existing = null) {
     arrow.textContent =
         "↔";
 
-
     const secondMatch =
         document.createElement("select");
-
 
     addSelectOptions(
         secondMatch,
@@ -2529,10 +2666,8 @@ function addMappingRow(existing = null) {
             : ""
     );
 
-
     const valueSelect =
         document.createElement("select");
-
 
     addSelectOptions(
         valueSelect,
@@ -2542,10 +2677,8 @@ function addMappingRow(existing = null) {
             : ""
     );
 
-
     const newName =
         document.createElement("input");
-
 
     newName.type =
         "text";
@@ -2558,10 +2691,8 @@ function addMappingRow(existing = null) {
             ? existing.newColumn
             : "";
 
-
     const remove =
         document.createElement("button");
-
 
     remove.className =
         "btn red";
@@ -2572,14 +2703,12 @@ function addMappingRow(existing = null) {
     remove.style.padding =
         "0 8px";
 
-
     remove.onclick =
     function() {
 
         row.remove();
 
     };
-
 
     row.appendChild(
         mainSelect
@@ -2605,7 +2734,6 @@ function addMappingRow(existing = null) {
         remove
     );
 
-
     row._mainSelect =
         mainSelect;
 
@@ -2618,13 +2746,11 @@ function addMappingRow(existing = null) {
     row._newName =
         newName;
 
-
     container.appendChild(
         row
     );
 
 }
-
 
 /* ============================================================
 SELECT OPTIONS
@@ -2636,27 +2762,21 @@ function addSelectOptions(
     selected
 ) {
 
-    select.innerHTML =
-        "";
-
+    select.innerHTML = "";
 
     const empty =
         document.createElement(
             "option"
         );
 
-
-    empty.value =
-        "";
+    empty.value = "";
 
     empty.textContent =
         "-- Select --";
 
-
     select.appendChild(
         empty
     );
-
 
     list.forEach(
         column => {
@@ -2666,13 +2786,11 @@ function addSelectOptions(
                     "option"
                 );
 
-
             option.value =
                 column;
 
             option.textContent =
                 column;
-
 
             if (
                 column === selected
@@ -2683,7 +2801,6 @@ function addSelectOptions(
 
             }
 
-
             select.appendChild(
                 option
             );
@@ -2692,7 +2809,6 @@ function addSelectOptions(
     );
 
 }
-
 
 /* ============================================================
 APPLY MAPPINGS
@@ -2707,9 +2823,7 @@ function applyMappings() {
             )
         );
 
-
     const newMappings = [];
-
 
     for (
         const row of rows
@@ -2718,18 +2832,14 @@ function applyMappings() {
         const mainMatch =
             row._mainSelect.value;
 
-
         const secondMatch =
             row._secondMatch.value;
-
 
         const valueColumn =
             row._valueSelect.value;
 
-
         let newColumn =
             row._newName.value.trim();
-
 
         if (
             !mainMatch &&
@@ -2741,7 +2851,6 @@ function applyMappings() {
             continue;
 
         }
-
 
         if (
             !mainMatch ||
@@ -2757,14 +2866,12 @@ function applyMappings() {
 
         }
 
-
         if (!newColumn) {
 
             newColumn =
                 valueColumn;
 
         }
-
 
         newMappings.push({
 
@@ -2780,7 +2887,6 @@ function applyMappings() {
 
     }
 
-
     if (!newMappings.length) {
 
         alert(
@@ -2791,10 +2897,8 @@ function applyMappings() {
 
     }
 
-
     const names =
         new Set();
-
 
     for (
         const mapping of newMappings
@@ -2804,7 +2908,6 @@ function applyMappings() {
             normalizeHeader(
                 mapping.newColumn
             );
-
 
         if (names.has(key)) {
 
@@ -2816,21 +2919,16 @@ function applyMappings() {
 
         }
 
-
         names.add(key);
 
     }
 
-
     removeMappedColumns();
-
 
     mappings =
         newMappings;
 
-
     applyMappingsToData();
-
 
     createDynamicTable();
 
@@ -2838,9 +2936,7 @@ function applyMappings() {
 
     renderTable();
 
-
     closeMappingModal();
-
 
     document.getElementById(
         "secondExcelStatus"
@@ -2849,7 +2945,6 @@ function applyMappings() {
         `${mappings.length} mapping applied`;
 
 }
-
 
 /* ============================================================
 REMOVE MAPPED COLUMNS
@@ -2865,13 +2960,11 @@ function removeMappedColumns() {
             )
         );
 
-
     if (!oldMappedNames.size) {
 
         return;
 
     }
-
 
     originalData.forEach(
         row => {
@@ -2887,13 +2980,11 @@ function removeMappedColumns() {
         }
     );
 
-
     columns =
         columns.filter(
             column =>
                 !oldMappedNames.has(column)
         );
-
 
     hiddenColumns =
         new Set(
@@ -2904,7 +2995,6 @@ function removeMappedColumns() {
         );
 
 }
-
 
 /* ============================================================
 APPLY MAPPINGS TO MAIN DATA
@@ -2921,13 +3011,11 @@ function applyMappingsToData() {
 
     }
 
-
     mappings.forEach(
         mapping => {
 
             const lookup =
                 new Map();
-
 
             secondExcelData.forEach(
                 secondRow => {
@@ -2939,13 +3027,11 @@ function applyMappingsToData() {
                             ]
                         );
 
-
                     if (!key) {
 
                         return;
 
                     }
-
 
                     if (
                         !lookup.has(key)
@@ -2963,7 +3049,6 @@ function applyMappingsToData() {
                 }
             );
 
-
             if (
                 !columns.includes(
                     mapping.newColumn
@@ -2976,7 +3061,6 @@ function applyMappingsToData() {
 
             }
 
-
             originalData.forEach(
                 row => {
 
@@ -2987,7 +3071,6 @@ function applyMappingsToData() {
                             ]
                         );
 
-
                     if (!key) {
 
                         row[
@@ -2997,7 +3080,6 @@ function applyMappingsToData() {
                         return;
 
                     }
-
 
                     row[
                         mapping.newColumn
@@ -3016,7 +3098,6 @@ function applyMappingsToData() {
 
 }
 
-
 /* ============================================================
 MANUAL NEW COLUMN
 ============================================================ */
@@ -3033,19 +3114,15 @@ function addManualColumn() {
 
     }
 
-
     const name =
         prompt(
             "নতুন Column-এর নাম দিন:"
         );
 
-
     if (!name) return;
-
 
     const cleanName =
         name.trim();
-
 
     if (
         columns.includes(
@@ -3061,11 +3138,9 @@ function addManualColumn() {
 
     }
 
-
     columns.push(
         cleanName
     );
-
 
     originalData.forEach(
         row => {
@@ -3076,7 +3151,6 @@ function addManualColumn() {
         }
     );
 
-
     createDynamicTable();
 
     createColumnMenu();
@@ -3084,7 +3158,6 @@ function addManualColumn() {
     renderTable();
 
 }
-
 
 /* ============================================================
 CLEAR SECOND EXCEL
@@ -3094,7 +3167,6 @@ function clearSecondExcel() {
 
     removeMappedColumns();
 
-
     secondExcelData = [];
 
     secondColumns = [];
@@ -3103,29 +3175,24 @@ function clearSecondExcel() {
 
     mappings = [];
 
-
     document.getElementById(
         "secondExcelFile"
     ).value = "";
-
 
     document.getElementById(
         "secondFileName"
     ).textContent =
         "Optional";
 
-
     document.getElementById(
         "secondExcelStatus"
     ).textContent =
         "";
 
-
     document.getElementById(
         "clearSecondBtn"
     ).style.display =
         "none";
-
 
     createDynamicTable();
 
@@ -3134,7 +3201,6 @@ function clearSecondExcel() {
     renderTable();
 
 }
-
 
 /* ============================================================
 TABLE
@@ -3147,25 +3213,19 @@ function createDynamicTable() {
             "dataTable"
         );
 
-
     const header =
         document.getElementById(
             "tableHeader"
         );
-
 
     const filterRow =
         document.getElementById(
             "tableFilterRow"
         );
 
+    header.innerHTML = "";
 
-    header.innerHTML =
-        "";
-
-    filterRow.innerHTML =
-        "";
-
+    filterRow.innerHTML = "";
 
     columns.forEach(
         (column,index) => {
@@ -3175,46 +3235,37 @@ function createDynamicTable() {
                     "th"
                 );
 
-
             th.draggable =
                 true;
-
 
             th.dataset.index =
                 index;
 
-
             th.dataset.column =
                 column;
 
-
             th.title =
                 "Drag to move • Double-click to rename";
-
 
             th.addEventListener(
                 "dragstart",
                 handleDragStart
             );
 
-
             th.addEventListener(
                 "dragover",
                 handleDragOver
             );
-
 
             th.addEventListener(
                 "drop",
                 handleDrop
             );
 
-
             th.addEventListener(
                 "dragend",
                 handleDragEnd
             );
-
 
             th.addEventListener(
                 "dblclick",
@@ -3230,40 +3281,32 @@ function createDynamicTable() {
                 }
             );
 
-
             const content =
                 document.createElement(
                     "div"
                 );
 
-
             content.className =
                 "header-content";
-
 
             const title =
                 document.createElement(
                     "span"
                 );
 
-
             title.textContent =
                 column;
-
 
             const icon =
                 document.createElement(
                     "span"
                 );
 
-
             icon.className =
                 "sort-icon";
 
-
             icon.textContent =
                 "↕";
-
 
             content.appendChild(
                 title
@@ -3272,7 +3315,6 @@ function createDynamicTable() {
             content.appendChild(
                 icon
             );
-
 
             content.addEventListener(
                 "click",
@@ -3283,59 +3325,47 @@ function createDynamicTable() {
                 }
             );
 
-
             th.appendChild(
                 content
             );
 
-
             header.appendChild(
                 th
             );
-
 
             const filterTh =
                 document.createElement(
                     "th"
                 );
 
-
             const input =
                 document.createElement(
                     "input"
                 );
 
-
             input.type =
                 "text";
-
 
             input.className =
                 "column-filter";
 
-
             input.placeholder =
                 "Filter...";
-
 
             input.dataset.column =
                 index;
 
-
             input.dataset.columnName =
                 column;
-
 
             input.addEventListener(
                 "input",
                 renderTable
             );
 
-
             filterTh.appendChild(
                 input
             );
-
 
             filterRow.appendChild(
                 filterTh
@@ -3344,23 +3374,19 @@ function createDynamicTable() {
         }
     );
 
-
     table.style.display =
         "table";
-
 
     document.getElementById(
         "emptyState"
     ).style.display =
         "none";
 
-
     applyColumnVisibility();
 
     updateSortIcons();
 
 }
-
 
 /* ============================================================
 EDIT TABLE HEADER
@@ -3381,58 +3407,45 @@ function startHeaderEdit(
 
     }
 
-
     const oldName =
         columns[index];
 
-
     if (!oldName) return;
-
 
     th.classList.add(
         "header-editing"
     );
 
-
     th.draggable =
         false;
 
-
     th.innerHTML =
         "";
-
 
     const input =
         document.createElement(
             "input"
         );
 
-
     input.type =
         "text";
-
 
     input.className =
         "header-edit-input";
 
-
     input.value =
         oldName;
-
 
     th.appendChild(
         input
     );
 
-
     input.focus();
 
     input.select();
 
-
     let finished =
         false;
-
 
     function finishHeaderEdit(save) {
 
@@ -3442,13 +3455,10 @@ function startHeaderEdit(
 
         }
 
-
         finished = true;
-
 
         const newName =
             input.value.trim();
-
 
         if (!save) {
 
@@ -3482,7 +3492,6 @@ function startHeaderEdit(
                             )
                     );
 
-
                 if (duplicate) {
 
                     alert(
@@ -3503,31 +3512,18 @@ function startHeaderEdit(
                     columns[index] =
                         newName;
 
-
-                    if (
-                        sortColumn === index
-                    ) {
-
-                        sortColumn =
-                            index;
-
-                    }
-
                 }
 
             }
 
         }
 
-
         th.classList.remove(
             "header-editing"
         );
 
-
         th.draggable =
             true;
-
 
         createDynamicTable();
 
@@ -3536,7 +3532,6 @@ function startHeaderEdit(
         renderTable();
 
     }
-
 
     input.addEventListener(
         "keydown",
@@ -3552,7 +3547,6 @@ function startHeaderEdit(
 
             }
 
-
             if (
                 event.key === "Escape"
             ) {
@@ -3566,7 +3560,6 @@ function startHeaderEdit(
         }
     );
 
-
     input.addEventListener(
         "blur",
         function() {
@@ -3577,7 +3570,6 @@ function startHeaderEdit(
     );
 
 }
-
 
 /* ============================================================
 RENAME COLUMN DATA
@@ -3596,19 +3588,16 @@ function renameColumnData(
 
     }
 
-
     originalData.forEach(
         row => {
 
             row[newName] =
                 row[oldName] ?? "";
 
-
             delete row[oldName];
 
         }
     );
-
 
     hiddenColumns =
         new Set(
@@ -3619,7 +3608,6 @@ function renameColumnData(
                         : column
             )
         );
-
 
     mappings.forEach(
         mapping => {
@@ -3633,7 +3621,6 @@ function renameColumnData(
                     newName;
 
             }
-
 
             if (
                 mapping.newColumn ===
@@ -3650,7 +3637,6 @@ function renameColumnData(
 
 }
 
-
 /* ============================================================
 DRAG COLUMN
 ============================================================ */
@@ -3662,53 +3648,43 @@ function handleDragStart(event) {
             event.currentTarget.dataset.index
         );
 
-
     event.currentTarget.classList.add(
         "dragging"
     );
-
 
     event.dataTransfer.effectAllowed =
         "move";
 
 }
 
-
 function handleDragOver(event) {
 
     event.preventDefault();
 
-
     event.currentTarget.classList.add(
         "drag-over"
     );
-
 
     event.dataTransfer.dropEffect =
         "move";
 
 }
 
-
 function handleDrop(event) {
 
     event.preventDefault();
 
-
     const target =
         event.currentTarget;
-
 
     target.classList.remove(
         "drag-over"
     );
 
-
     const targetIndex =
         Number(
             target.dataset.index
         );
-
 
     if (
         draggedColumnIndex === null ||
@@ -3719,18 +3695,15 @@ function handleDrop(event) {
 
     }
 
-
     moveColumn(
         draggedColumnIndex,
         targetIndex
     );
 
-
     draggedColumnIndex =
         null;
 
 }
-
 
 function handleDragEnd() {
 
@@ -3752,12 +3725,10 @@ function handleDragEnd() {
         }
     );
 
-
     draggedColumnIndex =
         null;
 
 }
-
 
 /* ============================================================
 MOVE COLUMN
@@ -3779,7 +3750,6 @@ function moveColumn(
 
     }
 
-
     if (
         fromIndex === toIndex
     ) {
@@ -3788,13 +3758,11 @@ function moveColumn(
 
     }
 
-
     const movedColumn =
         columns.splice(
             fromIndex,
             1
         )[0];
-
 
     columns.splice(
         toIndex,
@@ -3802,11 +3770,9 @@ function moveColumn(
         movedColumn
     );
 
-
     sortColumn = -1;
 
     sortDirection = "asc";
-
 
     createDynamicTable();
 
@@ -3815,7 +3781,6 @@ function moveColumn(
     renderTable();
 
 }
-
 
 /* ============================================================
 COLUMN MENU
@@ -3828,10 +3793,8 @@ function createColumnMenu() {
             "columnMenuItems"
         );
 
-
     container.innerHTML =
         "";
-
 
     columns.forEach(
         (column,index) => {
@@ -3841,30 +3804,24 @@ function createColumnMenu() {
                     "div"
                 );
 
-
             row.className =
                 "column-menu-item";
-
 
             const checkbox =
                 document.createElement(
                     "input"
                 );
 
-
             checkbox.type =
                 "checkbox";
-
 
             checkbox.checked =
                 !hiddenColumns.has(
                     column
                 );
 
-
             checkbox.title =
                 "Show / Hide";
-
 
             checkbox.addEventListener(
                 "change",
@@ -3887,44 +3844,35 @@ function createColumnMenu() {
 
                     }
 
-
                     applyColumnVisibility();
 
                 }
             );
-
 
             const text =
                 document.createElement(
                     "span"
                 );
 
-
             text.className =
                 "column-menu-name";
 
-
             text.textContent =
                 column;
-
 
             const upBtn =
                 document.createElement(
                     "button"
                 );
 
-
             upBtn.type =
                 "button";
-
 
             upBtn.textContent =
                 "↑";
 
-
             upBtn.className =
                 "position-btn up";
-
 
             if (index === 0) {
 
@@ -3933,12 +3881,10 @@ function createColumnMenu() {
 
             }
 
-
             upBtn.onclick =
             function(event) {
 
                 event.stopPropagation();
-
 
                 if (index > 0) {
 
@@ -3951,24 +3897,19 @@ function createColumnMenu() {
 
             };
 
-
             const downBtn =
                 document.createElement(
                     "button"
                 );
 
-
             downBtn.type =
                 "button";
-
 
             downBtn.textContent =
                 "↓";
 
-
             downBtn.className =
                 "position-btn down";
-
 
             if (
                 index ===
@@ -3980,12 +3921,10 @@ function createColumnMenu() {
 
             }
 
-
             downBtn.onclick =
             function(event) {
 
                 event.stopPropagation();
-
 
                 if (
                     index <
@@ -4001,26 +3940,21 @@ function createColumnMenu() {
 
             };
 
-
             row.appendChild(
                 checkbox
             );
-
 
             row.appendChild(
                 text
             );
 
-
             row.appendChild(
                 upBtn
             );
 
-
             row.appendChild(
                 downBtn
             );
-
 
             container.appendChild(
                 row
@@ -4031,11 +3965,9 @@ function createColumnMenu() {
 
 }
 
-
 function toggleColumnMenu(event) {
 
     event.stopPropagation();
-
 
     document
     .getElementById(
@@ -4047,7 +3979,6 @@ function toggleColumnMenu(event) {
 
 }
 
-
 function applyColumnVisibility() {
 
     const table =
@@ -4055,9 +3986,7 @@ function applyColumnVisibility() {
             "dataTable"
         );
 
-
     if (!table) return;
-
 
     table
     .querySelectorAll("tr")
@@ -4072,7 +4001,6 @@ function applyColumnVisibility() {
 
                     const column =
                         columns[index];
-
 
                     cell.style.display =
                         hiddenColumns.has(
@@ -4089,7 +4017,6 @@ function applyColumnVisibility() {
 
 }
 
-
 /* ============================================================
 MULTIPLE FILTER
 ============================================================ */
@@ -4103,6 +4030,7 @@ function getColumnFilters() {
     )
     .map(
         input => ({
+
             column:
                 input.dataset.columnName,
 
@@ -4110,6 +4038,7 @@ function getColumnFilters() {
                 input.value
                     .toLowerCase()
                     .trim()
+
         })
     )
     .filter(
@@ -4120,19 +4049,16 @@ function getColumnFilters() {
 
 }
 
-
 function rowPassesMultipleFilters(row) {
 
     const filters =
         getColumnFilters();
-
 
     if (!filters.length) {
 
         return true;
 
     }
-
 
     return filters.every(
         filter => {
@@ -4145,7 +4071,6 @@ function rowPassesMultipleFilters(row) {
                 )
                 .toLowerCase();
 
-
             const terms =
                 filter.value
                 .split(",")
@@ -4155,13 +4080,11 @@ function rowPassesMultipleFilters(row) {
                 )
                 .filter(Boolean);
 
-
             if (!terms.length) {
 
                 return true;
 
             }
-
 
             return terms.some(
                 term =>
@@ -4172,7 +4095,6 @@ function rowPassesMultipleFilters(row) {
     );
 
 }
-
 
 /* ============================================================
 RENDER
@@ -4191,14 +4113,12 @@ function renderTable() {
 
     }
 
-
     const globalSearch =
         document.getElementById(
             "globalSearch"
         ).value
         .toLowerCase()
         .trim();
-
 
     filteredData =
         originalData.filter(
@@ -4216,7 +4136,6 @@ function renderTable() {
                         )
                         .join(" ");
 
-
                     if (
                         !text.includes(
                             globalSearch
@@ -4229,7 +4148,6 @@ function renderTable() {
 
                 }
 
-
                 if (
                     !rowPassesMultipleFilters(
                         row
@@ -4240,18 +4158,15 @@ function renderTable() {
 
                 }
 
-
                 return true;
 
             }
         );
 
-
     if (sortColumn >= 0) {
 
         const column =
             columns[sortColumn];
-
 
         if (column) {
 
@@ -4263,23 +4178,20 @@ function renderTable() {
                             a[column] ?? ""
                         ).toLowerCase();
 
-
                     const bVal =
                         String(
                             b[column] ?? ""
                         ).toLowerCase();
-
 
                     const result =
                         aVal.localeCompare(
                             bVal,
                             undefined,
                             {
-                                numeric:true,
-                                sensitivity:"base"
+                                numeric: true,
+                                sensitivity: "base"
                             }
                         );
-
 
                     return sortDirection === "asc"
                         ? result
@@ -4292,13 +4204,11 @@ function renderTable() {
 
     }
 
-
     renderRows(
         filteredData
     );
 
 }
-
 
 /* ============================================================
 ROWS + CELL EDITING
@@ -4306,15 +4216,20 @@ ROWS + CELL EDITING
 
 function renderRows(data) {
 
+    /*
+        Reset selection because the visible row order/count
+        may have changed after filtering/searching/sorting.
+    */
+
+    selectedRowIndex = -1;
+
     const tbody =
         document.getElementById(
             "tableBody"
         );
 
-
     tbody.innerHTML =
         "";
-
 
     if (!data.length) {
 
@@ -4323,12 +4238,10 @@ function renderRows(data) {
                 "tr"
             );
 
-
         const td =
             document.createElement(
                 "td"
             );
-
 
         td.colSpan =
             Math.max(
@@ -4336,23 +4249,18 @@ function renderRows(data) {
                 1
             );
 
-
         td.textContent =
             "No matching records found.";
-
 
         td.style.padding =
             "35px";
 
-
         td.style.textAlign =
             "center";
-
 
         tr.appendChild(
             td
         );
-
 
         tbody.appendChild(
             tr
@@ -4364,7 +4272,6 @@ function renderRows(data) {
         const fragment =
             document.createDocumentFragment();
 
-
         data.forEach(
             row => {
 
@@ -4372,7 +4279,6 @@ function renderRows(data) {
                     document.createElement(
                         "tr"
                     );
-
 
                 columns.forEach(
                     column => {
@@ -4382,23 +4288,18 @@ function renderRows(data) {
                                 "td"
                             );
 
-
                         const value =
                             row[column] ?? "";
-
 
                         td.textContent =
                             value;
 
-
                         td.title =
                             "Double-click to edit";
-
 
                         td.classList.add(
                             "editable-cell"
                         );
-
 
                         td.addEventListener(
                             "dblclick",
@@ -4415,14 +4316,12 @@ function renderRows(data) {
                             }
                         );
 
-
                         tr.appendChild(
                             td
                         );
 
                     }
                 );
-
 
                 fragment.appendChild(
                     tr
@@ -4431,24 +4330,20 @@ function renderRows(data) {
             }
         );
 
-
         tbody.appendChild(
             fragment
         );
 
     }
 
-
     document.getElementById(
         "recordCount"
     ).textContent =
         data.length;
 
-
     applyColumnVisibility();
 
 }
-
 
 /* ============================================================
 CELL EDIT
@@ -4470,54 +4365,42 @@ function startCellEdit(
 
     }
 
-
     td.classList.add(
         "editing"
     );
-
 
     const oldValue =
         String(
             row[column] ?? ""
         );
 
-
     const input =
         document.createElement(
             "input"
         );
 
-
     input.type =
         "text";
-
 
     input.className =
         "cell-edit-input";
 
-
     input.value =
         oldValue;
 
-
     td.innerHTML =
         "";
-
 
     td.appendChild(
         input
     );
 
-
     input.focus();
-
 
     input.select();
 
-
     let finished =
         false;
-
 
     function finishEdit(save) {
 
@@ -4527,23 +4410,18 @@ function startCellEdit(
 
         }
 
-
         finished = true;
-
 
         if (save) {
 
             const newValue =
                 input.value;
 
-
             row[column] =
                 newValue;
 
-
             td.textContent =
                 newValue;
-
 
             td.title =
                 "Double-click to edit";
@@ -4554,22 +4432,18 @@ function startCellEdit(
             td.textContent =
                 oldValue;
 
-
             td.title =
                 "Double-click to edit";
 
         }
 
-
         td.classList.remove(
             "editing"
         );
 
-
         updateEditedCellUI();
 
     }
-
 
     input.addEventListener(
         "keydown",
@@ -4587,7 +4461,6 @@ function startCellEdit(
 
             }
 
-
             if (
                 event.key === "Escape"
             ) {
@@ -4603,7 +4476,6 @@ function startCellEdit(
         }
     );
 
-
     input.addEventListener(
         "blur",
         function() {
@@ -4615,7 +4487,6 @@ function startCellEdit(
 
 }
 
-
 /* ============================================================
 AFTER EDIT
 ============================================================ */
@@ -4625,7 +4496,6 @@ function updateEditedCellUI() {
     renderTable();
 
 }
-
 
 /* ============================================================
 SORT
@@ -4653,13 +4523,11 @@ function sortTable(index) {
 
     }
 
-
     updateSortIcons();
 
     renderTable();
 
 }
-
 
 function updateSortIcons() {
 
@@ -4675,9 +4543,7 @@ function updateSortIcons() {
                     ".sort-icon"
                 );
 
-
             if (!icon) return;
-
 
             if (
                 index !== sortColumn
@@ -4701,7 +4567,6 @@ function updateSortIcons() {
 
 }
 
-
 /* ============================================================
 FILTER
 ============================================================ */
@@ -4711,11 +4576,9 @@ function applyTopFilters() {
     reportName =
         getReportName();
 
-
     renderTable();
 
 }
-
 
 function clearAllFilters() {
 
@@ -4724,21 +4587,17 @@ function clearAllFilters() {
     ).value =
         "";
 
-
     document.getElementById(
         "reportName"
     ).value =
         "DBL Delivery Report";
 
-
     reportName =
         "DBL Delivery Report";
-
 
     clearColumnFilters();
 
 }
-
 
 function clearColumnFilters() {
 
@@ -4755,11 +4614,9 @@ function clearColumnFilters() {
         }
     );
 
-
     renderTable();
 
 }
-
 
 function resetFiltersOnly() {
 
@@ -4768,14 +4625,14 @@ function resetFiltersOnly() {
     ).value =
         "";
 
-
     sortColumn =
         -1;
-
 
     sortDirection =
         "asc";
 
+    selectedRowIndex =
+        -1;
 
     document
     .querySelectorAll(
@@ -4792,24 +4649,24 @@ function resetFiltersOnly() {
 
 }
 
-
 /* ============================================================
 EMPTY
 ============================================================ */
 
 function showEmpty() {
 
+    selectedRowIndex =
+        -1;
+
     document.getElementById(
         "dataTable"
     ).style.display =
         "none";
 
-
     document.getElementById(
         "emptyState"
     ).style.display =
         "flex";
-
 
     document.getElementById(
         "recordCount"
@@ -4817,7 +4674,6 @@ function showEmpty() {
         "0";
 
 }
-
 
 /* ============================================================
 CLOCK
@@ -4828,32 +4684,26 @@ function updateClock() {
     const now =
         new Date();
 
-
     let hours =
         now.getHours();
-
 
     const minutes =
         String(
             now.getMinutes()
         ).padStart(2,"0");
 
-
     const seconds =
         String(
             now.getSeconds()
         ).padStart(2,"0");
-
 
     const ampm =
         hours >= 12
             ? "pm"
             : "am";
 
-
     hours =
         hours % 12 || 12;
-
 
     document.getElementById(
         "currentTime"
@@ -4871,7 +4721,6 @@ function updateClock() {
 
 }
 
-
 /* ============================================================
 SAVE EXCEL
 ============================================================ */
@@ -4888,17 +4737,14 @@ function saveExcel() {
 
     }
 
-
     reportName =
         getReportName();
-
 
     const exportData =
         originalData.map(
             row => {
 
                 const obj = {};
-
 
                 columns.forEach(
                     column => {
@@ -4909,12 +4755,10 @@ function saveExcel() {
                     }
                 );
 
-
                 return obj;
 
             }
         );
-
 
     const worksheet =
         XLSX.utils.json_to_sheet(
@@ -4924,14 +4768,12 @@ function saveExcel() {
             }
         );
 
-
     worksheet["!cols"] =
         columns.map(
             column => {
 
                 let max =
                     column.length;
-
 
                 exportData
                 .slice(0,100)
@@ -4943,7 +4785,6 @@ function saveExcel() {
                                 row[column] ?? ""
                             ).length;
 
-
                         if (
                             length > max
                         ) {
@@ -4954,7 +4795,6 @@ function saveExcel() {
 
                     }
                 );
-
 
                 return {
                     wch:
@@ -4970,10 +4810,8 @@ function saveExcel() {
             }
         );
 
-
     const workbook =
         XLSX.utils.book_new();
-
 
     XLSX.utils.book_append_sheet(
         workbook,
@@ -4981,10 +4819,8 @@ function saveExcel() {
         "Delivery Data"
     );
 
-
     const date =
         new Date();
-
 
     const safeReportName =
         reportName
@@ -4993,7 +4829,6 @@ function saveExcel() {
             "_"
         )
         .trim();
-
 
     const filename =
         `${safeReportName || "DBL_Delivery_Report"}_` +
@@ -5005,14 +4840,12 @@ function saveExcel() {
             date.getDate()
         ).padStart(2,"0")}.xlsx`;
 
-
     XLSX.writeFile(
         workbook,
         filename
     );
 
 }
-
 
 /* ============================================================
 PRINT
@@ -5021,7 +4854,6 @@ PRINT
 function printTable() {
 
     renderTable();
-
 
     if (!originalData.length) {
 
@@ -5033,7 +4865,6 @@ function printTable() {
 
     }
 
-
     if (!filteredData.length) {
 
         alert(
@@ -5044,10 +4875,8 @@ function printTable() {
 
     }
 
-
     reportName =
         getReportName();
-
 
     const visibleIndexes =
         columns
@@ -5062,7 +4891,6 @@ function printTable() {
                 )
         );
 
-
     if (!visibleIndexes.length) {
 
         alert(
@@ -5073,13 +4901,11 @@ function printTable() {
 
     }
 
-
     const printWindow =
         window.open(
             "",
             "_blank"
         );
-
 
     if (!printWindow) {
 
@@ -5090,7 +4916,6 @@ function printTable() {
         return;
 
     }
-
 
     let html = `
 
@@ -5109,49 +4934,49 @@ function printTable() {
 <style>
 
 @page {
-    size:A4 landscape;
-    margin:8mm;
+    size: A4 landscape;
+    margin: 8mm;
 }
 
 body {
-    font-family:Arial, sans-serif;
-    font-size:8px;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
 }
 
 .company-title {
-    font-size:14px;
-    font-weight:bold;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .report-title {
-    font-size:12px;
-    font-weight:bold;
-    margin-top:4px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 4px;
 }
 
 table {
-    width:100%;
-    border-collapse:collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 th {
-    background:#5ea2a7 !important;
-    color:#0000c8 !important;
-    border:1px solid #777;
-    padding:3px;
-    font-size:8px;
-    white-space:nowrap;
+    background: #5ea2a7 !important;
+    color: #0000c8 !important;
+    border: 1px solid #777;
+    padding: 3px;
+    font-size: 8px;
+    white-space: nowrap;
 }
 
 td {
-    border:1px solid #999;
-    padding:3px;
-    font-size:8px;
-    white-space:nowrap;
+    border: 1px solid #999;
+    padding: 3px;
+    font-size: 8px;
+    white-space: nowrap;
 }
 
 tr:nth-child(even) td {
-    background:#f5f5f5 !important;
+    background: #f5f5f5 !important;
 }
 
 </style>
@@ -5179,7 +5004,6 @@ Records: ${filteredData.length}
 <tr>
 `;
 
-
     visibleIndexes.forEach(
         index => {
 
@@ -5191,7 +5015,6 @@ Records: ${filteredData.length}
         }
     );
 
-
     html += `
 
 </tr>
@@ -5202,13 +5025,11 @@ Records: ${filteredData.length}
 
 `;
 
-
     filteredData.forEach(
         row => {
 
             html +=
                 "<tr>";
-
 
             visibleIndexes.forEach(
                 index => {
@@ -5223,13 +5044,11 @@ Records: ${filteredData.length}
                 }
             );
 
-
             html +=
                 "</tr>";
 
         }
     );
-
 
     html += `
 
@@ -5243,17 +5062,13 @@ Records: ${filteredData.length}
 
 `;
 
-
     printWindow.document.open();
-
 
     printWindow.document.write(
         html
     );
 
-
     printWindow.document.close();
-
 
     setTimeout(
         () => {
@@ -5265,7 +5080,6 @@ Records: ${filteredData.length}
     );
 
 }
-
 
 /* ============================================================
 ESCAPE
@@ -5302,4 +5116,3 @@ function escapeHtml(value) {
 </body>
 
 </html>
-```
