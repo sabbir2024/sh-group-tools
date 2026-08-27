@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF to DOC Converter</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs"
+        type="module"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #222;
+}
+
+.container {
+  width: min(600px, 92%);
+  margin: 60px auto;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 10px 35px rgba(0,0,0,.08);
+  text-align: center;
+}
+
+h1 {
+  margin-top: 0;
+  color: #2563eb;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.drop-zone {
+  border: 2px dashed #2563eb;
+  border-radius: 15px;
+  padding: 40px 20px;
+  cursor: pointer;
+  background: #f8fbff;
+  transition: .2s;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+  background: #eaf2ff;
+}
+
+.icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.file-name {
+  margin: 20px 0;
+  font-weight: bold;
+  color: #444;
+  word-break: break-word;
+}
+
+button {
+  border: 0;
+  padding: 13px 25px;
+  border-radius: 9px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+.progress-box {
+  display: none;
+  margin-top: 20px;
+}
+
+.progress {
+  width: 100%;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: #2563eb;
+  transition: width .2s;
+}
+
+.status {
+  margin-top: 10px;
+  color: #555;
+}
+
+.note {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <h1>PDF to DOC</h1>
+
+    <div class="subtitle">
+      Convert your PDF into an editable Word document
+    </div>
+
+    <label class="drop-zone" id="dropZone">
+      <div class="icon">📄</div>
+      <strong>Click to select PDF</strong>
+      <br>
+      <span>or drag & drop your PDF here</span>
+
+      <input type="file" id="pdfInput" accept="application/pdf,.pdf">
+    </label>
+
+    <div class="file-name" id="fileName">
+      No file selected
+    </div>
+
+    <button id="convertBtn" disabled>
+      Convert to DOC
+    </button>
+
+    <button id="downloadBtn" style="display:none;">
+      Download DOC
+    </button>
+
+    <div class="progress-box" id="progressBox">
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="status" id="status">
+        Preparing...
+      </div>
+    </div>
+
+    <div class="note">
+      Your PDF is processed in your browser.
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+
+import * as pdfjsLib from
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+
+
+const pdfInput = document.getElementById("pdfInput");
+const dropZone = document.getElementById("dropZone");
+const fileName = document.getElementById("fileName");
+const convertBtn = document.getElementById("convertBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const progressBox = document.getElementById("progressBox");
+const progressBar = document.getElementById("progressBar");
+const status = document.getElementById("status");
+
+let selectedFile = null;
+let generatedDoc = null;
+
+
+/* =========================
+   FILE SELECT
+========================= */
+
+pdfInput.addEventListener("change", function() {
+
+  if (this.files.length > 0) {
+    setFile(this.files[0]);
+  }
+
+});
+
+
+/* =========================
+   DRAG & DROP
+========================= */
+
+dropZone.addEventListener("dragover", function(e) {
+  e.preventDefault();
+  dropZone.classList.add("dragover");
+});
+
+dropZone.addEventListener("dragleave", function() {
+  dropZone.classList.remove("dragover");
+});
+
+dropZone.addEventListener("drop", function(e) {
+
+  e.preventDefault();
+
+  dropZone.classList.remove("dragover");
+
+  if (e.dataTransfer.files.length > 0) {
+    setFile(e.dataTransfer.files[0]);
+  }
+
+});
+
+
+/* =========================
+   SET FILE
+========================= */
+
+function setFile(file) {
+
+  if (
+    file.type !== "application/pdf" &&
+    !file.name.toLowerCase().endsWith(".pdf")
+  ) {
+
+    alert("Please select a PDF file.");
+
+    return;
+  }
+
+  selectedFile = file;
+
+  fileName.textContent =
+    "Selected: " + file.name;
+
+  convertBtn.disabled = false;
+
+  downloadBtn.style.display = "none";
+
+}
+
+
+/* =========================
+   CONVERT
+========================= */
+
+convertBtn.addEventListener("click", async function() {
+
+  if (!selectedFile) {
+    alert("Please select a PDF first.");
+    return;
+  }
+
+  convertBtn.disabled = true;
+
+  progressBox.style.display = "block";
+
+  progressBar.style.width = "0%";
+
+  status.textContent = "Reading PDF...";
+
+  try {
+
+    const arrayBuffer =
+      await selectedFile.arrayBuffer();
+
+    const pdf =
+      await pdfjsLib.getDocument({
+        data: arrayBuffer
+      }).promise;
+
+
+    let html = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  font-size: 12pt;
+}
+
+.page {
+  margin-bottom: 30px;
+  page-break-after: always;
+}
+
+p {
+  margin: 4px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+`;
+
+
+    /* =========================
+       PROCESS EACH PAGE
+    ========================= */
+
+    for (let pageNumber = 1;
+         pageNumber <= pdf.numPages;
+         pageNumber++) {
+
+      status.textContent =
+        `Converting page ${pageNumber} of ${pdf.numPages}...`;
+
+      const page =
+        await pdf.getPage(pageNumber);
+
+      const textContent =
+        await page.getTextContent();
+
+
+      /*
+       * Group text items approximately
+       * by their Y position.
+       */
+
+      let lines = [];
+
+      textContent.items.forEach(item => {
+
+        const text = item.str;
+
+        if (!text.trim()) {
+          return;
+        }
+
+        const y =
+          Math.round(item.transform[5]);
+
+        let existingLine =
+          lines.find(line =>
+            Math.abs(line.y - y) < 5
+          );
+
+        if (!existingLine) {
+
+          existingLine = {
+            y: y,
+            text: ""
+          };
+
+          lines.push(existingLine);
+        }
+
+        existingLine.text += text + " ";
+
+      });
+
+
+      /*
+       * PDF coordinates are usually
+       * top-to-bottom reversed.
+       */
+
+      lines.sort((a, b) => b.y - a.y);
+
+
+      html += `<div class="page">`;
+
+
+      lines.forEach(line => {
+
+        const safeText =
+          escapeHtml(line.text.trim());
+
+        if (safeText) {
+          html += `<p>${safeText}</p>`;
+        }
+
+      });
+
+
+      html += `</div>`;
+
+
+      const percent =
+        Math.round(
+          (pageNumber / pdf.numPages) * 100
+        );
+
+      progressBar.style.width =
+        percent + "%";
+
+    }
+
+
+    html += `
+</body>
+</html>
+`;
+
+
+    generatedDoc = new Blob(
+      [html],
+      {
+        type:
+          "application/msword;charset=utf-8"
+      }
+    );
+
+
+    status.textContent =
+      "Conversion completed!";
+
+    downloadBtn.style.display =
+      "inline-block";
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    status.textContent =
+      "Conversion failed.";
+
+    alert(
+      "Could not convert this PDF. " +
+      "Please try another PDF."
+    );
+
+  }
+
+  finally {
+
+    convertBtn.disabled = false;
+
+  }
+
+});
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+downloadBtn.addEventListener("click", function() {
+
+  if (!generatedDoc) {
+    return;
+  }
+
+  const url =
+    URL.createObjectURL(generatedDoc);
+
+  const a =
+    document.createElement("a");
+
+  const originalName =
+    selectedFile.name
+      .replace(/\.pdf$/i, "");
+
+  a.href = url;
+
+  a.download =
+    originalName + ".doc";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url);
+
+});
+
+
+/* =========================
+   HTML ESCAPE
+========================= */
+
+function escapeHtml(text) {
+
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
