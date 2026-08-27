@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>Football Kick || SABBIR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .pupil {
+      position: absolute;
+      transition: all 0.1s ease;
+    }
+    .football {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: top 1s ease;
+    }
+    @keyframes kick {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(-45deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .kick {
+      animation: kick 0.5s ease;
+    }
+  </style>
+</head>
+<body class="h-screen flex justify-center items-center bg-green-100 relative">
+
+  <!-- Character -->
+  <div id="player" class="flex flex-col items-center">
+    <!-- Head -->
+    <div class="w-32 h-32 bg-yellow-400 rounded-full flex flex-col items-center justify-center">
+      <div class="flex space-x-6">
+        <div id="eye1" class="eye relative w-12 h-12 rounded-full bg-white border-2 border-black">
+          <div class="pupil w-4 h-4 rounded-full bg-black" style="top:4px; left:4px;"></div>
+        </div>
+        <div id="eye2" class="eye relative w-12 h-12 rounded-full bg-white border-2 border-black">
+          <div class="pupil w-4 h-4 rounded-full bg-black" style="top:4px; left:4px;"></div>
+        </div>
+      </div>
+      <div id="mouth" class="w-16 h-3 bg-red-500 rounded-full mt-2 transition-all duration-300"></div>
+    </div>
+
+    <!-- Body -->
+    <div class="w-12 h-32 bg-blue-500"></div>
+
+    <!-- Arms -->
+    <div class="flex space-x-20 -mt-28">
+      <div class="w-4 h-24 bg-blue-500"></div>
+      <div class="w-4 h-24 bg-blue-500"></div>
+    </div>
+
+    <!-- Legs -->
+    <div class="flex space-x-10 mt-2">
+      <div id="leftLeg" class="w-4 h-24 bg-black"></div>
+      <div id="rightLeg" class="w-4 h-24 bg-black origin-top"></div>
+    </div>
+  </div>
+
+  <!-- Football -->
+  <div id="ball" class="football w-12 h-12 bg-white border-4 border-black rounded-full"></div>
+
+  <script>
+    const eyes = document.querySelectorAll(".eye");
+    const mouth = document.getElementById("mouth");
+    const ball = document.getElementById("ball");
+    const player = document.getElementById("player");
+    const rightLeg = document.getElementById("rightLeg");
+
+    document.addEventListener("mousemove", (event) => {
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+
+      // চোখের pupil মুভমেন্ট
+      eyes.forEach((eye) => {
+        const rect = eye.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const dx = mouseX - centerX;
+        const dy = mouseY - centerY;
+        const angle = Math.atan2(dy, dx);
+
+        const radius = 10;
+        const pupilX = Math.cos(angle) * radius;
+        const pupilY = Math.sin(angle) * radius;
+
+        const pupil = eye.querySelector(".pupil");
+        pupil.style.left = rect.width/2 - pupil.offsetWidth/2 + pupilX + "px";
+        pupil.style.top = rect.height/2 - pupil.offsetHeight/2 + pupilY + "px";
+      });
+
+      // Mouth হাসি হবে যদি মাউস mouth এর কাছে আসে
+      const rectMouth = mouth.getBoundingClientRect();
+      const centerX = rectMouth.left + rectMouth.width / 2;
+      const centerY = rectMouth.top + rectMouth.height / 2;
+      const dxM = mouseX - centerX;
+      const dyM = mouseY - centerY;
+      const distance = Math.sqrt(dxM * dxM + dyM * dyM);
+
+      if (distance < 100) {
+        mouth.className = "w-20 h-8 bg-red-500 rounded-b-full mt-2 transition-all duration-300";
+      } else {
+        mouth.className = "w-16 h-3 bg-red-500 rounded-full mt-2 transition-all duration-300";
+      }
+
+      // ফুটবল কিক
+      const rectPlayer = player.getBoundingClientRect();
+      const footY = rectPlayer.bottom;
+
+      if (event.clientY > footY - 50) {
+        ball.style.top = footY - 40 + "px";
+        rightLeg.classList.add("kick");
+        setTimeout(() => {
+          rightLeg.classList.remove("kick");
+          ball.style.top = "-100px";
+        }, 800);
+      }
+    });
+  </script>
+</body>
+</html>
