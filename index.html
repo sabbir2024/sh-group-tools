@@ -27,6 +27,7 @@
                             }
                         }
                     },
+
                     animation: {
                         float: "float 3s ease-in-out infinite"
                     }
@@ -45,16 +46,79 @@
             margin: 0;
         }
 
+        /* CARD */
+
         .card {
+            position: relative;
+            overflow: hidden;
             transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease;
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--card-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.25s ease;
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-7px);
             box-shadow:
-                0 15px 35px rgba(0, 0, 0, 0.15);
+                0 18px 40px rgba(0, 0, 0, 0.14);
+            border-color: var(--card-color);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.08) rotate(-3deg);
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-button {
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease;
+        }
+
+        .card:hover .card-button {
+            transform: translateX(4px);
+        }
+
+        /* PAGE */
+
+        .page-container {
+            animation: pageIn 0.5s ease;
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -63,9 +127,9 @@
 <body class="min-h-screen bg-[#f5f5f5]">
 
 
-    <!-- ================================
+    <!-- =========================================
          HEADER
-    ================================= -->
+    ========================================== -->
 
     <header class="relative z-10">
 
@@ -84,6 +148,8 @@
             "
         >
 
+            <!-- LOGO -->
+
             <div class="flex items-center gap-2">
 
                 <div
@@ -98,6 +164,7 @@
                         text-[11px]
                         font-bold
                         text-[#319a82]
+                        shadow-sm
                     "
                 >
                     SG
@@ -110,6 +177,8 @@
             </div>
 
 
+            <!-- DATE TIME -->
+
             <div
                 id="headerDateTime"
                 class="
@@ -121,6 +190,8 @@
             ></div>
 
 
+            <!-- PAGE -->
+
             <div class="text-xs font-bold">
                 Home
             </div>
@@ -128,13 +199,16 @@
         </div>
 
 
-        <!-- NAVIGATION -->
+        <!-- =========================================
+             NAVIGATION
+        ========================================== -->
 
         <nav
             class="
                 flex
                 h-[42px]
                 items-stretch
+                overflow-x-auto
                 border-b
                 border-[#1d2124]
                 bg-[#252a2d]
@@ -145,6 +219,7 @@
                 href="index.html"
                 class="
                     flex
+                    shrink-0
                     items-center
                     border-r
                     border-[#343a3d]
@@ -166,6 +241,7 @@
                 href="excel.html"
                 class="
                     flex
+                    shrink-0
                     items-center
                     border-r
                     border-[#343a3d]
@@ -186,6 +262,7 @@
                 href="gatepass.html"
                 class="
                     flex
+                    shrink-0
                     items-center
                     border-r
                     border-[#343a3d]
@@ -201,30 +278,56 @@
                 OGP Print
             </a>
 
+
+            <a
+                href="converter.html"
+                class="
+                    flex
+                    shrink-0
+                    items-center
+                    border-r
+                    border-[#343a3d]
+                    px-5
+                    text-xs
+                    font-bold
+                    text-white
+                    no-underline
+                    transition
+                    hover:bg-[#343a3d]
+                "
+            >
+                Converter
+            </a>
+
         </nav>
 
     </header>
 
 
-    <!-- ================================
+    <!-- =========================================
          MAIN
-    ================================= -->
+    ========================================== -->
 
     <main
         class="
+            page-container
             flex
             min-h-[calc(100vh-90px)]
             items-center
             justify-center
-            px-5
-            py-12
+            px-4
+            py-10
+            sm:px-6
+            sm:py-12
         "
     >
 
-        <div class="w-full max-w-[800px]">
+        <div class="w-full max-w-[1050px]">
 
 
-            <!-- TITLE -->
+            <!-- =========================================
+                 TITLE
+            ========================================== -->
 
             <div class="mb-10 text-center">
 
@@ -266,15 +369,15 @@
 
 
                 <p class="text-sm text-[#777] sm:text-base">
-                    Excel Editing & OGP Print
+                    Internal Tools & Applications
                 </p>
 
             </div>
 
 
-            <!-- ================================
-                 OPTIONS
-            ================================= -->
+            <!-- =========================================
+                 CARDS
+            ========================================== -->
 
             <div
                 class="
@@ -282,28 +385,35 @@
                     grid-cols-1
                     gap-5
                     sm:grid-cols-2
+                    lg:grid-cols-3
                 "
             >
 
 
-                <!-- EXCEL EDITING -->
+                <!-- =====================================
+                     EXCEL EDITING
+                ====================================== -->
 
                 <a
                     href="excel.html"
                     class="
                         card
                         block
-                        rounded-xl
+                        rounded-2xl
+                        border
+                        border-transparent
                         bg-white
-                        p-7
+                        p-6
                         text-center
                         no-underline
-                        shadow-[0_5px_20px_rgba(0,0,0,0.08)]
+                        shadow-[0_5px_20px_rgba(0,0,0,0.07)]
                     "
+                    style="--card-color:#319a82;"
                 >
 
                     <div
                         class="
+                            card-icon
                             mx-auto
                             mb-5
                             flex
@@ -311,7 +421,7 @@
                             w-[70px]
                             items-center
                             justify-center
-                            rounded-full
+                            rounded-2xl
                             bg-[#e8f5e9]
                             text-3xl
                         "
@@ -335,6 +445,7 @@
                     <p
                         class="
                             mb-5
+                            min-h-[48px]
                             text-sm
                             leading-6
                             text-[#777]
@@ -345,42 +456,51 @@
                     </p>
 
 
-                    <div
+                    <span
                         class="
-                            inline-block
-                            rounded-md
+                            card-button
+                            inline-flex
+                            items-center
+                            justify-center
+                            rounded-lg
                             bg-[#319a82]
-                            px-6
+                            px-5
                             py-2.5
                             text-sm
                             font-bold
                             text-white
                         "
                     >
-                        Open Excel Editing →
-                    </div>
+                        Open Tool →
+                    </span>
 
                 </a>
 
 
-                <!-- OGP PRINT -->
+                <!-- =====================================
+                     OGP PRINT
+                ====================================== -->
 
                 <a
                     href="gatepass.html"
                     class="
                         card
                         block
-                        rounded-xl
+                        rounded-2xl
+                        border
+                        border-transparent
                         bg-white
-                        p-7
+                        p-6
                         text-center
                         no-underline
-                        shadow-[0_5px_20px_rgba(0,0,0,0.08)]
+                        shadow-[0_5px_20px_rgba(0,0,0,0.07)]
                     "
+                    style="--card-color:#007bff;"
                 >
 
                     <div
                         class="
+                            card-icon
                             mx-auto
                             mb-5
                             flex
@@ -388,7 +508,7 @@
                             w-[70px]
                             items-center
                             justify-center
-                            rounded-full
+                            rounded-2xl
                             bg-[#e3f2fd]
                             text-3xl
                         "
@@ -412,56 +532,62 @@
                     <p
                         class="
                             mb-5
+                            min-h-[48px]
                             text-sm
                             leading-6
                             text-[#777]
                         "
                     >
                         Generate Delivery Challan,
-                        Delivery Gate Pass and
-                        Generic Gate Pass.
+                        Delivery Gate Pass and Gate Pass.
                     </p>
 
 
-                    <div
+                    <span
                         class="
-                            inline-block
-                            rounded-md
+                            card-button
+                            inline-flex
+                            items-center
+                            justify-center
+                            rounded-lg
                             bg-[#007bff]
-                            px-6
+                            px-5
                             py-2.5
                             text-sm
                             font-bold
                             text-white
                         "
                     >
-                        Open OGP Print →
-                    </div>
+                        Open Tool →
+                    </span>
 
                 </a>
 
 
-                <!-- ================================
-                     SABBIR PROFILE
-                ================================= -->
+                <!-- =====================================
+                     CONVERTER
+                ====================================== -->
 
                 <a
-                    href="sabbir.html"
+                    href="converter.html"
                     class="
                         card
                         block
-                        rounded-xl
+                        rounded-2xl
+                        border
+                        border-transparent
                         bg-white
-                        p-7
+                        p-6
                         text-center
                         no-underline
-                        shadow-[0_5px_20px_rgba(0,0,0,0.08)]
-                        sm:col-span-2
+                        shadow-[0_5px_20px_rgba(0,0,0,0.07)]
                     "
+                    style="--card-color:#9c27b0;"
                 >
 
                     <div
                         class="
+                            card-icon
                             mx-auto
                             mb-5
                             flex
@@ -469,8 +595,358 @@
                             w-[70px]
                             items-center
                             justify-center
-                            rounded-full
+                            rounded-2xl
+                            bg-[#f3e5f5]
+                            text-3xl
+                        "
+                    >
+                        🔄
+                    </div>
+
+
+                    <h2
+                        class="
+                            mb-2
+                            text-xl
+                            font-bold
+                            text-[#222]
+                        "
+                    >
+                        Converter
+                    </h2>
+
+
+                    <p
+                        class="
+                            mb-5
+                            min-h-[48px]
+                            text-sm
+                            leading-6
+                            text-[#777]
+                        "
+                    >
+                        Convert files, values and
+                        information quickly.
+                    </p>
+
+
+                    <span
+                        class="
+                            card-button
+                            inline-flex
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-[#9c27b0]
+                            px-5
+                            py-2.5
+                            text-sm
+                            font-bold
+                            text-white
+                        "
+                    >
+                        Open Tool →
+                    </span>
+
+                </a>
+
+
+                <!-- =====================================
+                     EYE
+                ====================================== -->
+
+                <a
+                    href="eye.html"
+                    class="
+                        card
+                        block
+                        rounded-2xl
+                        border
+                        border-transparent
+                        bg-white
+                        p-6
+                        text-center
+                        no-underline
+                        shadow-[0_5px_20px_rgba(0,0,0,0.07)]
+                    "
+                    style="--card-color:#00a8a8;"
+                >
+
+                    <div
+                        class="
+                            card-icon
+                            mx-auto
+                            mb-5
+                            flex
+                            h-[70px]
+                            w-[70px]
+                            items-center
+                            justify-center
+                            rounded-2xl
+                            bg-[#e0f7f7]
+                            text-3xl
+                        "
+                    >
+                        👁️
+                    </div>
+
+
+                    <h2
+                        class="
+                            mb-2
+                            text-xl
+                            font-bold
+                            text-[#222]
+                        "
+                    >
+                        Eye
+                    </h2>
+
+
+                    <p
+                        class="
+                            mb-5
+                            min-h-[48px]
+                            text-sm
+                            leading-6
+                            text-[#777]
+                        "
+                    >
+                        Access Eye related tools
+                        and information.
+                    </p>
+
+
+                    <span
+                        class="
+                            card-button
+                            inline-flex
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-[#00a8a8]
+                            px-5
+                            py-2.5
+                            text-sm
+                            font-bold
+                            text-white
+                        "
+                    >
+                        Open Tool →
+                    </span>
+
+                </a>
+
+
+                <!-- =====================================
+                     PHARMACY
+                ====================================== -->
+
+                <a
+                    href="pharmacy.html"
+                    class="
+                        card
+                        block
+                        rounded-2xl
+                        border
+                        border-transparent
+                        bg-white
+                        p-6
+                        text-center
+                        no-underline
+                        shadow-[0_5px_20px_rgba(0,0,0,0.07)]
+                    "
+                    style="--card-color:#e53935;"
+                >
+
+                    <div
+                        class="
+                            card-icon
+                            mx-auto
+                            mb-5
+                            flex
+                            h-[70px]
+                            w-[70px]
+                            items-center
+                            justify-center
+                            rounded-2xl
+                            bg-[#ffebee]
+                            text-3xl
+                        "
+                    >
+                        💊
+                    </div>
+
+
+                    <h2
+                        class="
+                            mb-2
+                            text-xl
+                            font-bold
+                            text-[#222]
+                        "
+                    >
+                        Pharmacy
+                    </h2>
+
+
+                    <p
+                        class="
+                            mb-5
+                            min-h-[48px]
+                            text-sm
+                            leading-6
+                            text-[#777]
+                        "
+                    >
+                        Manage pharmacy related
+                        tools and information.
+                    </p>
+
+
+                    <span
+                        class="
+                            card-button
+                            inline-flex
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-[#e53935]
+                            px-5
+                            py-2.5
+                            text-sm
+                            font-bold
+                            text-white
+                        "
+                    >
+                        Open Tool →
+                    </span>
+
+                </a>
+
+
+                <!-- =====================================
+                     SALE
+                ====================================== -->
+
+                <a
+                    href="sale.html"
+                    class="
+                        card
+                        block
+                        rounded-2xl
+                        border
+                        border-transparent
+                        bg-white
+                        p-6
+                        text-center
+                        no-underline
+                        shadow-[0_5px_20px_rgba(0,0,0,0.07)]
+                    "
+                    style="--card-color:#ff9800;"
+                >
+
+                    <div
+                        class="
+                            card-icon
+                            mx-auto
+                            mb-5
+                            flex
+                            h-[70px]
+                            w-[70px]
+                            items-center
+                            justify-center
+                            rounded-2xl
                             bg-[#fff3e0]
+                            text-3xl
+                        "
+                    >
+                        🛒
+                    </div>
+
+
+                    <h2
+                        class="
+                            mb-2
+                            text-xl
+                            font-bold
+                            text-[#222]
+                        "
+                    >
+                        Sale
+                    </h2>
+
+
+                    <p
+                        class="
+                            mb-5
+                            min-h-[48px]
+                            text-sm
+                            leading-6
+                            text-[#777]
+                        "
+                    >
+                        Access sales tools and
+                        manage sales information.
+                    </p>
+
+
+                    <span
+                        class="
+                            card-button
+                            inline-flex
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-[#ff9800]
+                            px-5
+                            py-2.5
+                            text-sm
+                            font-bold
+                            text-white
+                        "
+                    >
+                        Open Tool →
+                    </span>
+
+                </a>
+
+
+                <!-- =====================================
+                     PROFILE
+                ====================================== -->
+
+                <a
+                    href="sabbir.html"
+                    class="
+                        card
+                        block
+                        rounded-2xl
+                        border
+                        border-transparent
+                        bg-white
+                        p-6
+                        text-center
+                        no-underline
+                        shadow-[0_5px_20px_rgba(0,0,0,0.07)]
+                        sm:col-span-2
+                        lg:col-span-3
+                    "
+                    style="--card-color:#6f42c1;"
+                >
+
+                    <div
+                        class="
+                            card-icon
+                            mx-auto
+                            mb-5
+                            flex
+                            h-[70px]
+                            w-[70px]
+                            items-center
+                            justify-center
+                            rounded-2xl
+                            bg-[#f3e5f5]
                             text-3xl
                         "
                     >
@@ -502,10 +978,13 @@
                     </p>
 
 
-                    <div
+                    <span
                         class="
-                            inline-block
-                            rounded-md
+                            card-button
+                            inline-flex
+                            items-center
+                            justify-center
+                            rounded-lg
                             bg-[#6f42c1]
                             px-6
                             py-2.5
@@ -515,14 +994,16 @@
                         "
                     >
                         View Profile →
-                    </div>
+                    </span>
 
                 </a>
 
             </div>
 
 
-            <!-- FOOTER TEXT -->
+            <!-- =========================================
+                 FOOTER
+            ========================================== -->
 
             <div
                 class="
@@ -540,9 +1021,9 @@
     </main>
 
 
-    <!-- ================================
+    <!-- =========================================
          DATE / TIME
-    ================================= -->
+    ========================================== -->
 
     <script>
 
