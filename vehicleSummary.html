@@ -1,0 +1,2640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gate Pass Vehicle Wise Summary</title>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    background:#f3f6fa;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#17202a;
+}
+
+/* =====================================================
+   TOP HEADER - ADDED FROM IMAGE
+===================================================== */
+
+.top-header{
+    position:relative;
+    margin:-20px -20px 20px -20px;
+    height:46px;
+    background:linear-gradient(
+        90deg,
+        #319b86 0%,
+        #4cae63 45%,
+        #8bc63f 100%
+    );
+    color:#fff;
+    display:flex;
+    align-items:center;
+    padding:0 12px 0 14px;
+    font-weight:bold;
+}
+
+.top-header-left{
+    display:flex;
+    align-items:center;
+    height:100%;
+}
+
+.sg-logo{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:#f5f8fa;
+    color:#319b86;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:bold;
+    margin-right:10px;
+    box-shadow:0 1px 2px rgba(0,0,0,.15);
+}
+
+.top-header-title{
+    font-size:18px;
+    white-space:nowrap;
+}
+
+.top-header-date{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:15px;
+    white-space:nowrap;
+}
+
+.top-header-back{
+    color:#fff;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.top-header-back:hover{
+    text-decoration:underline;
+}
+
+/* =====================================================
+   NAVIGATION HEADER - ADDED FROM IMAGE
+===================================================== */
+
+.main-nav{
+    margin:-20px -20px 20px -20px;
+    height:44px;
+    background:#252a2e;
+    display:flex;
+    align-items:stretch;
+    padding-left:0;
+}
+
+.main-nav-item{
+    min-width:133px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:bold;
+    font-size:14px;
+    border-right:1px solid #30363b;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.main-nav-item.active{
+    background:#15191c;
+    border-bottom:3px solid #36a56f;
+}
+
+.main-nav-item:hover{
+    background:#30363b;
+}
+
+@media screen and (max-width:700px){
+
+    .top-header{
+        height:auto;
+        min-height:46px;
+        padding:7px 10px;
+    }
+
+    .top-header-title{
+        font-size:14px;
+    }
+
+    .top-header-date{
+        display:none;
+    }
+
+    .top-header-back{
+        font-size:11px;
+    }
+
+    .main-nav-item{
+        min-width:110px;
+        font-size:12px;
+    }
+
+}
+
+/* =====================================================
+   ORIGINAL CODE
+===================================================== */
+
+.container{
+    max-width:1500px;
+    margin:auto;
+}
+
+.no-print h1{
+    text-align:center;
+    color:#123b66;
+    margin:0 0 20px;
+}
+
+.card{
+    background:#fff;
+    padding:18px;
+    margin-bottom:18px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.card h2{
+    margin:0 0 12px;
+    color:#174a7a;
+    font-size:18px;
+}
+
+input[type="file"]{
+    width:100%;
+    padding:10px;
+    border:1px solid #cbd5df;
+    border-radius:6px;
+}
+
+textarea{
+    width:100%;
+    min-height:180px;
+    padding:12px;
+    resize:vertical;
+    border:1px solid #cbd5df;
+    border-radius:7px;
+    font-family:Consolas,monospace;
+    font-size:13px;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:12px;
+}
+
+button{
+    border:none;
+    color:white;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.btn-blue{background:#1677c8}
+.btn-green{background:#198754}
+.btn-orange{background:#f08c00}
+.btn-red{background:#dc3545}
+.btn-dark{background:#343a40}
+
+.status{
+    margin-top:10px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+/* =====================================================
+   INPUT TABLE
+===================================================== */
+
+.input-table-wrapper{
+    margin-top:15px;
+    overflow:auto;
+    border:1px solid #ccd6df;
+    border-radius:7px;
+    max-height:500px;
+}
+
+.input-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+    background:#fff;
+}
+
+.input-table th{
+    position:sticky;
+    top:0;
+    z-index:3;
+    background:#174a7a;
+    color:white;
+    padding:8px;
+    border:1px solid #0e3457;
+    white-space:nowrap;
+}
+
+.input-table td{
+    border:1px solid #cbd5df;
+    padding:5px;
+    white-space:nowrap;
+}
+
+.input-table input{
+    width:100%;
+    min-width:120px;
+    border:1px solid #d1d9e0;
+    border-radius:4px;
+    padding:6px;
+    font-size:12px;
+}
+
+.input-table input:focus{
+    outline:2px solid #80bdff;
+    border-color:#1677c8;
+}
+
+.row-number{
+    width:45px;
+    text-align:center;
+    font-weight:bold;
+    color:#555;
+}
+
+.remove-btn{
+    background:#dc3545;
+    padding:5px 9px;
+    font-size:11px;
+}
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+.filter-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:12px;
+    margin-top:12px;
+}
+
+.filter-box{
+    background:#f8fafc;
+    border:1px solid #d6dee7;
+    border-radius:7px;
+    padding:10px;
+}
+
+.filter-box label{
+    display:block;
+    margin-bottom:6px;
+    color:#174a7a;
+}
+
+.filter-box select{
+    width:100%;
+    padding:8px;
+    border:1px solid #cbd5df;
+    border-radius:5px;
+    background:#fff;
+}
+
+#gateOutDateFilter{
+    min-height:110px;
+}
+
+.filter-box small{
+    display:block;
+    margin-top:5px;
+    color:#777;
+}
+
+/* =====================================================
+   REPORT
+===================================================== */
+
+.report-wrapper{
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.report-header{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.report-header h2{
+    margin:0;
+    color:#123b66;
+    font-size:23px;
+}
+
+.report-header p{
+    margin:5px 0 0;
+    font-size:12px;
+    color:#666;
+}
+
+.vehicle-block{
+    margin-bottom:20px;
+    break-inside:avoid;
+    page-break-inside:avoid;
+}
+
+.vehicle-title{
+    background:#174a7a;
+    color:white;
+    font-weight:bold;
+    padding:8px 10px;
+    border-radius:4px 4px 0 0;
+    font-size:15px;
+}
+
+.vehicle-table-wrapper{
+    width:100%;
+    overflow-x:auto;
+}
+
+.vehicle-table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:auto;
+    font-size:12px;
+}
+
+.vehicle-table td{
+    border:1px solid #8996a3;
+    padding:7px 8px;
+    white-space:nowrap;
+    text-align:right;
+}
+
+.vehicle-table td:first-child{
+    text-align:left;
+}
+
+.vehicle-total-row,
+.vehicle-total-row td{
+    background:#dceaf7 !important;
+    color:#123b66;
+    font-weight:bold;
+}
+
+.customer-row{
+    background:#f7f9fb;
+    font-weight:bold;
+}
+
+.customer-row td:first-child{
+    padding-left:14px;
+}
+
+.gate-row td:first-child{
+    padding-left:28px;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:25px;
+}
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print{
+
+    @page{
+        size:A4 portrait;
+        margin:7mm;
+    }
+
+    html,
+    body{
+        width:210mm;
+        background:white;
+        margin:0;
+        padding:0;
+    }
+
+    .no-print{
+        display:none !important;
+    }
+
+    .top-header,
+    .main-nav{
+        display:none !important;
+    }
+
+    .report-wrapper{
+        width:100%;
+        padding:0;
+        margin:0;
+        box-shadow:none;
+        border-radius:0;
+    }
+
+    .report-header{
+        margin-bottom:8px;
+    }
+
+    .report-header h2{
+        font-size:18px;
+    }
+
+    .report-header p{
+        font-size:8px;
+    }
+
+    .vehicle-block{
+        margin-bottom:8px;
+        break-inside:avoid;
+        page-break-inside:avoid;
+    }
+
+    .vehicle-title{
+        font-size:10px;
+        padding:4px 6px;
+    }
+
+    .vehicle-table{
+        font-size:8px;
+    }
+
+    .vehicle-table td{
+        padding:3px 4px;
+    }
+
+    .vehicle-total-row,
+    .vehicle-total-row td{
+        background:#dceaf7 !important;
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
+
+    .customer-row,
+    .customer-row td{
+        background:#f7f9fb !important;
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media screen and (max-width:700px){
+
+    body{
+        padding:10px;
+    }
+
+    .card,
+    .report-wrapper{
+        padding:12px;
+    }
+
+    button{
+        width:100%;
+    }
+
+    .vehicle-table{
+        font-size:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     IMAGE STYLE TOP HEADER - ADDED
+===================================================== -->
+
+<div class="top-header">
+
+    <div class="top-header-left">
+
+        <div class="sg-logo">
+            SG
+        </div>
+
+        <div class="top-header-title">
+            Excel Editing - SH Group
+        </div>
+
+    </div>
+
+    <div
+        class="top-header-date"
+        id="topHeaderDate"
+    >
+        30-08-2026 11:58:48 am
+    </div>
+
+    <a href="index.html" class="top-header-back">
+    → Back
+</a>
+
+</div>
+
+
+<!-- =====================================================
+     NAVIGATION - ADDED
+===================================================== -->
+
+<div class="main-nav">
+
+    <a href="excel.html" class="main-nav-item">
+        Excel Editing
+    </a>
+
+<a href="gatepass.html" class="main-nav-item">
+        OGP Print
+    </a>
+
+
+<a href="vehicleSummary.html" class="main-nav-item">
+        Vehicle Summary
+    </a>
+
+
+   </div>
+
+
+<div class="container">
+
+<!-- =====================================================
+     INPUT AREA
+===================================================== -->
+
+<div class="no-print">
+
+<h1>Gate Pass Vehicle Wise Summary</h1>
+
+<div class="card">
+
+<h2>1. Upload Excel File</h2>
+
+<input
+    type="file"
+    id="excelFile"
+    accept=".xlsx,.xls,.csv"
+>
+
+<div id="fileStatus" class="status">
+    No Excel file selected.
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>2. Paste Gate Pass Data</h2>
+
+<textarea
+    id="pasteInput"
+    placeholder="Excel থেকে OGP Date, Gate Out Date, Gate Pass No, Vehicle No সহ data copy করে এখানে paste করুন..."
+></textarea>
+
+<div class="buttons">
+
+<button
+    class="btn-green"
+    onclick="loadPasteTable()"
+>
+    Load Paste Data
+</button>
+
+<button
+    class="btn-orange"
+    onclick="clearPaste()"
+>
+    Clear Paste
+</button>
+
+</div>
+
+<div id="pasteStatus" class="status"></div>
+
+</div>
+
+
+<!-- =====================================================
+     EDITABLE INPUT TABLE
+===================================================== -->
+
+<div class="card" id="inputTableCard" style="display:none">
+
+<h2>3. Paste Input Table</h2>
+
+<div class="filter-grid">
+
+<div class="filter-box">
+
+<label for="gateOutDateFilter">
+    <b>Gate Out Date</b>
+</label>
+
+<select
+    id="gateOutDateFilter"
+    multiple
+    onchange="renderInputTable()"
+>
+</select>
+
+<small>
+    একসাথে Date + Blank select করতে Ctrl / Cmd ব্যবহার করুন
+</small>
+
+</div>
+
+</div>
+
+<div class="buttons">
+
+<button
+    class="btn-blue"
+    onclick="addInputRow()"
+>
+    + Add Row
+</button>
+
+<button
+    class="btn-green"
+    onclick="generateReport()"
+>
+    Generate Report
+</button>
+
+</div>
+
+<div class="input-table-wrapper">
+
+<table class="input-table">
+
+<thead>
+
+<tr>
+
+<th class="row-number">#</th>
+
+<th>OGP Date</th>
+
+<th>Gate Out Date</th>
+
+<th>Gate Pass No</th>
+
+<th>Vehicle No</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="inputTableBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     REPORT
+===================================================== -->
+
+<div
+    id="reportArea"
+    class="report-wrapper"
+>
+
+<div class="report-header">
+
+<h2>
+Gate Pass Vehicle Wise Summary
+</h2>
+
+<p id="reportDate"></p>
+
+</div>
+
+<div id="vehicleTables">
+
+<div class="empty">
+Generate report to view data
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   HEADER DATE - ADDED
+===================================================== */
+
+function updateTopHeaderDate(){
+
+    const now=new Date();
+
+    const day=
+        String(now.getDate())
+        .padStart(2,"0");
+
+    const month=
+        String(now.getMonth()+1)
+        .padStart(2,"0");
+
+    const year=
+        now.getFullYear();
+
+    let hours=now.getHours();
+
+    const minutes=
+        String(now.getMinutes())
+        .padStart(2,"0");
+
+    const seconds=
+        String(now.getSeconds())
+        .padStart(2,"0");
+
+    const ampm=
+        hours>=12
+        ?"pm"
+        :"am";
+
+    hours=
+        hours%12 || 12;
+
+    const time=
+        String(hours)
+        .padStart(2,"0")+
+        ":"+
+        minutes+
+        ":"+
+        seconds+
+        " "+
+        ampm;
+
+    document.getElementById(
+        "topHeaderDate"
+    ).innerText=
+        day+
+        "-"+
+        month+
+        "-"+
+        year+
+        " "+
+        time;
+
+}
+
+updateTopHeaderDate();
+
+setInterval(
+    updateTopHeaderDate,
+    1000
+);
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let excelRows = [];
+let inputRows = [];
+
+
+/* =====================================================
+   CUSTOMER MAPPING
+===================================================== */
+
+const customerMap = [
+
+["MAWNA FASHIONS LTD. Jinnat Knitwear Ltd","JINNAT"],
+["FLAMINGO FASHIONS LTD. FLAMINGO FASHIONS LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","JINNAT"],
+["FB FOOTWEAR LTD. Uloshara, Kaliakoir, Gazipur","FB"],
+["JINNAT KNITWEARS LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","JINNAT"],
+["FLAMINGO FASHIONS LTD. (FFL2-1)_FLAMINGO FASHIONS LTD.","FFL2"],
+["MAWNA FASHIONS LTD. MAWNA, SHREEPUR, GAZIPUR","MAWNA"],
+["PARASOLE FOOTWEAR LTD. Moddho Gazirchat, Ashulia, Savar, Dhaka.","PARASOL"],
+["JINNAT KNITWEARS LTD. (JKL-U2-2)_JINNAT KNITWEARS LTD.","JKL-2"],
+["JINNAT KNITWEARS LTD. (FFL2-1)_FLAMINGO FASHIONS LTD.","FFL2"],
+["Bonshoe Bangladesh Ltd. Plot#1-5, Sector# 5, CEPZ Chattogram","BONSHOE"],
+["JINNAT FASHIONS LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","JINNAT"],
+["APEX FOOTWEAR LIMITED. Shafipur, Kaliakoir, Gazipur","APEX"],
+["EDISON FOOTWEAR LTD. J L No: 5, Mirzapur, Gazipur Sadar,1700 Gazipur, Bangladesh","EDISION"],
+["THANBEE PRINT WORLD LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","THANBE"],
+["JINNAT FASHIONS LTD. JINNAT FASHIONS LTD.","JINNAT"],
+["VULUA FOOTWEAR INDUSTRIES LTD. Dighamatia, Hemayetpur, Savar, Dhaka, Bangladesh","VULUA"],
+["JINNAT FASHIONS LTD. Mawna Fashions Ltd ,Tepir Bari, Sreepur, Gazipur, Bangladesh","MAWNA"],
+["MATIN SPINNING MILLS PLC SARDAGONJ, KASHIMPUR, GAZIPUR","MATIN"],
+["FLAMINGO FASHIONS LTD. (JKL-U2-1)_JINNAT KNITWEARS LTD","JKL-2"],
+["FOOTBED FOOTWEAR LTD. ULOSHARA, KAI.IAKOI R, GAZIPUR","FOOTBED"],
+["DBL CERAMICS LTD. MAWNA, SREEPUR, GAZIPUR","CERAMICS"],
+["UTAH FASHIONS LTD 1st-6th Floor, South Shalna, PO: Shalna Bazar, PS: Gazipur Sadar, Gazipur, Bangladesh.","UTAH FASHION"],
+["JINNAT KNITWEARS LTD. (JKL-U2-1)_JINNAT KNITWEARS LTD.","JKL-2"],
+["GLORY TEXTILES & APPARELS LTD. Kharuail, Ward No-7, Bhaluka Municipal Area Mymensingh 2240 BANGLADESH","GLORY"],
+["EU DESIGN, HK LTD. UNITS 1901-1906, 19/F, METRO LOFT, NO. 38 KWAI HEI STREET, KWAI CHUNG, N. T.","EU DESIGN"],
+["FLAMINGO FASHIONS LTD. (JKL-U2-4)_JINNAT KNITWEARS LTD","JKL-2"],
+["PARKWAY PACKAGING & PRINTING PLC SARDAGONJ, KASHIMPUR, GAZIPUR","PARKWAY"],
+["TEXTILE TESTING SERVICES LTD. NAYAPARA, KASHIMPUR, GAZIPUR, 1712","TTSL"],
+["UTAH KNITTING & DYEING LTD( Garments Division ) Vill:Bokran Monipur, P.O.Bhabanipur, P.S.Gazipur Sadar, Dist: Gazipur, Bangladesh","UTAH KNITING"],
+["JINNAT KNITWEARS LTD. (MFL)_MAWNA FASHIONS LTD.","MAWNA"],
+["MEHNAZ STYLES & CRAFT LTD. Industry SL No-56, Ward-06 | Tongabari Ashulia, Savar, Dhaka","MEHNAZ"],
+["COLOR CITY LTD. NAYAPARA, KASHIMPUR, GAZIPUR","COLOR"],
+["MAWNA FASHIONS LTD. (JKL-U2-2)_JINNAT KNITWEARS LTD.","JKL-2"],
+["JINNAT APPARELS LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","JINNAT"],
+["FLAMINGO FASHIONS LTD. (JAL)_JINNAT APPARELS LTD","JINNAT"],
+["EUDB ACCESSORIES LIMITED SARDAGONJ, KASHIMPUR, GAZIPUR","EUDB"],
+["DB TEX LTD. NAYAPARA, KASHIMPUR, GAZIPUR","DB TEX"],
+["Nuovo Shoes (BD) Ltd. BUILDING.B,PLOT#81-B2,WEST -PADARDIA,SATAKUL,ROAD.SATAKUL-294, DHAKA,","NUOVO SHOES"],
+["OMC FOOTWEAR LIMITED Nalpathor, Kanchan, Rupgonj, Narayanganj-1461, Bangladesh","OMC"],
+["HAMZA TEXTILES LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","HAMZA"],
+["COMFIT COMPOSITE KNIT LTD. GORAI, MIRZAPUR, TANGAIL","COMFIT"],
+["Fabrica Knit Composite Ltd. Jamgora, Asulia, Dhaka","FAVRICA"],
+["FLAMINGO FASHIONS LTD. Glory Textile & Apparels Ltd.","GLORY"],
+["Fabrica Knit Composite Ltd. FNF Trend Fashion Ltd","FAVRICA"],
+["DBL Pharmaceuticals Ltd. DEWAN BARI, KASHIMPUR, GAZIPUR","PRHARMA"],
+["JINNAT KNITWEARS LTD. (MFL-1)_MAWNA FASHIONS LTD","MAWNA"],
+["JINNAT KNITWEARS LTD. (FFL2-2)_FLAMINGO FASHIONS LTD.","FFL2"],
+["FLAMINGO FASHIONS LTD. (FFL2-4)_FLAMINGO FASHIONS LTD.","FFL2"],
+["FLAMINGO FASHIONS LTD. (JKL-U2-3)_JINNAT KNITWEARS LTD.","JKL-2"],
+["MATRIGHOR LIMITED. Shingair Road, Hemayetpur, Tetuljhora, Savar, Dhaka-1340","MATRIGH"],
+["FLAMINGO FASHIONS LTD. (JAL-1)_JINNAT APPARELS LTD","JINNAT"],
+["JINNAT KNITWEARS LTD. (JKL-U2-4)_JINNAT KNITWEARS LTD.","JKL-2"],
+["FLAMINGO FASHIONS LTD. (FFL2-5)_FLAMINGO FASHIONS LTD.","FFL2"],
+["MAWNA FASHIONS LTD. (MFL)_MAWNA FASHIONS LTD.","MAWNA"],
+["JINNAT KNITWEARS LTD (JKL)_JINNAT KNITWEARS LTD.","JINNAT"],
+["T.K. FOOTWEAR LIMITED. 4, CDA INDUSTRIAL AREA, CHANDGAON,KALURGHAT, CHITTAGONG, BANGLADESH","T.K. FOOTWEAR"],
+["JINNAT KNITWEARS LTD. (JKL-U2-3)_JINNAT KNITWEARS LTD.","JKL-2"],
+["FLAMINGO FASHIONS LTD. (JKL-1)_JINNAT KNITWEARS LTD.","JINNAT"],
+["JINNAT KNITWEARS LTD. (JKL)_JINNAT KNITWEARS LTD.","JINNAT"],
+["Jinnat Textile Mills Ltd. (JTML) Shreehatta Economic Zone, Sherpur, Moulvibazar","Jinnat Textile"]
+
+];
+
+
+/* =====================================================
+   NORMALIZE
+===================================================== */
+
+function normalize(value){
+
+    if(value===null || value===undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/<br\s*\/?>/gi," ")
+        .replace(/\u00a0/g," ")
+        .replace(/[\r\n\t]+/g," ")
+        .replace(/\s+/g," ")
+        .trim()
+        .toUpperCase();
+}
+
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+function numberValue(value){
+
+    if(
+        value===null ||
+        value===undefined ||
+        value===""
+    ){
+        return 0;
+    }
+
+    const text =
+        String(value)
+        .replace(/,/g,"")
+        .replace(/[^\d.-]/g,"");
+
+    const num=parseFloat(text);
+
+    return isNaN(num)?0:num;
+}
+
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
+function formatNumber(value){
+
+    if(!isFinite(value)){
+        return "0";
+    }
+
+    return Number(value).toLocaleString(
+        "en-US",
+        {
+            maximumFractionDigits:3
+        }
+    );
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =====================================================
+   FIND COLUMN
+===================================================== */
+
+function findColumn(row,names){
+
+    const keys=Object.keys(row);
+
+    for(const name of names){
+
+        const target=normalize(name);
+
+        const exact=keys.find(
+            key=>normalize(key)===target
+        );
+
+        if(exact){
+            return exact;
+        }
+    }
+
+    for(const name of names){
+
+        const target=normalize(name);
+
+        const partial=keys.find(key=>{
+
+            const current=normalize(key);
+
+            return current.includes(target) ||
+                   target.includes(current);
+
+        });
+
+        if(partial){
+            return partial;
+        }
+    }
+
+    return null;
+}
+
+
+/* =====================================================
+   EXCEL UPLOAD
+===================================================== */
+
+document
+.getElementById("excelFile")
+.addEventListener("change",function(event){
+
+    const file=event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+    const reader=new FileReader();
+
+    reader.onload=function(e){
+
+        try{
+
+            const data=new Uint8Array(e.target.result);
+
+            const workbook=XLSX.read(
+                data,
+                {
+                    type:"array",
+                    cellDates:true
+                }
+            );
+
+            const sheet=
+                workbook.Sheets[
+                    workbook.SheetNames[0]
+                ];
+
+            excelRows=
+                XLSX.utils.sheet_to_json(
+                    sheet,
+                    {
+                        defval:"",
+                        raw:false
+                    }
+                );
+
+            document.getElementById("fileStatus").innerHTML=
+                "Excel loaded successfully: "+
+                excelRows.length+
+                " rows.";
+
+            document.getElementById("fileStatus").style.color=
+                "#198754";
+
+        }
+        catch(error){
+
+            console.error(error);
+
+            document.getElementById("fileStatus").innerHTML=
+                "Error reading Excel file.";
+
+            document.getElementById("fileStatus").style.color=
+                "#dc3545";
+        }
+
+    };
+
+    reader.readAsArrayBuffer(file);
+
+});
+
+
+/* =====================================================
+   PREPARE EXCEL
+===================================================== */
+
+function prepareExcelData(){
+
+    return excelRows.map(row=>{
+
+        const gateCol=findColumn(
+            row,
+            [
+                "Gate Pass No",
+                "Gate Pass",
+                "GatePass No"
+            ]
+        );
+
+        const challanCol=findColumn(
+            row,
+            [
+                "Challan No",
+                "Challan"
+            ]
+        );
+
+        const qtyCol=findColumn(
+            row,
+            [
+                "Quantity",
+                "Qty"
+            ]
+        );
+
+        const weightCol=findColumn(
+            row,
+            [
+                "Net Weight",
+                "NetWeight",
+                "Weight"
+            ]
+        );
+
+        const bagCol=findColumn(
+            row,
+            [
+                "Bag/Ctn",
+                "Bag Ctn",
+                "Bag/Ctns",
+                "Bag"
+            ]
+        );
+
+        const customerCol=findColumn(
+            row,
+            [
+                "Customer Name",
+                "Customer",
+                "Buyer Name"
+            ]
+        );
+
+        const locationCol=findColumn(
+            row,
+            [
+                "Delilocation",
+                "Delivery Location",
+                "DeliveryLocation",
+                "Location"
+            ]
+        );
+
+        const vehicleCol=findColumn(
+            row,
+            [
+                "Vehicle No",
+                "Vehicle Number"
+            ]
+        );
+
+        return{
+
+            gatePass:
+                gateCol?
+                String(row[gateCol]).trim():"",
+
+            challan:
+                challanCol?
+                String(row[challanCol]).trim():"",
+
+            quantity:
+                numberValue(
+                    qtyCol?row[qtyCol]:0
+                ),
+
+            netWeight:
+                numberValue(
+                    weightCol?row[weightCol]:0
+                ),
+
+            bagCtn:
+                numberValue(
+                    bagCol?row[bagCol]:0
+                ),
+
+            customer:
+                customerCol?
+                String(row[customerCol]).trim():"",
+
+            location:
+                locationCol?
+                String(row[locationCol]).trim():"",
+
+            vehicle:
+                vehicleCol?
+                String(row[vehicleCol]).trim():""
+
+        };
+
+    });
+
+}
+
+
+/* =====================================================
+   PASTE PARSER
+===================================================== */
+
+function parsePastedData(text){
+
+    if(!text.trim()){
+        return [];
+    }
+
+    const lines=
+        text
+        .split(/\r?\n/)
+        .map(x=>x.trim())
+        .filter(x=>x!=="");
+
+    if(!lines.length){
+        return [];
+    }
+
+    let delimiter="\t";
+
+    if(!lines[0].includes("\t")){
+
+        if(lines[0].includes("|")){
+            delimiter="|";
+        }
+        else{
+            delimiter=/\s{2,}/;
+        }
+    }
+
+    const headers=
+        lines[0]
+        .split(delimiter)
+        .map(x=>normalize(x));
+
+    const result=[];
+
+    for(
+        let i=1;
+        i<lines.length;
+        i++
+    ){
+
+        const cols=lines[i].split(delimiter);
+
+        if(cols.length<=1){
+            continue;
+        }
+
+        const obj={};
+
+        headers.forEach(
+            (header,index)=>{
+
+                obj[header]=
+                    cols[index]!==undefined
+                    ?cols[index].trim()
+                    :"";
+
+            }
+        );
+
+        result.push(obj);
+    }
+
+    return result;
+}
+
+
+/* =====================================================
+   PREPARE PASTE INPUT
+===================================================== */
+
+function preparePastedData(){
+
+    const rows=parsePastedData(
+        document.getElementById("pasteInput").value
+    );
+
+    return rows.map(row=>{
+
+        const ogpDateCol=findColumn(
+            row,
+            [
+                "OGP Date",
+                "OGPDate"
+            ]
+        );
+
+        const gateOutDateCol=findColumn(
+            row,
+            [
+                "Gate Out Date",
+                "GateOut Date",
+                "GateOutDate",
+                "Gate Out"
+            ]
+        );
+
+        const gateCol=findColumn(
+            row,
+            [
+                "Gate Pass No",
+                "Gate Pass",
+                "GatePass No"
+            ]
+        );
+
+        const vehicleCol=findColumn(
+            row,
+            [
+                "Vehicle No",
+                "Vehicle Number"
+            ]
+        );
+
+        return{
+
+            ogpDate:
+                ogpDateCol?
+                row[ogpDateCol]:"",
+
+            gateOutDate:
+                gateOutDateCol?
+                row[gateOutDateCol]:"",
+
+            gatePass:
+                gateCol?
+                row[gateCol]:"",
+
+            vehicle:
+                vehicleCol?
+                row[vehicleCol]:""
+
+        };
+
+    });
+
+}
+
+
+/* =====================================================
+   DATE NORMALIZE
+===================================================== */
+
+function normalizeDateForFilter(value){
+
+    if(
+        value===null ||
+        value===undefined ||
+        String(value).trim()===""
+    ){
+        return "";
+    }
+
+    let text=String(value).trim();
+
+    let m=text.match(
+        /^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/
+    );
+
+    if(m){
+
+        const day=String(m[1]).padStart(2,"0");
+        const monthNumber=parseInt(m[2],10);
+        const year=m[3];
+
+        const months=[
+            "Jan","Feb","Mar","Apr","May","Jun",
+            "Jul","Aug","Sep","Oct","Nov","Dec"
+        ];
+
+        if(monthNumber>=1 && monthNumber<=12){
+
+            return(
+                day+
+                "-"+
+                months[monthNumber-1]+
+                "-"+
+                year
+            );
+        }
+    }
+
+    const date=new Date(text);
+
+    if(!isNaN(date.getTime())){
+
+        return formatGateOutDate(date);
+
+    }
+
+    return text;
+}
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatGateOutDate(date){
+
+    const day=
+        String(date.getDate())
+        .padStart(2,"0");
+
+    const months=[
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    return(
+        day+
+        "-"+
+        months[date.getMonth()]+
+        "-"+
+        date.getFullYear()
+    );
+}
+
+
+/* =====================================================
+   LOAD PASTE TABLE
+===================================================== */
+
+function loadPasteTable(){
+
+    const rows=preparePastedData();
+
+    if(!rows.length){
+
+        document.getElementById("pasteStatus").style.color=
+            "#dc3545";
+
+        document.getElementById("pasteStatus").innerText=
+            "Please paste valid data first.";
+
+        return;
+    }
+
+    inputRows=rows;
+
+    document.getElementById("inputTableCard").style.display=
+        "block";
+
+    buildGateOutDateFilter();
+
+    renderInputTable();
+
+    document.getElementById("pasteStatus").style.color=
+        "#198754";
+
+    document.getElementById("pasteStatus").innerText=
+        inputRows.length+
+        " rows loaded. You can edit, add or remove rows.";
+}
+
+
+/* =====================================================
+   BUILD GATE OUT DATE FILTER
+===================================================== */
+
+function buildGateOutDateFilter(){
+
+    const select=
+        document.getElementById(
+            "gateOutDateFilter"
+        );
+
+    if(!select){
+        return;
+    }
+
+    const oldSelected=
+        Array.from(
+            select.selectedOptions
+        ).map(option=>option.value);
+
+    select.innerHTML="";
+
+    const dates=new Set();
+
+    let hasBlank=false;
+
+    inputRows.forEach(row=>{
+
+        const formatted=
+            normalizeDateForFilter(
+                row.gateOutDate
+            );
+
+        if(formatted){
+            dates.add(formatted);
+        }
+        else{
+            hasBlank=true;
+        }
+
+    });
+
+    const sortedDates=
+        [...dates].sort((a,b)=>{
+
+            const parse=x=>{
+
+                const parts=x.split("-");
+
+                if(parts.length!==3){
+                    return new Date(x);
+                }
+
+                const monthMap={
+                    Jan:0,Feb:1,Mar:2,Apr:3,
+                    May:4,Jun:5,Jul:6,Aug:7,
+                    Sep:8,Oct:9,Nov:10,Dec:11
+                };
+
+                return new Date(
+                    Number(parts[2]),
+                    monthMap[parts[1]],
+                    Number(parts[0])
+                );
+            };
+
+            return parse(a)-parse(b);
+        });
+
+    sortedDates.forEach(date=>{
+
+        const option=
+            document.createElement("option");
+
+        option.value=date;
+        option.textContent=date;
+
+        if(oldSelected.includes(date)){
+            option.selected=true;
+        }
+
+        select.appendChild(option);
+
+    });
+
+    if(hasBlank){
+
+        const option=
+            document.createElement("option");
+
+        option.value="__BLANK__";
+        option.textContent="Blank";
+
+        if(oldSelected.includes("__BLANK__")){
+            option.selected=true;
+        }
+
+        select.appendChild(option);
+    }
+
+}
+
+
+/* =====================================================
+   GET SELECTED DATES
+===================================================== */
+
+function getSelectedGateOutDates(){
+
+    const select=
+        document.getElementById(
+            "gateOutDateFilter"
+        );
+
+    if(!select){
+        return [];
+    }
+
+    return Array.from(
+        select.selectedOptions
+    ).map(
+        option=>option.value
+    );
+
+}
+
+
+/* =====================================================
+   FILTER INPUT ROWS
+===================================================== */
+
+function getFilteredInputRows(){
+
+    const selected=
+        getSelectedGateOutDates();
+
+    if(!selected.length){
+        return inputRows;
+    }
+
+    return inputRows.filter(row=>{
+
+        const date=
+            normalizeDateForFilter(
+                row.gateOutDate
+            );
+
+        if(!date){
+
+            return selected.includes(
+                "__BLANK__"
+            );
+        }
+
+        return selected.includes(date);
+
+    });
+
+}
+
+
+/* =====================================================
+   RENDER INPUT TABLE
+===================================================== */
+
+function renderInputTable(){
+
+    const tbody=
+        document.getElementById(
+            "inputTableBody"
+        );
+
+    tbody.innerHTML="";
+
+    const filteredRows=
+        getFilteredInputRows();
+
+    inputRows.forEach(
+        (row,index)=>{
+
+            const date=
+                normalizeDateForFilter(
+                    row.gateOutDate
+                );
+
+            const selected=
+                getSelectedGateOutDates();
+
+            let visible=true;
+
+            if(selected.length){
+
+                if(!date){
+                    visible=
+                        selected.includes(
+                            "__BLANK__"
+                        );
+                }
+                else{
+                    visible=
+                        selected.includes(date);
+                }
+
+            }
+
+            if(!visible){
+                return;
+            }
+
+            const tr=
+                document.createElement("tr");
+
+            tr.innerHTML=`
+
+                <td class="row-number">
+                    ${index+1}
+                </td>
+
+                <td>
+                    <input
+                        type="text"
+                        value="${escapeHtml(row.ogpDate)}"
+                        onchange="updateInputRow(${index},'ogpDate',this.value)"
+                    >
+                </td>
+
+                <td>
+                    <input
+                        type="text"
+                        value="${escapeHtml(row.gateOutDate)}"
+                        onchange="updateInputRow(${index},'gateOutDate',this.value); refreshDateFilter();"
+                    >
+                </td>
+
+                <td>
+                    <input
+                        type="text"
+                        value="${escapeHtml(row.gatePass)}"
+                        onchange="updateInputRow(${index},'gatePass',this.value)"
+                    >
+                </td>
+
+                <td>
+                    <input
+                        type="text"
+                        value="${escapeHtml(row.vehicle)}"
+                        onchange="updateInputRow(${index},'vehicle',this.value)"
+                    >
+                </td>
+
+                <td>
+                    <button
+                        class="remove-btn"
+                        onclick="removeInputRow(${index})"
+                    >
+                        Remove
+                    </button>
+                </td>
+
+            `;
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   UPDATE ROW
+===================================================== */
+
+function updateInputRow(index,field,value){
+
+    if(!inputRows[index]){
+        return;
+    }
+
+    inputRows[index][field]=value;
+
+}
+
+
+/* =====================================================
+   REFRESH FILTER
+===================================================== */
+
+function refreshDateFilter(){
+
+    const selected=
+        getSelectedGateOutDates();
+
+    buildGateOutDateFilter();
+
+    const select=
+        document.getElementById(
+            "gateOutDateFilter"
+        );
+
+    Array.from(select.options)
+        .forEach(option=>{
+
+            if(selected.includes(option.value)){
+                option.selected=true;
+            }
+
+        });
+
+    renderInputTable();
+
+}
+
+
+/* =====================================================
+   ADD ROW
+===================================================== */
+
+function addInputRow(){
+
+    inputRows.push({
+
+        ogpDate:"",
+        gateOutDate:"",
+        gatePass:"",
+        vehicle:""
+
+    });
+
+    buildGateOutDateFilter();
+
+    renderInputTable();
+
+}
+
+
+/* =====================================================
+   REMOVE ROW
+===================================================== */
+
+function removeInputRow(index){
+
+    if(!confirm("Remove this row?")){
+        return;
+    }
+
+    inputRows.splice(index,1);
+
+    buildGateOutDateFilter();
+
+    renderInputTable();
+
+}
+
+
+/* =====================================================
+   CUSTOMER MAPPING
+===================================================== */
+
+function getMappedCustomer(customer,location){
+
+    const combined=
+        normalize(
+            customer+
+            " "+
+            location
+        );
+
+    for(const item of customerMap){
+
+        const source=
+            normalize(item[0]);
+
+        if(
+            combined===source ||
+            combined.includes(source) ||
+            source.includes(combined)
+        ){
+
+            return item[1];
+
+        }
+
+    }
+
+    const checks=[
+
+        [/APEX FOOTWEAR/,"APEX"],
+        [/JINNAT APPARELS/,"JINNAT"],
+        [/JINNAT FASHIONS/,"JINNAT"],
+        [/JINNAT KNITWEARS.*FFL2/,"FFL2"],
+        [/FFL2/,"FFL2"],
+        [/JKL-U2/,"JKL-2"],
+        [/JKL-1/,"JINNAT"],
+        [/GLORY TEXTILES/,"GLORY"],
+        [/GLORY TEXTILE/,"GLORY"],
+        [/FOOTBED/,"FOOTBED"],
+        [/UTAH KNITTING/,"UTAH KNITING"],
+        [/UTAH FASHIONS/,"UTAH FASHION"],
+        [/FAVRICA|FABRICA/,"FAVRICA"],
+        [/T\.K\. FOOTWEAR/,"T.K. FOOTWEAR"],
+        [/PARASOLE/,"PARASOL"],
+        [/BONSHOE/,"BONSHOE"],
+        [/MATIN SPINNING/,"MATIN"],
+        [/MEHNAZ/,"MEHNAZ"],
+        [/COLOR CITY/,"COLOR"],
+        [/PARKWAY/,"PARKWAY"],
+        [/TEXTILE TESTING/,"TTSL"],
+        [/EU DESIGN/,"EU DESIGN"],
+        [/EUDB/,"EUDB"],
+        [/DB TEX/,"DB TEX"],
+        [/NUOVO SHOES/,"NUOVO SHOES"],
+        [/OMC FOOTWEAR/,"OMC"],
+        [/HAMZA TEXTILES/,"HAMZA"],
+        [/COMFIT/,"COMFIT"],
+        [/DBL CERAMICS/,"CERAMICS"],
+        [/DBL PHARMACEUTICALS/,"PRHARMA"],
+        [/MATRIGHOR/,"MATRIGH"],
+        [/VULUA/,"VULUA"],
+        [/THANBEE/,"THANBE"],
+        [/FB FOOTWEAR/,"FB"]
+
+    ];
+
+    for(const [regex,value] of checks){
+
+        if(regex.test(combined)){
+            return value;
+        }
+
+    }
+
+    return customer || "Unknown";
+}
+
+
+/* =====================================================
+   MATCH GATE PASS
+===================================================== */
+
+function getMatchedRows(excelData,pastedData){
+
+    const gatePassSet=new Set();
+
+    const vehicleMap=new Map();
+
+    pastedData.forEach(row=>{
+
+        const key=
+            normalize(row.gatePass);
+
+        if(!key){
+            return;
+        }
+
+        gatePassSet.add(key);
+
+        if(!vehicleMap.has(key)){
+            vehicleMap.set(key,[]);
+        }
+
+        if(row.vehicle){
+
+            vehicleMap
+                .get(key)
+                .push(row.vehicle);
+
+        }
+
+    });
+
+    return excelData
+
+        .filter(row=>{
+
+            return gatePassSet.has(
+                normalize(row.gatePass)
+            );
+
+        })
+
+        .map(row=>{
+
+            const key=
+                normalize(row.gatePass);
+
+            const vehicles=[
+                ...new Set(
+                    (
+                        vehicleMap.get(key)||[]
+                    ).filter(Boolean)
+                )
+            ];
+
+            return{
+
+                ...row,
+
+                mappedCustomer:
+                    getMappedCustomer(
+                        row.customer,
+                        row.location
+                    ),
+
+                matchedVehicles:
+                    vehicles
+
+            };
+
+        });
+
+}
+
+
+/* =====================================================
+   DISTINCT
+===================================================== */
+
+function distinctCount(rows,field){
+
+    const set=new Set();
+
+    rows.forEach(row=>{
+
+        const value=
+            normalize(row[field]);
+
+        if(value){
+            set.add(value);
+        }
+
+    });
+
+    return set.size;
+
+}
+
+
+/* =====================================================
+   SUM
+===================================================== */
+
+function sumField(rows,field){
+
+    return rows.reduce(
+        (total,row)=>{
+
+            return total+
+                numberValue(row[field]);
+
+        },
+        0
+    );
+
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+function makeSummary(label,rows){
+
+    return{
+
+        label,
+
+        gatePass:
+            distinctCount(
+                rows,
+                "gatePass"
+            ),
+
+        challan:
+            distinctCount(
+                rows,
+                "challan"
+            ),
+
+        quantity:
+            sumField(
+                rows,
+                "quantity"
+            ),
+
+        netWeight:
+            sumField(
+                rows,
+                "netWeight"
+            ),
+
+        bagCtn:
+            sumField(
+                rows,
+                "bagCtn"
+            )
+
+    };
+
+}
+
+
+/* =====================================================
+   GENERATE REPORT
+===================================================== */
+
+function generateReport(){
+
+    const status=
+        document.getElementById(
+            "pasteStatus"
+        );
+
+    if(!excelRows.length){
+
+        status.style.color="#dc3545";
+
+        status.innerHTML=
+            "Please upload Excel file first.";
+
+        return;
+    }
+
+    if(!inputRows.length){
+
+        status.style.color="#dc3545";
+
+        status.innerHTML=
+            "Please load paste data first.";
+
+        return;
+    }
+
+    const filteredInputRows=
+        getFilteredInputRows();
+
+    const pastedData=
+        filteredInputRows.map(row=>({
+
+            gatePass:
+                String(row.gatePass||"").trim(),
+
+            vehicle:
+                String(row.vehicle||"").trim()
+
+        }));
+
+    if(!pastedData.length){
+
+        status.style.color="#dc3545";
+
+        status.innerHTML=
+            "No rows available after filter.";
+
+        return;
+    }
+
+    const excelData=
+        prepareExcelData();
+
+    const matchedRows=
+        getMatchedRows(
+            excelData,
+            pastedData
+        );
+
+    if(!matchedRows.length){
+
+        status.style.color="#dc3545";
+
+        status.innerHTML=
+            "No matching Gate Pass No found.";
+
+        document.getElementById(
+            "vehicleTables"
+        ).innerHTML=`
+
+            <div class="empty">
+                No matching Gate Pass No found.
+            </div>
+
+        `;
+
+        return;
+    }
+
+    const vehicleGroups=new Map();
+
+    matchedRows.forEach(row=>{
+
+        let vehicles=
+            row.matchedVehicles;
+
+        if(!vehicles.length){
+
+            vehicles=[
+                row.vehicle||
+                "Unknown"
+            ];
+
+        }
+
+        vehicles.forEach(vehicle=>{
+
+            const key=
+                vehicle.trim()||
+                "Unknown";
+
+            if(!vehicleGroups.has(key)){
+
+                vehicleGroups.set(
+                    key,
+                    []
+                );
+
+            }
+
+            vehicleGroups
+                .get(key)
+                .push(row);
+
+        });
+
+    });
+
+    renderVehicleWise(
+        vehicleGroups
+    );
+
+    document.getElementById(
+        "reportDate"
+    ).innerText=
+        "Generated: "+
+        new Date().toLocaleString();
+
+    status.style.color="#198754";
+
+    status.innerHTML=
+        "Report generated successfully. "+
+        matchedRows.length+
+        " matching Excel rows found.";
+
+}
+
+
+/* =====================================================
+   RENDER VEHICLE WISE
+===================================================== */
+
+function renderVehicleWise(vehicleGroups){
+
+    const container=
+        document.getElementById(
+            "vehicleTables"
+        );
+
+    container.innerHTML="";
+
+    vehicleGroups.forEach(
+        (rows,vehicle)=>{
+
+            const vehicleTotal=
+                makeSummary(
+                    vehicle,
+                    rows
+                );
+
+            const customerGroups=
+                new Map();
+
+            rows.forEach(row=>{
+
+                const customer=
+                    row.mappedCustomer||
+                    "Unknown";
+
+                if(!customerGroups.has(customer)){
+
+                    customerGroups.set(
+                        customer,
+                        []
+                    );
+
+                }
+
+                customerGroups
+                    .get(customer)
+                    .push(row);
+
+            });
+
+            const block=
+                document.createElement("div");
+
+            block.className=
+                "vehicle-block";
+
+            let html=`
+
+                <div class="vehicle-title">
+                    Vehicle: ${escapeHtml(vehicle)}
+                </div>
+
+                <div class="vehicle-table-wrapper">
+
+                <table class="vehicle-table">
+
+                <tbody>
+
+                <tr class="vehicle-total-row">
+
+                    <td>
+                        ${escapeHtml(
+                            vehicleTotal.label
+                        )}
+                    </td>
+
+                    <td>
+                        Gatepass = ${formatNumber(
+                            vehicleTotal.gatePass
+                        )}
+                    </td>
+
+                    <td>
+                        Challan = ${formatNumber(
+                            vehicleTotal.challan
+                        )}
+                    </td>
+
+                    <td>
+                        Quantity = ${formatNumber(
+                            vehicleTotal.quantity
+                        )}
+                    </td>
+
+                    <td>
+                        Net Weight = ${formatNumber(
+                            vehicleTotal.netWeight
+                        )}
+                    </td>
+
+                    <td>
+                        Bag/Ctn = ${formatNumber(
+                            vehicleTotal.bagCtn
+                        )}
+                    </td>
+
+                </tr>
+            `;
+
+            customerGroups.forEach(
+                (customerRows,customer)=>{
+
+                    const customerSummary=
+                        makeSummary(
+                            customer,
+                            customerRows
+                        );
+
+                    html+=`
+
+                        <tr class="customer-row">
+
+                            <td>
+                                ${escapeHtml(
+                                    customerSummary.label
+                                )}
+                            </td>
+
+                            <td>
+                                ${formatNumber(
+                                    customerSummary.gatePass
+                                )}
+                            </td>
+
+                            <td>
+                                ${formatNumber(
+                                    customerSummary.challan
+                                )}
+                            </td>
+
+                            <td>
+                                ${formatNumber(
+                                    customerSummary.quantity
+                                )}
+                            </td>
+
+                            <td>
+                                ${formatNumber(
+                                    customerSummary.netWeight
+                                )}
+                            </td>
+
+                            <td>
+                                ${formatNumber(
+                                    customerSummary.bagCtn
+                                )}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                    const gateGroups=
+                        new Map();
+
+                    customerRows.forEach(row=>{
+
+                        const gate=
+                            row.gatePass||
+                            "Unknown";
+
+                        if(!gateGroups.has(gate)){
+
+                            gateGroups.set(
+                                gate,
+                                []
+                            );
+
+                        }
+
+                        gateGroups
+                            .get(gate)
+                            .push(row);
+
+                    });
+
+                    gateGroups.forEach(
+                        (gateRows,gate)=>{
+
+                            const gateSummary=
+                                makeSummary(
+                                    gate,
+                                    gateRows
+                                );
+
+                            html+=`
+
+                                <tr class="gate-row">
+
+                                    <td>
+                                        ${escapeHtml(
+                                            gateSummary.label
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${formatNumber(
+                                            gateSummary.gatePass
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${formatNumber(
+                                            gateSummary.challan
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${formatNumber(
+                                            gateSummary.quantity
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${formatNumber(
+                                            gateSummary.netWeight
+                                        )}
+                                    </td>
+
+                                    <td>
+                                        ${formatNumber(
+                                            gateSummary.bagCtn
+                                        )}
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }
+                    );
+
+                }
+            );
+
+            html+=`
+
+                </tbody>
+
+                </table>
+
+                </div>
+
+            `;
+
+            block.innerHTML=html;
+
+            container.appendChild(block);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PRINT / SAVE PDF
+===================================================== */
+
+function printPDF(){
+
+    const report=
+        document.getElementById(
+            "vehicleTables"
+        );
+
+    if(
+        !report||
+        report.innerText.trim()===""||
+        report.innerText.includes(
+            "Generate report"
+        )
+    ){
+
+        alert(
+            "Please generate report first."
+        );
+
+        return;
+    }
+
+    window.print();
+
+}
+
+
+/* =====================================================
+   CLEAR PASTE
+===================================================== */
+
+function clearPaste(){
+
+    document.getElementById(
+        "pasteInput"
+    ).value="";
+
+    inputRows=[];
+
+    document.getElementById(
+        "inputTableCard"
+    ).style.display="none";
+
+    document.getElementById(
+        "inputTableBody"
+    ).innerHTML="";
+
+    document.getElementById(
+        "gateOutDateFilter"
+    ).innerHTML="";
+
+    document.getElementById(
+        "pasteStatus"
+    ).innerHTML="";
+
+}
+
+
+/* =====================================================
+   CLEAR ALL
+===================================================== */
+
+function clearAll(){
+
+    excelRows=[];
+    inputRows=[];
+
+    document.getElementById(
+        "excelFile"
+    ).value="";
+
+    document.getElementById(
+        "pasteInput"
+    ).value="";
+
+    document.getElementById(
+        "fileStatus"
+    ).innerHTML=
+        "No Excel file selected.";
+
+    document.getElementById(
+        "pasteStatus"
+    ).innerHTML="";
+
+    document.getElementById(
+        "inputTableCard"
+    ).style.display="none";
+
+    document.getElementById(
+        "inputTableBody"
+    ).innerHTML="";
+
+    document.getElementById(
+        "gateOutDateFilter"
+    ).innerHTML="";
+
+    document.getElementById(
+        "vehicleTables"
+    ).innerHTML=`
+
+        <div class="empty">
+            Generate report to view data
+        </div>
+
+    `;
+
+    document.getElementById(
+        "reportDate"
+    ).innerText="";
+
+}
+
+
+/* =====================================================
+   CTRL + P
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(
+            (e.ctrlKey||e.metaKey)&&
+            e.key.toLowerCase()==="p"
+        ){
+
+            e.preventDefault();
+
+            printPDF();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
