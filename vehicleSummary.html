@@ -222,16 +222,139 @@ button:hover{
 }
 
 /* =====================================================
-   INPUT TABLE
+   UPLOAD + PASTE FLEX
 ===================================================== */
 
-.input-table-wrapper{
+.upload-paste-flex{
+    display:flex;
+    gap:18px;
+    align-items:stretch;
+}
+
+.upload-paste-flex .card{
+    flex:1;
+    min-width:0;
+}
+
+/* =====================================================
+   PASTE INPUT AREA FLEX
+===================================================== */
+
+/*
+    Structure:
+
+    paste-input-layout
+        ├── paste-input-filter
+        ├── paste-input-actions
+        └── input-table-wrapper
+
+    Desktop:
+        Filter + Actions = left column
+        Input Table      = right column
+
+    Mobile:
+        Filter
+        Actions
+        Table
+        one after another
+*/
+
+.paste-input-layout{
+    display:flex;
+    align-items:stretch;
+    gap:15px;
     margin-top:15px;
+    width:100%;
+}
+
+.paste-input-side{
+    flex:0 0 270px;
+    min-width:220px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.paste-input-filter{
+    background:#f8fafc;
+    border:1px solid #d6dee7;
+    border-radius:7px;
+    padding:10px;
+    flex:1;
+}
+
+.paste-input-actions{
+    background:#f8fafc;
+    border:1px solid #d6dee7;
+    border-radius:7px;
+    padding:10px;
+}
+
+.paste-input-actions .buttons{
+    margin-top:0;
+    flex-direction:column;
+}
+
+.paste-input-actions button{
+    width:100%;
+}
+
+.input-table-wrapper{
+    flex:1;
+    min-width:0;
     overflow:auto;
     border:1px solid #ccd6df;
     border-radius:7px;
     max-height:500px;
 }
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+.filter-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    margin-top:0;
+}
+
+.filter-box{
+    background:#f8fafc;
+    border:1px solid #d6dee7;
+    border-radius:7px;
+    padding:10px;
+}
+
+.filter-box label{
+    display:block;
+    margin-bottom:6px;
+    color:#174a7a;
+}
+
+.filter-box select{
+    width:100%;
+    padding:8px;
+    border:1px solid #cbd5df;
+    border-radius:5px;
+    background:#fff;
+}
+
+#gateOutDateFilter{
+    min-height:180px;
+    width:100%;
+}
+
+.filter-box small{
+    display:block;
+    margin-top:5px;
+    color:#777;
+    line-height:1.4;
+}
+
+/* =====================================================
+   INPUT TABLE
+===================================================== */
 
 .input-table{
     width:100%;
@@ -282,51 +405,6 @@ button:hover{
     background:#dc3545;
     padding:5px 9px;
     font-size:11px;
-}
-
-/* =====================================================
-   FILTER
-===================================================== */
-
-.filter-grid{
-    display:grid;
-    grid-template-columns:repeat(
-        auto-fit,
-        minmax(240px,1fr)
-    );
-    gap:12px;
-    margin-top:12px;
-}
-
-.filter-box{
-    background:#f8fafc;
-    border:1px solid #d6dee7;
-    border-radius:7px;
-    padding:10px;
-}
-
-.filter-box label{
-    display:block;
-    margin-bottom:6px;
-    color:#174a7a;
-}
-
-.filter-box select{
-    width:100%;
-    padding:8px;
-    border:1px solid #cbd5df;
-    border-radius:5px;
-    background:#fff;
-}
-
-#gateOutDateFilter{
-    min-height:110px;
-}
-
-.filter-box small{
-    display:block;
-    margin-top:5px;
-    color:#777;
 }
 
 /* =====================================================
@@ -557,8 +635,8 @@ button:hover{
     }
 
     .vehicle-total-summary{
-    display:none !important;
-}
+        display:none !important;
+    }
 
     .copy-summary-btn{
         display:none !important;
@@ -586,11 +664,6 @@ button:hover{
         print-color-adjust:exact !important;
     }
 
-    .vehicle-total-summary,
-    .vehicle-total-summary *{
-        -webkit-print-color-adjust:exact !important;
-        print-color-adjust:exact !important;
-    }
 }
 
 /* =====================================================
@@ -638,6 +711,41 @@ button:hover{
         width:100%;
     }
 
+    .upload-paste-flex{
+        flex-direction:column;
+        gap:0;
+    }
+
+    .upload-paste-flex .card{
+        width:100%;
+    }
+
+    /* Paste Input Flex becomes vertical */
+
+    .paste-input-layout{
+        flex-direction:column;
+        gap:12px;
+    }
+
+    .paste-input-side{
+        flex:0 0 auto;
+        width:100%;
+    }
+
+    .paste-input-actions .buttons{
+        flex-direction:row;
+    }
+
+    .paste-input-actions button{
+        flex:1;
+        width:auto;
+    }
+
+    .input-table-wrapper{
+        width:100%;
+        max-height:450px;
+    }
+
     .vehicle-total-summary{
         flex-direction:column;
         align-items:stretch;
@@ -649,6 +757,22 @@ button:hover{
 
     .vehicle-table{
         font-size:10px;
+    }
+
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media screen and (max-width:450px){
+
+    .paste-input-actions .buttons{
+        flex-direction:column;
+    }
+
+    .paste-input-actions button{
+        width:100%;
     }
 
 }
@@ -737,6 +861,13 @@ button:hover{
 </h1>
 
 
+<!-- =====================================================
+     UPLOAD + PASTE FLEX
+===================================================== -->
+
+<div class="upload-paste-flex">
+
+
 <div class="card">
 
 <h2>
@@ -796,6 +927,9 @@ button:hover{
 </div>
 
 
+</div>
+
+
 <!-- =====================================================
      EDITABLE INPUT TABLE
 ===================================================== -->
@@ -810,93 +944,128 @@ button:hover{
     3. Paste Input Table
 </h2>
 
-<div class="filter-grid">
 
-<div class="filter-box">
+<!-- =====================================================
+     FILTER + ACTION + TABLE FLEX
+===================================================== -->
 
-<label for="gateOutDateFilter">
-    <b>Gate Out Date</b>
-</label>
+<div class="paste-input-layout">
 
-<select
-    id="gateOutDateFilter"
-    multiple
-    onchange="renderInputTable()"
->
-</select>
 
-<small>
-    একসাথে Date + Blank select করতে Ctrl / Cmd ব্যবহার করুন
-</small>
+    <!-- LEFT SIDE -->
+    <div class="paste-input-side">
 
-</div>
 
-</div>
+        <!-- FILTER -->
 
-<div class="buttons">
+        <div class="paste-input-filter">
 
-<button
-    class="btn-blue"
-    onclick="addInputRow()"
->
-    + Add Row
-</button>
+            <div class="filter-grid">
 
-<button
-    class="btn-green"
-    onclick="generateReport()"
->
-    Generate Report
-</button>
+                <div class="filter-box">
 
-<button
-    class="btn-dark"
-    onclick="clearAll()"
->
-    Clear All
-</button>
+                    <label for="gateOutDateFilter">
+                        <b>Gate Out Date</b>
+                    </label>
 
-</div>
+                    <select
+                        id="gateOutDateFilter"
+                        multiple
+                        onchange="renderInputTable()"
+                    >
+                    </select>
 
-<div class="input-table-wrapper">
+                    <small>
+                        একসাথে Date + Blank select করতে
+                        Ctrl / Cmd ব্যবহার করুন
+                    </small>
 
-<table class="input-table">
+                </div>
 
-<thead>
+            </div>
 
-<tr>
+        </div>
 
-<th class="row-number">
-    #
-</th>
 
-<th>
-    OGP Date
-</th>
+        <!-- ACTION BUTTONS -->
 
-<th>
-    Gate Out Date
-</th>
+        <div class="paste-input-actions">
 
-<th>
-    Gate Pass No
-</th>
+            <div class="buttons">
 
-<th>
-    Vehicle No
-</th>
+                <button
+                    class="btn-blue"
+                    onclick="addInputRow()"
+                >
+                    + Add Row
+                </button>
 
-<th>
-    Action
-</th>
+                <button
+                    class="btn-green"
+                    onclick="generateReport()"
+                >
+                    Generate Report
+                </button>
 
-</tr>
+                <button
+                    class="btn-dark"
+                    onclick="clearAll()"
+                >
+                    Clear All
+                </button>
 
-</thead>
+            </div>
 
-<tbody id="inputTableBody"></tbody>
+        </div>
 
-</table>
+
+    </div>
+
+
+    <!-- INPUT TABLE -->
+
+    <div class="input-table-wrapper">
+
+        <table class="input-table">
+
+            <thead>
+
+                <tr>
+
+                    <th class="row-number">
+                        #
+                    </th>
+
+                    <th>
+                        OGP Date
+                    </th>
+
+                    <th>
+                        Gate Out Date
+                    </th>
+
+                    <th>
+                        Gate Pass No
+                    </th>
+
+                    <th>
+                        Vehicle No
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="inputTableBody"></tbody>
+
+        </table>
+
+    </div>
+
 
 </div>
 
@@ -924,8 +1093,6 @@ button:hover{
 
 </div>
 
-
-<!-- REPORT BUTTONS -->
 
 <div
     class="report-actions no-print"
@@ -1055,7 +1222,7 @@ const customerMap=[
 ["JINNAT KNITWEARS LTD. (JKL-U2-2)_JINNAT KNITWEARS LTD.","JKL-2"],
 ["JINNAT KNITWEARS LTD. (FFL2-1)_FLAMINGO FASHIONS LTD.","FFL2"],
 ["Bonshoe Bangladesh Ltd. Plot#1-5, Sector# 5, CEPZ Chattogram","BONSHOE"],
-["JINNAT FASHIONS LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","JINNAT"],
+["JINNAT FASHIONS LTD. SARDARGONJ, KASHIMPUR, GAZIPUR","JINNAT"],
 ["APEX FOOTWEAR LIMITED. Shafipur, Kaliakoir, Gazipur","APEX"],
 ["EDISON FOOTWEAR LTD. J L No: 5, Mirzapur, Gazipur Sadar,1700 Gazipur, Bangladesh","EDISION"],
 ["THANBEE PRINT WORLD LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","THANBE"],
@@ -2510,8 +2677,6 @@ async function copyVehicleSummary(
     }
     catch(error){
 
-        /* Fallback */
-
         const textarea=
             document.createElement(
                 "textarea"
@@ -2725,20 +2890,11 @@ function renderVehicleWise(
     vehicleGroups.forEach(
         (rows,vehicle)=>{
 
-            /* =========================================
-               VEHICLE TOTAL
-            ========================================= */
-
             const vehicleTotal=
                 makeSummary(
                     vehicle,
                     rows
                 );
-
-
-            /* =========================================
-               CUSTOMER GROUPS
-            ========================================= */
 
             const customerGroups=
                 new Map();
@@ -2768,11 +2924,6 @@ function renderVehicleWise(
 
             });
 
-
-            /* =========================================
-               CREATE VEHICLE BLOCK
-            ========================================= */
-
             const block=
                 document.createElement(
                     "div"
@@ -2781,20 +2932,12 @@ function renderVehicleWise(
             block.className=
                 "vehicle-block";
 
-
-            /* =========================================
-               VEHICLE TITLE
-            ========================================= */
-
             let html=`
 
                 <div class="vehicle-title">
                     Vehicle:
                     ${escapeHtml(vehicle)}
                 </div>
-
-
-                <!-- VEHICLE-WISE TOTAL TEXT -->
 
                 <div class="vehicle-total-summary">
 
@@ -2835,7 +2978,6 @@ function renderVehicleWise(
                     </button>
 
                 </div>
-
 
                 <div class="vehicle-table-wrapper">
 
@@ -2890,11 +3032,6 @@ function renderVehicleWise(
 
             `;
 
-
-            /* =========================================
-               CUSTOMER WISE
-            ========================================= */
-
             customerGroups.forEach(
                 (customerRows,customer)=>{
 
@@ -2948,11 +3085,6 @@ function renderVehicleWise(
 
                     `;
 
-
-                    /* =================================
-                       GATE PASS WISE
-                    ================================= */
-
                     const gateGroups=
                         new Map();
 
@@ -2978,7 +3110,6 @@ function renderVehicleWise(
                             .push(row);
 
                     });
-
 
                     gateGroups.forEach(
                         (gateRows,gate)=>{
@@ -3039,7 +3170,6 @@ function renderVehicleWise(
                 }
             );
 
-
             html+=`
 
                 </tbody>
@@ -3049,7 +3179,6 @@ function renderVehicleWise(
                 </div>
 
             `;
-
 
             block.innerHTML=html;
 
@@ -3121,11 +3250,6 @@ function downloadPDF(){
         return;
 
     }
-
-    /*
-       Browser print dialog is used for PDF.
-       Select "Save as PDF" as printer.
-    */
 
     window.print();
 
