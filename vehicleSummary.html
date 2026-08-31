@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -22,7 +23,7 @@ body{
 }
 
 /* =====================================================
-   TOP HEADER - ADDED FROM IMAGE
+   TOP HEADER
 ===================================================== */
 
 .top-header{
@@ -80,6 +81,7 @@ body{
     color:#fff;
     text-decoration:none;
     cursor:pointer;
+    margin-left:auto;
 }
 
 .top-header-back:hover{
@@ -87,7 +89,7 @@ body{
 }
 
 /* =====================================================
-   NAVIGATION HEADER - ADDED FROM IMAGE
+   NAVIGATION
 ===================================================== */
 
 .main-nav{
@@ -122,35 +124,8 @@ body{
     background:#30363b;
 }
 
-@media screen and (max-width:700px){
-
-    .top-header{
-        height:auto;
-        min-height:46px;
-        padding:7px 10px;
-    }
-
-    .top-header-title{
-        font-size:14px;
-    }
-
-    .top-header-date{
-        display:none;
-    }
-
-    .top-header-back{
-        font-size:11px;
-    }
-
-    .main-nav-item{
-        min-width:110px;
-        font-size:12px;
-    }
-
-}
-
 /* =====================================================
-   ORIGINAL CODE
+   CONTAINER
 ===================================================== */
 
 .container{
@@ -216,11 +191,29 @@ button:hover{
     opacity:.9;
 }
 
-.btn-blue{background:#1677c8}
-.btn-green{background:#198754}
-.btn-orange{background:#f08c00}
-.btn-red{background:#dc3545}
-.btn-dark{background:#343a40}
+.btn-blue{
+    background:#1677c8;
+}
+
+.btn-green{
+    background:#198754;
+}
+
+.btn-orange{
+    background:#f08c00;
+}
+
+.btn-red{
+    background:#dc3545;
+}
+
+.btn-dark{
+    background:#343a40;
+}
+
+.btn-purple{
+    background:#6f42c1;
+}
 
 .status{
     margin-top:10px;
@@ -297,7 +290,10 @@ button:hover{
 
 .filter-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    grid-template-columns:repeat(
+        auto-fit,
+        minmax(240px,1fr)
+    );
     gap:12px;
     margin-top:12px;
 }
@@ -361,6 +357,10 @@ button:hover{
     color:#666;
 }
 
+/* =====================================================
+   VEHICLE BLOCK
+===================================================== */
+
 .vehicle-block{
     margin-bottom:20px;
     break-inside:avoid;
@@ -375,6 +375,58 @@ button:hover{
     border-radius:4px 4px 0 0;
     font-size:15px;
 }
+
+/* =====================================================
+   VEHICLE TOTAL SUMMARY TEXT
+===================================================== */
+
+.vehicle-total-summary{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+
+    background:#eef8f2;
+    border:1px solid #b8dfc8;
+    border-left:4px solid #198754;
+
+    color:#145c38;
+
+    padding:8px 10px;
+
+    font-size:13px;
+    font-weight:bold;
+
+    line-height:1.5;
+}
+
+.vehicle-summary-text{
+    flex:1;
+}
+
+/* =====================================================
+   COPY BUTTON
+===================================================== */
+
+.copy-summary-btn{
+    flex-shrink:0;
+    background:#198754;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    border-radius:5px;
+    font-size:11px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.copy-summary-btn:hover{
+    background:#146c43;
+}
+
+/* =====================================================
+   VEHICLE TABLE
+===================================================== */
 
 .vehicle-table-wrapper{
     width:100%;
@@ -426,6 +478,22 @@ button:hover{
 }
 
 /* =====================================================
+   REPORT ACTION BUTTONS
+===================================================== */
+
+.report-actions{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
+}
+
+.report-actions button{
+    min-width:130px;
+}
+
+/* =====================================================
    PRINT
 ===================================================== */
 
@@ -461,6 +529,10 @@ button:hover{
         border-radius:0;
     }
 
+    .report-actions{
+        display:none !important;
+    }
+
     .report-header{
         margin-bottom:8px;
     }
@@ -484,6 +556,14 @@ button:hover{
         padding:4px 6px;
     }
 
+    .vehicle-total-summary{
+    display:none !important;
+}
+
+    .copy-summary-btn{
+        display:none !important;
+    }
+
     .vehicle-table{
         font-size:8px;
     }
@@ -505,6 +585,12 @@ button:hover{
         -webkit-print-color-adjust:exact !important;
         print-color-adjust:exact !important;
     }
+
+    .vehicle-total-summary,
+    .vehicle-total-summary *{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
 }
 
 /* =====================================================
@@ -517,6 +603,32 @@ button:hover{
         padding:10px;
     }
 
+    .top-header{
+        margin:-10px -10px 10px -10px;
+    }
+
+    .main-nav{
+        margin:-10px -10px 10px -10px;
+        overflow-x:auto;
+    }
+
+    .main-nav-item{
+        min-width:110px;
+        font-size:12px;
+    }
+
+    .top-header-title{
+        font-size:14px;
+    }
+
+    .top-header-date{
+        display:none;
+    }
+
+    .top-header-back{
+        font-size:11px;
+    }
+
     .card,
     .report-wrapper{
         padding:12px;
@@ -526,17 +638,28 @@ button:hover{
         width:100%;
     }
 
+    .vehicle-total-summary{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .copy-summary-btn{
+        width:100%;
+    }
+
     .vehicle-table{
         font-size:10px;
     }
+
 }
+
 </style>
 </head>
 
 <body>
 
 <!-- =====================================================
-     IMAGE STYLE TOP HEADER - ADDED
+     TOP HEADER
 ===================================================== -->
 
 <div class="top-header">
@@ -560,37 +683,48 @@ button:hover{
         30-08-2026 11:58:48 am
     </div>
 
-    <a href="index.html" class="top-header-back">
-    → Back
-</a>
+    <a
+        href="index.html"
+        class="top-header-back"
+    >
+        → Back
+    </a>
 
 </div>
 
 
 <!-- =====================================================
-     NAVIGATION - ADDED
+     NAVIGATION
 ===================================================== -->
 
 <div class="main-nav">
 
-    <a href="excel.html" class="main-nav-item">
+    <a
+        href="excel.html"
+        class="main-nav-item"
+    >
         Excel Editing
     </a>
 
-<a href="gatepass.html" class="main-nav-item">
+    <a
+        href="gatepass.html"
+        class="main-nav-item"
+    >
         OGP Print
     </a>
 
-
-<a href="vehicleSummary.html" class="main-nav-item">
+    <a
+        href="vehicleSummary.html"
+        class="main-nav-item active"
+    >
         Vehicle Summary
     </a>
 
-
-   </div>
+</div>
 
 
 <div class="container">
+
 
 <!-- =====================================================
      INPUT AREA
@@ -598,11 +732,16 @@ button:hover{
 
 <div class="no-print">
 
-<h1>Gate Pass Vehicle Wise Summary</h1>
+<h1>
+    Gate Pass Vehicle Wise Summary
+</h1>
+
 
 <div class="card">
 
-<h2>1. Upload Excel File</h2>
+<h2>
+    1. Upload Excel File
+</h2>
 
 <input
     type="file"
@@ -610,7 +749,10 @@ button:hover{
     accept=".xlsx,.xls,.csv"
 >
 
-<div id="fileStatus" class="status">
+<div
+    id="fileStatus"
+    class="status"
+>
     No Excel file selected.
 </div>
 
@@ -619,7 +761,9 @@ button:hover{
 
 <div class="card">
 
-<h2>2. Paste Gate Pass Data</h2>
+<h2>
+    2. Paste Gate Pass Data
+</h2>
 
 <textarea
     id="pasteInput"
@@ -644,7 +788,10 @@ button:hover{
 
 </div>
 
-<div id="pasteStatus" class="status"></div>
+<div
+    id="pasteStatus"
+    class="status"
+></div>
 
 </div>
 
@@ -653,9 +800,15 @@ button:hover{
      EDITABLE INPUT TABLE
 ===================================================== -->
 
-<div class="card" id="inputTableCard" style="display:none">
+<div
+    class="card"
+    id="inputTableCard"
+    style="display:none"
+>
 
-<h2>3. Paste Input Table</h2>
+<h2>
+    3. Paste Input Table
+</h2>
 
 <div class="filter-grid">
 
@@ -696,6 +849,13 @@ button:hover{
     Generate Report
 </button>
 
+<button
+    class="btn-dark"
+    onclick="clearAll()"
+>
+    Clear All
+</button>
+
 </div>
 
 <div class="input-table-wrapper">
@@ -706,17 +866,29 @@ button:hover{
 
 <tr>
 
-<th class="row-number">#</th>
+<th class="row-number">
+    #
+</th>
 
-<th>OGP Date</th>
+<th>
+    OGP Date
+</th>
 
-<th>Gate Out Date</th>
+<th>
+    Gate Out Date
+</th>
 
-<th>Gate Pass No</th>
+<th>
+    Gate Pass No
+</th>
 
-<th>Vehicle No</th>
+<th>
+    Vehicle No
+</th>
 
-<th>Action</th>
+<th>
+    Action
+</th>
 
 </tr>
 
@@ -745,17 +917,41 @@ button:hover{
 <div class="report-header">
 
 <h2>
-Gate Pass Vehicle Wise Summary
+    Gate Pass Vehicle Wise Summary
 </h2>
 
 <p id="reportDate"></p>
 
 </div>
 
+
+<!-- REPORT BUTTONS -->
+
+<div
+    class="report-actions no-print"
+>
+
+<button
+    class="btn-blue"
+    onclick="printPDF()"
+>
+    🖨 Print
+</button>
+
+<button
+    class="btn-red"
+    onclick="downloadPDF()"
+>
+    📄 Download PDF
+</button>
+
+</div>
+
+
 <div id="vehicleTables">
 
 <div class="empty">
-Generate report to view data
+    Generate report to view data
 </div>
 
 </div>
@@ -768,7 +964,7 @@ Generate report to view data
 <script>
 
 /* =====================================================
-   HEADER DATE - ADDED
+   HEADER DATE
 ===================================================== */
 
 function updateTopHeaderDate(){
@@ -839,15 +1035,15 @@ setInterval(
    GLOBAL
 ===================================================== */
 
-let excelRows = [];
-let inputRows = [];
+let excelRows=[];
+let inputRows=[];
 
 
 /* =====================================================
    CUSTOMER MAPPING
 ===================================================== */
 
-const customerMap = [
+const customerMap=[
 
 ["MAWNA FASHIONS LTD. Jinnat Knitwear Ltd","JINNAT"],
 ["FLAMINGO FASHIONS LTD. FLAMINGO FASHIONS LTD. SARDAGONJ, KASHIMPUR, GAZIPUR","JINNAT"],
@@ -930,6 +1126,7 @@ function normalize(value){
         .replace(/\s+/g," ")
         .trim()
         .toUpperCase();
+
 }
 
 
@@ -947,7 +1144,7 @@ function numberValue(value){
         return 0;
     }
 
-    const text =
+    const text=
         String(value)
         .replace(/,/g,"")
         .replace(/[^\d.-]/g,"");
@@ -955,6 +1152,7 @@ function numberValue(value){
     const num=parseFloat(text);
 
     return isNaN(num)?0:num;
+
 }
 
 
@@ -974,11 +1172,12 @@ function formatNumber(value){
             maximumFractionDigits:3
         }
     );
+
 }
 
 
 /* =====================================================
-   ESCAPE
+   ESCAPE HTML
 ===================================================== */
 
 function escapeHtml(value){
@@ -989,6 +1188,7 @@ function escapeHtml(value){
         .replace(/>/g,"&gt;")
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
+
 }
 
 
@@ -1011,6 +1211,7 @@ function findColumn(row,names){
         if(exact){
             return exact;
         }
+
     }
 
     for(const name of names){
@@ -1029,9 +1230,11 @@ function findColumn(row,names){
         if(partial){
             return partial;
         }
+
     }
 
     return null;
+
 }
 
 
@@ -1041,69 +1244,85 @@ function findColumn(row,names){
 
 document
 .getElementById("excelFile")
-.addEventListener("change",function(event){
+.addEventListener(
+    "change",
+    function(event){
 
-    const file=event.target.files[0];
+        const file=event.target.files[0];
 
-    if(!file){
-        return;
+        if(!file){
+            return;
+        }
+
+        const reader=new FileReader();
+
+        reader.onload=function(e){
+
+            try{
+
+                const data=
+                    new Uint8Array(
+                        e.target.result
+                    );
+
+                const workbook=
+                    XLSX.read(
+                        data,
+                        {
+                            type:"array",
+                            cellDates:true
+                        }
+                    );
+
+                const sheet=
+                    workbook.Sheets[
+                        workbook.SheetNames[0]
+                    ];
+
+                excelRows=
+                    XLSX.utils.sheet_to_json(
+                        sheet,
+                        {
+                            defval:"",
+                            raw:false
+                        }
+                    );
+
+                document.getElementById(
+                    "fileStatus"
+                ).innerHTML=
+                    "Excel loaded successfully: "+
+                    excelRows.length+
+                    " rows.";
+
+                document.getElementById(
+                    "fileStatus"
+                ).style.color=
+                    "#198754";
+
+            }
+            catch(error){
+
+                console.error(error);
+
+                document.getElementById(
+                    "fileStatus"
+                ).innerHTML=
+                    "Error reading Excel file.";
+
+                document.getElementById(
+                    "fileStatus"
+                ).style.color=
+                    "#dc3545";
+
+            }
+
+        };
+
+        reader.readAsArrayBuffer(file);
+
     }
-
-    const reader=new FileReader();
-
-    reader.onload=function(e){
-
-        try{
-
-            const data=new Uint8Array(e.target.result);
-
-            const workbook=XLSX.read(
-                data,
-                {
-                    type:"array",
-                    cellDates:true
-                }
-            );
-
-            const sheet=
-                workbook.Sheets[
-                    workbook.SheetNames[0]
-                ];
-
-            excelRows=
-                XLSX.utils.sheet_to_json(
-                    sheet,
-                    {
-                        defval:"",
-                        raw:false
-                    }
-                );
-
-            document.getElementById("fileStatus").innerHTML=
-                "Excel loaded successfully: "+
-                excelRows.length+
-                " rows.";
-
-            document.getElementById("fileStatus").style.color=
-                "#198754";
-
-        }
-        catch(error){
-
-            console.error(error);
-
-            document.getElementById("fileStatus").innerHTML=
-                "Error reading Excel file.";
-
-            document.getElementById("fileStatus").style.color=
-                "#dc3545";
-        }
-
-    };
-
-    reader.readAsArrayBuffer(file);
-
-});
+);
 
 
 /* =====================================================
@@ -1114,76 +1333,84 @@ function prepareExcelData(){
 
     return excelRows.map(row=>{
 
-        const gateCol=findColumn(
-            row,
-            [
-                "Gate Pass No",
-                "Gate Pass",
-                "GatePass No"
-            ]
-        );
+        const gateCol=
+            findColumn(
+                row,
+                [
+                    "Gate Pass No",
+                    "Gate Pass",
+                    "GatePass No"
+                ]
+            );
 
-        const challanCol=findColumn(
-            row,
-            [
-                "Challan No",
-                "Challan"
-            ]
-        );
+        const challanCol=
+            findColumn(
+                row,
+                [
+                    "Challan No",
+                    "Challan"
+                ]
+            );
 
-        const qtyCol=findColumn(
-            row,
-            [
-                "Quantity",
-                "Qty"
-            ]
-        );
+        const qtyCol=
+            findColumn(
+                row,
+                [
+                    "Quantity",
+                    "Qty"
+                ]
+            );
 
-        const weightCol=findColumn(
-            row,
-            [
-                "Net Weight",
-                "NetWeight",
-                "Weight"
-            ]
-        );
+        const weightCol=
+            findColumn(
+                row,
+                [
+                    "Net Weight",
+                    "NetWeight",
+                    "Weight"
+                ]
+            );
 
-        const bagCol=findColumn(
-            row,
-            [
-                "Bag/Ctn",
-                "Bag Ctn",
-                "Bag/Ctns",
-                "Bag"
-            ]
-        );
+        const bagCol=
+            findColumn(
+                row,
+                [
+                    "Bag/Ctn",
+                    "Bag Ctn",
+                    "Bag/Ctns",
+                    "Bag"
+                ]
+            );
 
-        const customerCol=findColumn(
-            row,
-            [
-                "Customer Name",
-                "Customer",
-                "Buyer Name"
-            ]
-        );
+        const customerCol=
+            findColumn(
+                row,
+                [
+                    "Customer Name",
+                    "Customer",
+                    "Buyer Name"
+                ]
+            );
 
-        const locationCol=findColumn(
-            row,
-            [
-                "Delilocation",
-                "Delivery Location",
-                "DeliveryLocation",
-                "Location"
-            ]
-        );
+        const locationCol=
+            findColumn(
+                row,
+                [
+                    "Delilocation",
+                    "Delivery Location",
+                    "DeliveryLocation",
+                    "Location"
+                ]
+            );
 
-        const vehicleCol=findColumn(
-            row,
-            [
-                "Vehicle No",
-                "Vehicle Number"
-            ]
-        );
+        const vehicleCol=
+            findColumn(
+                row,
+                [
+                    "Vehicle No",
+                    "Vehicle Number"
+                ]
+            );
 
         return{
 
@@ -1197,17 +1424,20 @@ function prepareExcelData(){
 
             quantity:
                 numberValue(
-                    qtyCol?row[qtyCol]:0
+                    qtyCol?
+                    row[qtyCol]:0
                 ),
 
             netWeight:
                 numberValue(
-                    weightCol?row[weightCol]:0
+                    weightCol?
+                    row[weightCol]:0
                 ),
 
             bagCtn:
                 numberValue(
-                    bagCol?row[bagCol]:0
+                    bagCol?
+                    row[bagCol]:0
                 ),
 
             customer:
@@ -1259,6 +1489,7 @@ function parsePastedData(text){
         else{
             delimiter=/\s{2,}/;
         }
+
     }
 
     const headers=
@@ -1274,7 +1505,8 @@ function parsePastedData(text){
         i++
     ){
 
-        const cols=lines[i].split(delimiter);
+        const cols=
+            lines[i].split(delimiter);
 
         if(cols.length<=1){
             continue;
@@ -1294,9 +1526,11 @@ function parsePastedData(text){
         );
 
         result.push(obj);
+
     }
 
     return result;
+
 }
 
 
@@ -1306,46 +1540,53 @@ function parsePastedData(text){
 
 function preparePastedData(){
 
-    const rows=parsePastedData(
-        document.getElementById("pasteInput").value
-    );
+    const rows=
+        parsePastedData(
+            document.getElementById(
+                "pasteInput"
+            ).value
+        );
 
     return rows.map(row=>{
 
-        const ogpDateCol=findColumn(
-            row,
-            [
-                "OGP Date",
-                "OGPDate"
-            ]
-        );
+        const ogpDateCol=
+            findColumn(
+                row,
+                [
+                    "OGP Date",
+                    "OGPDate"
+                ]
+            );
 
-        const gateOutDateCol=findColumn(
-            row,
-            [
-                "Gate Out Date",
-                "GateOut Date",
-                "GateOutDate",
-                "Gate Out"
-            ]
-        );
+        const gateOutDateCol=
+            findColumn(
+                row,
+                [
+                    "Gate Out Date",
+                    "GateOut Date",
+                    "GateOutDate",
+                    "Gate Out"
+                ]
+            );
 
-        const gateCol=findColumn(
-            row,
-            [
-                "Gate Pass No",
-                "Gate Pass",
-                "GatePass No"
-            ]
-        );
+        const gateCol=
+            findColumn(
+                row,
+                [
+                    "Gate Pass No",
+                    "Gate Pass",
+                    "GatePass No"
+                ]
+            );
 
-        const vehicleCol=findColumn(
-            row,
-            [
-                "Vehicle No",
-                "Vehicle Number"
-            ]
-        );
+        const vehicleCol=
+            findColumn(
+                row,
+                [
+                    "Vehicle No",
+                    "Vehicle Number"
+                ]
+            );
 
         return{
 
@@ -1386,24 +1627,35 @@ function normalizeDateForFilter(value){
         return "";
     }
 
-    let text=String(value).trim();
+    let text=
+        String(value).trim();
 
-    let m=text.match(
-        /^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/
-    );
+    let m=
+        text.match(
+            /^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/
+        );
 
     if(m){
 
-        const day=String(m[1]).padStart(2,"0");
-        const monthNumber=parseInt(m[2],10);
+        const day=
+            String(m[1])
+            .padStart(2,"0");
+
+        const monthNumber=
+            parseInt(m[2],10);
+
         const year=m[3];
 
         const months=[
-            "Jan","Feb","Mar","Apr","May","Jun",
-            "Jul","Aug","Sep","Oct","Nov","Dec"
+            "Jan","Feb","Mar","Apr",
+            "May","Jun","Jul","Aug",
+            "Sep","Oct","Nov","Dec"
         ];
 
-        if(monthNumber>=1 && monthNumber<=12){
+        if(
+            monthNumber>=1 &&
+            monthNumber<=12
+        ){
 
             return(
                 day+
@@ -1412,7 +1664,9 @@ function normalizeDateForFilter(value){
                 "-"+
                 year
             );
+
         }
+
     }
 
     const date=new Date(text);
@@ -1424,6 +1678,7 @@ function normalizeDateForFilter(value){
     }
 
     return text;
+
 }
 
 
@@ -1438,8 +1693,9 @@ function formatGateOutDate(date){
         .padStart(2,"0");
 
     const months=[
-        "Jan","Feb","Mar","Apr","May","Jun",
-        "Jul","Aug","Sep","Oct","Nov","Dec"
+        "Jan","Feb","Mar","Apr",
+        "May","Jun","Jul","Aug",
+        "Sep","Oct","Nov","Dec"
     ];
 
     return(
@@ -1449,6 +1705,7 @@ function formatGateOutDate(date){
         "-"+
         date.getFullYear()
     );
+
 }
 
 
@@ -1458,34 +1715,47 @@ function formatGateOutDate(date){
 
 function loadPasteTable(){
 
-    const rows=preparePastedData();
+    const rows=
+        preparePastedData();
 
     if(!rows.length){
 
-        document.getElementById("pasteStatus").style.color=
+        document.getElementById(
+            "pasteStatus"
+        ).style.color=
             "#dc3545";
 
-        document.getElementById("pasteStatus").innerText=
+        document.getElementById(
+            "pasteStatus"
+        ).innerText=
             "Please paste valid data first.";
 
         return;
+
     }
 
     inputRows=rows;
 
-    document.getElementById("inputTableCard").style.display=
+    document.getElementById(
+        "inputTableCard"
+    ).style.display=
         "block";
 
     buildGateOutDateFilter();
 
     renderInputTable();
 
-    document.getElementById("pasteStatus").style.color=
+    document.getElementById(
+        "pasteStatus"
+    ).style.color=
         "#198754";
 
-    document.getElementById("pasteStatus").innerText=
+    document.getElementById(
+        "pasteStatus"
+    ).innerText=
         inputRows.length+
         " rows loaded. You can edit, add or remove rows.";
+
 }
 
 
@@ -1507,7 +1777,9 @@ function buildGateOutDateFilter(){
     const oldSelected=
         Array.from(
             select.selectedOptions
-        ).map(option=>option.value);
+        ).map(
+            option=>option.value
+        );
 
     select.innerHTML="";
 
@@ -1553,15 +1825,19 @@ function buildGateOutDateFilter(){
                     monthMap[parts[1]],
                     Number(parts[0])
                 );
+
             };
 
             return parse(a)-parse(b);
+
         });
 
     sortedDates.forEach(date=>{
 
         const option=
-            document.createElement("option");
+            document.createElement(
+                "option"
+            );
 
         option.value=date;
         option.textContent=date;
@@ -1577,16 +1853,23 @@ function buildGateOutDateFilter(){
     if(hasBlank){
 
         const option=
-            document.createElement("option");
+            document.createElement(
+                "option"
+            );
 
         option.value="__BLANK__";
         option.textContent="Blank";
 
-        if(oldSelected.includes("__BLANK__")){
+        if(
+            oldSelected.includes(
+                "__BLANK__"
+            )
+        ){
             option.selected=true;
         }
 
         select.appendChild(option);
+
     }
 
 }
@@ -1641,6 +1924,7 @@ function getFilteredInputRows(){
             return selected.includes(
                 "__BLANK__"
             );
+
         }
 
         return selected.includes(date);
@@ -1663,8 +1947,8 @@ function renderInputTable(){
 
     tbody.innerHTML="";
 
-    const filteredRows=
-        getFilteredInputRows();
+    const selected=
+        getSelectedGateOutDates();
 
     inputRows.forEach(
         (row,index)=>{
@@ -1674,22 +1958,25 @@ function renderInputTable(){
                     row.gateOutDate
                 );
 
-            const selected=
-                getSelectedGateOutDates();
-
             let visible=true;
 
             if(selected.length){
 
                 if(!date){
+
                     visible=
                         selected.includes(
                             "__BLANK__"
                         );
+
                 }
                 else{
+
                     visible=
-                        selected.includes(date);
+                        selected.includes(
+                            date
+                        );
+
                 }
 
             }
@@ -1699,7 +1986,9 @@ function renderInputTable(){
             }
 
             const tr=
-                document.createElement("tr");
+                document.createElement(
+                    "tr"
+                );
 
             tr.innerHTML=`
 
@@ -1740,12 +2029,14 @@ function renderInputTable(){
                 </td>
 
                 <td>
+
                     <button
                         class="remove-btn"
                         onclick="removeInputRow(${index})"
                     >
                         Remove
                     </button>
+
                 </td>
 
             `;
@@ -1762,7 +2053,11 @@ function renderInputTable(){
    UPDATE ROW
 ===================================================== */
 
-function updateInputRow(index,field,value){
+function updateInputRow(
+    index,
+    field,
+    value
+){
 
     if(!inputRows[index]){
         return;
@@ -1835,7 +2130,10 @@ function removeInputRow(index){
         return;
     }
 
-    inputRows.splice(index,1);
+    inputRows.splice(
+        index,
+        1
+    );
 
     buildGateOutDateFilter();
 
@@ -1848,7 +2146,10 @@ function removeInputRow(index){
    CUSTOMER MAPPING
 ===================================================== */
 
-function getMappedCustomer(customer,location){
+function getMappedCustomer(
+    customer,
+    location
+){
 
     const combined=
         normalize(
@@ -1913,7 +2214,10 @@ function getMappedCustomer(customer,location){
 
     ];
 
-    for(const [regex,value] of checks){
+    for(
+        const [regex,value]
+        of checks
+    ){
 
         if(regex.test(combined)){
             return value;
@@ -1922,6 +2226,7 @@ function getMappedCustomer(customer,location){
     }
 
     return customer || "Unknown";
+
 }
 
 
@@ -1929,7 +2234,10 @@ function getMappedCustomer(customer,location){
    MATCH GATE PASS
 ===================================================== */
 
-function getMatchedRows(excelData,pastedData){
+function getMatchedRows(
+    excelData,
+    pastedData
+){
 
     const gatePassSet=new Set();
 
@@ -1938,7 +2246,9 @@ function getMatchedRows(excelData,pastedData){
     pastedData.forEach(row=>{
 
         const key=
-            normalize(row.gatePass);
+            normalize(
+                row.gatePass
+            );
 
         if(!key){
             return;
@@ -1947,7 +2257,10 @@ function getMatchedRows(excelData,pastedData){
         gatePassSet.add(key);
 
         if(!vehicleMap.has(key)){
-            vehicleMap.set(key,[]);
+            vehicleMap.set(
+                key,
+                []
+            );
         }
 
         if(row.vehicle){
@@ -1965,7 +2278,9 @@ function getMatchedRows(excelData,pastedData){
         .filter(row=>{
 
             return gatePassSet.has(
-                normalize(row.gatePass)
+                normalize(
+                    row.gatePass
+                )
             );
 
         })
@@ -1973,7 +2288,9 @@ function getMatchedRows(excelData,pastedData){
         .map(row=>{
 
             const key=
-                normalize(row.gatePass);
+                normalize(
+                    row.gatePass
+                );
 
             const vehicles=[
                 ...new Set(
@@ -2007,14 +2324,19 @@ function getMatchedRows(excelData,pastedData){
    DISTINCT
 ===================================================== */
 
-function distinctCount(rows,field){
+function distinctCount(
+    rows,
+    field
+){
 
     const set=new Set();
 
     rows.forEach(row=>{
 
         const value=
-            normalize(row[field]);
+            normalize(
+                row[field]
+            );
 
         if(value){
             set.add(value);
@@ -2031,13 +2353,18 @@ function distinctCount(rows,field){
    SUM
 ===================================================== */
 
-function sumField(rows,field){
+function sumField(
+    rows,
+    field
+){
 
     return rows.reduce(
         (total,row)=>{
 
             return total+
-                numberValue(row[field]);
+                numberValue(
+                    row[field]
+                );
 
         },
         0
@@ -2050,7 +2377,10 @@ function sumField(rows,field){
    SUMMARY
 ===================================================== */
 
-function makeSummary(label,rows){
+function makeSummary(
+    label,
+    rows
+){
 
     return{
 
@@ -2092,6 +2422,133 @@ function makeSummary(label,rows){
 
 
 /* =====================================================
+   VEHICLE SUMMARY TEXT
+===================================================== */
+
+function getVehicleSummaryText(
+    vehicle,
+    summary
+){
+
+    return(
+        "Vehicle: "+
+        vehicle+
+        "\n"+
+        "Total Gatepass = "+
+        formatNumber(
+            summary.gatePass
+        )+
+        " pcs, Total Challan = "+
+        formatNumber(
+            summary.challan
+        )+
+        " pcs, Total QTY = "+
+        formatNumber(
+            summary.quantity
+        )+
+        " pcs/mtr/yrd, "+
+        formatNumber(
+            summary.bagCtn
+        )+
+        " CTN's/Bag's"
+    );
+
+}
+
+
+/* =====================================================
+   COPY VEHICLE SUMMARY
+===================================================== */
+
+async function copyVehicleSummary(
+    vehicle,
+    summary
+){
+
+    const text=
+        getVehicleSummaryText(
+            vehicle,
+            summary
+        );
+
+    try{
+
+        await navigator.clipboard.writeText(
+            text
+        );
+
+        const buttons=
+            document.querySelectorAll(
+                ".copy-summary-btn"
+            );
+
+        buttons.forEach(btn=>{
+
+            if(
+                btn.dataset.vehicle===
+                vehicle
+            ){
+
+                const oldText=
+                    btn.innerText;
+
+                btn.innerText=
+                    "✓ Copied";
+
+                setTimeout(
+                    ()=>{
+                        btn.innerText=
+                            oldText;
+                    },
+                    1500
+                );
+
+            }
+
+        });
+
+    }
+    catch(error){
+
+        /* Fallback */
+
+        const textarea=
+            document.createElement(
+                "textarea"
+            );
+
+        textarea.value=text;
+
+        textarea.style.position=
+            "fixed";
+
+        textarea.style.left=
+            "-9999px";
+
+        document.body.appendChild(
+            textarea
+        );
+
+        textarea.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        document.body.removeChild(
+            textarea
+        );
+
+        alert(
+            "Vehicle summary copied."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
    GENERATE REPORT
 ===================================================== */
 
@@ -2104,22 +2561,26 @@ function generateReport(){
 
     if(!excelRows.length){
 
-        status.style.color="#dc3545";
+        status.style.color=
+            "#dc3545";
 
         status.innerHTML=
             "Please upload Excel file first.";
 
         return;
+
     }
 
     if(!inputRows.length){
 
-        status.style.color="#dc3545";
+        status.style.color=
+            "#dc3545";
 
         status.innerHTML=
             "Please load paste data first.";
 
         return;
+
     }
 
     const filteredInputRows=
@@ -2129,21 +2590,27 @@ function generateReport(){
         filteredInputRows.map(row=>({
 
             gatePass:
-                String(row.gatePass||"").trim(),
+                String(
+                    row.gatePass||""
+                ).trim(),
 
             vehicle:
-                String(row.vehicle||"").trim()
+                String(
+                    row.vehicle||""
+                ).trim()
 
         }));
 
     if(!pastedData.length){
 
-        status.style.color="#dc3545";
+        status.style.color=
+            "#dc3545";
 
         status.innerHTML=
             "No rows available after filter.";
 
         return;
+
     }
 
     const excelData=
@@ -2157,7 +2624,8 @@ function generateReport(){
 
     if(!matchedRows.length){
 
-        status.style.color="#dc3545";
+        status.style.color=
+            "#dc3545";
 
         status.innerHTML=
             "No matching Gate Pass No found.";
@@ -2173,9 +2641,11 @@ function generateReport(){
         `;
 
         return;
+
     }
 
-    const vehicleGroups=new Map();
+    const vehicleGroups=
+        new Map();
 
     matchedRows.forEach(row=>{
 
@@ -2197,7 +2667,9 @@ function generateReport(){
                 vehicle.trim()||
                 "Unknown";
 
-            if(!vehicleGroups.has(key)){
+            if(
+                !vehicleGroups.has(key)
+            ){
 
                 vehicleGroups.set(
                     key,
@@ -2224,7 +2696,8 @@ function generateReport(){
         "Generated: "+
         new Date().toLocaleString();
 
-    status.style.color="#198754";
+    status.style.color=
+        "#198754";
 
     status.innerHTML=
         "Report generated successfully. "+
@@ -2238,7 +2711,9 @@ function generateReport(){
    RENDER VEHICLE WISE
 ===================================================== */
 
-function renderVehicleWise(vehicleGroups){
+function renderVehicleWise(
+    vehicleGroups
+){
 
     const container=
         document.getElementById(
@@ -2250,11 +2725,20 @@ function renderVehicleWise(vehicleGroups){
     vehicleGroups.forEach(
         (rows,vehicle)=>{
 
+            /* =========================================
+               VEHICLE TOTAL
+            ========================================= */
+
             const vehicleTotal=
                 makeSummary(
                     vehicle,
                     rows
                 );
+
+
+            /* =========================================
+               CUSTOMER GROUPS
+            ========================================= */
 
             const customerGroups=
                 new Map();
@@ -2265,7 +2749,11 @@ function renderVehicleWise(vehicleGroups){
                     row.mappedCustomer||
                     "Unknown";
 
-                if(!customerGroups.has(customer)){
+                if(
+                    !customerGroups.has(
+                        customer
+                    )
+                ){
 
                     customerGroups.set(
                         customer,
@@ -2280,17 +2768,74 @@ function renderVehicleWise(vehicleGroups){
 
             });
 
+
+            /* =========================================
+               CREATE VEHICLE BLOCK
+            ========================================= */
+
             const block=
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             block.className=
                 "vehicle-block";
 
+
+            /* =========================================
+               VEHICLE TITLE
+            ========================================= */
+
             let html=`
 
                 <div class="vehicle-title">
-                    Vehicle: ${escapeHtml(vehicle)}
+                    Vehicle:
+                    ${escapeHtml(vehicle)}
                 </div>
+
+
+                <!-- VEHICLE-WISE TOTAL TEXT -->
+
+                <div class="vehicle-total-summary">
+
+                    <div
+                        class="vehicle-summary-text"
+                    >
+                        Total Gatepass =
+                        ${formatNumber(
+                            vehicleTotal.gatePass
+                        )}
+                        pcs,
+                        Total Challan =
+                        ${formatNumber(
+                            vehicleTotal.challan
+                        )}
+                        pcs,
+                        Total QTY =
+                        ${formatNumber(
+                            vehicleTotal.quantity
+                        )}
+                        pcs/mtr/yrd,
+                        ${formatNumber(
+                            vehicleTotal.bagCtn
+                        )}
+                        CTN's/Bag's
+                    </div>
+
+                    <button
+                        type="button"
+                        class="copy-summary-btn no-print"
+                        data-vehicle="${escapeHtml(vehicle)}"
+                        onclick='copyVehicleSummary(
+                            ${JSON.stringify(vehicle)},
+                            ${JSON.stringify(vehicleTotal)}
+                        )'
+                    >
+                        📋 Copy Text
+                    </button>
+
+                </div>
+
 
                 <div class="vehicle-table-wrapper">
 
@@ -2307,37 +2852,48 @@ function renderVehicleWise(vehicleGroups){
                     </td>
 
                     <td>
-                        Gatepass = ${formatNumber(
+                        Gatepass =
+                        ${formatNumber(
                             vehicleTotal.gatePass
                         )}
                     </td>
 
                     <td>
-                        Challan = ${formatNumber(
+                        Challan =
+                        ${formatNumber(
                             vehicleTotal.challan
                         )}
                     </td>
 
                     <td>
-                        Quantity = ${formatNumber(
+                        Quantity =
+                        ${formatNumber(
                             vehicleTotal.quantity
                         )}
                     </td>
 
                     <td>
-                        Net Weight = ${formatNumber(
+                        Net Weight =
+                        ${formatNumber(
                             vehicleTotal.netWeight
                         )}
                     </td>
 
                     <td>
-                        Bag/Ctn = ${formatNumber(
+                        Bag/Ctn =
+                        ${formatNumber(
                             vehicleTotal.bagCtn
                         )}
                     </td>
 
                 </tr>
+
             `;
+
+
+            /* =========================================
+               CUSTOMER WISE
+            ========================================= */
 
             customerGroups.forEach(
                 (customerRows,customer)=>{
@@ -2392,6 +2948,11 @@ function renderVehicleWise(vehicleGroups){
 
                     `;
 
+
+                    /* =================================
+                       GATE PASS WISE
+                    ================================= */
+
                     const gateGroups=
                         new Map();
 
@@ -2401,7 +2962,9 @@ function renderVehicleWise(vehicleGroups){
                             row.gatePass||
                             "Unknown";
 
-                        if(!gateGroups.has(gate)){
+                        if(
+                            !gateGroups.has(gate)
+                        ){
 
                             gateGroups.set(
                                 gate,
@@ -2415,6 +2978,7 @@ function renderVehicleWise(vehicleGroups){
                             .push(row);
 
                     });
+
 
                     gateGroups.forEach(
                         (gateRows,gate)=>{
@@ -2475,6 +3039,7 @@ function renderVehicleWise(vehicleGroups){
                 }
             );
 
+
             html+=`
 
                 </tbody>
@@ -2485,9 +3050,12 @@ function renderVehicleWise(vehicleGroups){
 
             `;
 
+
             block.innerHTML=html;
 
-            container.appendChild(block);
+            container.appendChild(
+                block
+            );
 
         }
     );
@@ -2496,7 +3064,7 @@ function renderVehicleWise(vehicleGroups){
 
 
 /* =====================================================
-   PRINT / SAVE PDF
+   PRINT
 ===================================================== */
 
 function printPDF(){
@@ -2519,7 +3087,45 @@ function printPDF(){
         );
 
         return;
+
     }
+
+    window.print();
+
+}
+
+
+/* =====================================================
+   DOWNLOAD PDF
+===================================================== */
+
+function downloadPDF(){
+
+    const report=
+        document.getElementById(
+            "vehicleTables"
+        );
+
+    if(
+        !report||
+        report.innerText.trim()===""||
+        report.innerText.includes(
+            "Generate report"
+        )
+    ){
+
+        alert(
+            "Please generate report first."
+        );
+
+        return;
+
+    }
+
+    /*
+       Browser print dialog is used for PDF.
+       Select "Save as PDF" as printer.
+    */
 
     window.print();
 
@@ -2540,7 +3146,8 @@ function clearPaste(){
 
     document.getElementById(
         "inputTableCard"
-    ).style.display="none";
+    ).style.display=
+        "none";
 
     document.getElementById(
         "inputTableBody"
@@ -2585,7 +3192,8 @@ function clearAll(){
 
     document.getElementById(
         "inputTableCard"
-    ).style.display="none";
+    ).style.display=
+        "none";
 
     document.getElementById(
         "inputTableBody"
